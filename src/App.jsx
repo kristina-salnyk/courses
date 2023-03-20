@@ -1,17 +1,17 @@
 import WebFont from 'webfontloader';
 import { useEffect } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { Header } from './components/Header';
 import { Courses } from './components/Courses';
+import { Header } from './components/Header';
 import { CreateCourse } from './components/CreateCourse';
-import { useCurrentView } from './contexts/ViewContext';
-import { VIEWS } from './constants';
+import { Registration } from './components/Registration';
+import { Login } from './components/Login';
+import { ROUTES } from './constants';
 
 function App() {
-	const { currentView } = useCurrentView();
-
 	useEffect(() => {
 		WebFont.load({
 			google: {
@@ -21,14 +21,18 @@ function App() {
 	}, []);
 
 	return (
-		<>
+		<BrowserRouter>
 			<ToastContainer />
 			<Header />
 			<main>
-				{currentView === VIEWS.COURSES && <Courses />}
-				{currentView === VIEWS.CREATE_NEW_COURSE && <CreateCourse />}
+				<Routes>
+					<Route path={ROUTES.COURSES} element={<Courses />} />
+					<Route path={ROUTES.CREATE_COURSE} element={<CreateCourse />} />
+					<Route path={ROUTES.REGISTRATION} element={<Registration />} />
+					<Route path={ROUTES.LOGIN} element={<Login />} />
+				</Routes>
 			</main>
-		</>
+		</BrowserRouter>
 	);
 }
 

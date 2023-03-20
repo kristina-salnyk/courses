@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 import { Container } from '../../common/Container';
 import { TextArea } from '../../common/TextArea';
 import { Button } from '../../common/Button';
 import { Input } from '../../common/Input';
-import { useCurrentView } from '../../contexts/ViewContext';
 import { ValidationMessage } from '../../common/ValidationMessage';
 import pipeDuration from '../../helpers/pipeDuration';
 import dateGenerator from '../../helpers/dateGenerator';
@@ -29,7 +29,6 @@ import {
 	MOCKED_AUTHORS_LIST,
 	MOCKED_COURSES_LIST,
 	TITLE_INPUT,
-	VIEWS,
 } from '../../constants';
 
 import {
@@ -49,6 +48,8 @@ import {
 } from './CreateCourse.styled';
 
 const CreateCourse = () => {
+	const navigate = useNavigate();
+
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [authors, setAuthors] = useState([]);
@@ -56,8 +57,6 @@ const CreateCourse = () => {
 	const [authorName, setAuthorName] = useState('');
 
 	const [validationError, setValidationError] = useState([]);
-
-	const { setCurrentView } = useCurrentView();
 
 	const validateField = (name, value) => {
 		(async () => {
@@ -94,7 +93,7 @@ const CreateCourse = () => {
 			});
 
 			MOCKED_COURSES_LIST.splice(0, 0, course);
-			setCurrentView(VIEWS.COURSES);
+			navigate(-1);
 		} catch (error) {
 			setValidationError(Array.from(error.inner));
 			toast.error(ADD_NEW_COURSE_ERROR_TEXT);
@@ -132,9 +131,6 @@ const CreateCourse = () => {
 		});
 	};
 
-	const getValidationError = (fieldName) =>
-		validationError.find((item) => item.path === fieldName)?.message;
-
 	const authorsList = MOCKED_AUTHORS_LIST.filter(
 		(item) => !authors.includes(item.id)
 	);
@@ -142,6 +138,9 @@ const CreateCourse = () => {
 	const courseAuthors = MOCKED_AUTHORS_LIST.filter((item) =>
 		authors.includes(item.id)
 	);
+
+	const getValidationError = (fieldName) =>
+		validationError.find((item) => item.path === fieldName)?.message;
 
 	const titleValidationError = getValidationError(TITLE_INPUT.name);
 	const descriptionValidationError = getValidationError(

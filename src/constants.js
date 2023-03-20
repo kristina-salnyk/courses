@@ -1,6 +1,15 @@
-export const VIEWS = {
-	CREATE_NEW_COURSE: 'Create new course',
-	COURSES: 'Courses',
+export const BASE_URL = 'http://localhost:4000';
+
+export const API_ENDPOINTS = {
+	LOGIN: '/login',
+	REGISTRATION: '/register',
+};
+
+export const ROUTES = {
+	COURSES: '/courses',
+	CREATE_COURSE: '/courses/add',
+	LOGIN: '/login',
+	REGISTRATION: '/registration',
 };
 
 export const GROUP_TITLES = {
@@ -20,6 +29,10 @@ export const LOGO_ALTERNATIVE_TEXT = 'Logo with books and courses title';
 
 export const ADD_NEW_AUTHOR_ERROR_TEXT = 'Author with this name already exists';
 
+export const REGISTRATION_INFO_TEXT = 'If you have an account you can go to';
+
+export const LOGIN_INFO_TEXT = 'If you not have an account you can go to';
+
 export const AUTHORS_INFO_TEXT = 'Author list is empty';
 
 export const AUTHORS_LIST_NAME = 'authors';
@@ -31,6 +44,16 @@ export const DURATION_UNITS = 'hours';
 export const LOGOUT_BTN = {
 	type: 'button',
 	text: 'Logout',
+};
+
+export const LOGIN_BTN = {
+	type: 'submit',
+	text: 'Login',
+};
+
+export const REGISTER_BTN = {
+	type: 'submit',
+	text: 'Registration',
 };
 
 export const SHOW_COURSE_BTN = {
@@ -68,6 +91,27 @@ export const DELETE_AUTHOR_BTN = {
 	text: 'Delete author',
 };
 
+export const NAME_INPUT = {
+	label: 'Name',
+	type: 'text',
+	placeholder: 'Enter name...',
+	name: 'name',
+};
+
+export const EMAIL_INPUT = {
+	label: 'Email',
+	type: 'email',
+	placeholder: 'Enter email...',
+	name: 'email',
+};
+
+export const PASSWORD_INPUT = {
+	label: 'Password',
+	type: 'password',
+	placeholder: 'Enter password...',
+	name: 'password',
+};
+
 export const SEARCH_BAR_INPUT = {
 	type: 'search',
 	placeholder: 'Enter course name or id...',
@@ -100,8 +144,6 @@ export const DURATION_INPUT = {
 	placeholder: 'Enter duration in minutes...',
 	name: 'duration',
 };
-
-export const MOCKED_USER_NAME = 'Dave';
 
 export const MOCKED_COURSES_LIST = [
 	{

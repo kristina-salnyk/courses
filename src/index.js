@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { ThemeProvider } from 'styled-components';
-
-import { ViewProvider } from './contexts/ViewContext';
 import App from './App';
 import theme from './theme';
+
+import { UserProvider } from './contexts/UserContext';
 
 import 'normalize.css';
 import './index.css';
@@ -13,9 +13,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<React.StrictMode>
 		<ThemeProvider theme={theme}>
-			<ViewProvider>
+			<UserProvider>
 				<App />
-			</ViewProvider>
+			</UserProvider>
 		</ThemeProvider>
 	</React.StrictMode>
 );
