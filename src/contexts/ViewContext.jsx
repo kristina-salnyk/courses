@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useCallback, useContext, useState } from 'react';
 
 import { VIEWS } from '../constants';
 
@@ -9,8 +9,14 @@ export const useCurrentView = () => useContext(ViewContext);
 export const ViewProvider = ({ children }) => {
 	const [currentView, setCurrentView] = useState(VIEWS.COURSES);
 
+	const updateCurrentView = useCallback((view) => {
+		setCurrentView(view);
+	}, []);
+
 	return (
-		<ViewContext.Provider value={{ currentView, setCurrentView }}>
+		<ViewContext.Provider
+			value={{ currentView, setCurrentView: updateCurrentView }}
+		>
 			{children}
 		</ViewContext.Provider>
 	);
