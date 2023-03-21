@@ -14,7 +14,7 @@ import {
 import { CoursesList, CoursesStyled, ToolBar } from './Courses.styled';
 
 const Courses = () => {
-	const [courses] = useState(MOCKED_COURSES_LIST);
+	const courses = MOCKED_COURSES_LIST;
 	const [searchQuery, setSearchQuery] = useState('');
 
 	const { setCurrentView } = useCurrentView();
