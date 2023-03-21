@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Button } from '../../../../common/Button';
 import { LimitedLine } from '../../../../common/LimitedLine';
 import pipeDuration from '../../../../helpers/pipeDuration';
+import getAuthorsListById from '../../../../helpers/getAuthorsListById';
 import {
 	CARD_TITLES,
 	DURATION_UNITS,
-	MOCKED_AUTHORS_LIST,
 	SHOW_COURSE_BTN,
 } from '../../../../constants';
 
@@ -25,11 +25,7 @@ const CourseCard = ({
 	description,
 	authors,
 }) => {
-	const authorsList = authors
-		.map(
-			(item) => MOCKED_AUTHORS_LIST.find((author) => author.id === item)?.name
-		)
-		.join(', ');
+	const authorsList = getAuthorsListById(authors);
 
 	return (
 		<CourseCardStyled>
