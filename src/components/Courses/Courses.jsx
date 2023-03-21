@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { CourseCard } from './components/CourseCard';
 import { Container } from '../../common/Container';
@@ -19,11 +19,13 @@ const Courses = () => {
 
 	const { setCurrentView } = useCurrentView();
 
-	const searchedCourses = courses.filter((item) =>
-		[item.title.toLowerCase(), item.id.toLowerCase()].some((property) =>
-			property.includes(searchQuery.toLowerCase())
-		)
-	);
+	const searchedCourses = useMemo(() => {
+		return courses.filter((item) =>
+			[item.title.toLowerCase(), item.id.toLowerCase()].some((property) =>
+				property.includes(searchQuery.toLowerCase())
+			)
+		);
+	}, [courses, searchQuery]);
 
 	return (
 		<CoursesStyled>
