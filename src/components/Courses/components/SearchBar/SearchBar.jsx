@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 import { Button } from '../../../../common/Button';
 import { SEARCH_BAR_INPUT, SEARCH_BTN } from '../../../../constants';
