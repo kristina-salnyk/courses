@@ -46,11 +46,7 @@ const CourseCard = ({
 					<CourseInfoTitle>{CARD_TITLES.CREATED}</CourseInfoTitle>
 					<span>{creationDate.replaceAll('/', '.')}</span>
 				</CourseInfo>
-				<Button
-					type={SHOW_COURSE_BTN.type}
-					text={SHOW_COURSE_BTN.text}
-					onClick={() => {}}
-				/>
+				<Button type={SHOW_COURSE_BTN.type} text={SHOW_COURSE_BTN.text} />
 			</CourseInfoWrap>
 		</CourseCardStyled>
 	);
