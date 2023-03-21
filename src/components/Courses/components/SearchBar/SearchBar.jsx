@@ -10,8 +10,7 @@ const SearchBar = ({ onSubmit }) => {
 	const [value, setValue] = useState('');
 
 	useEffect(() => {
-		if (value) return;
-		onSubmit(value);
+		if (!value) onSubmit(value);
 	}, [value, onSubmit]);
 
 	return (
