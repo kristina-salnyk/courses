@@ -101,9 +101,9 @@ export const DURATION_INPUT = {
 	name: 'duration',
 };
 
-export const MOCKED_USER_NAME = 'Dave';
+export const USER_NAME = 'Dave';
 
-export const MOCKED_COURSES_LIST = [
+export const COURSES_LIST = [
 	{
 		id: 'de5aaa59-90f5-4dbc-b8a9-aaf205c551ba',
 		title: 'JavaScript',
@@ -128,7 +128,7 @@ export const MOCKED_COURSES_LIST = [
 	},
 ];
 
-export const MOCKED_AUTHORS_LIST = [
+export const AUTHORS_LIST = [
 	{
 		id: '27cc3006-e93a-4748-8ca8-73d06aa93b6d',
 		name: 'Vasiliy Dobkin',

@@ -1,7 +1,7 @@
 import { Logo } from './components/Logo';
 import { Button } from '../../common/Button';
 import { Container } from '../../common/Container';
-import { LOGOUT_BTN, MOCKED_USER_NAME } from '../../constants';
+import { LOGOUT_BTN, USER_NAME } from '../../constants';
 
 import { Controls, HeaderContent, HeaderStyled } from './Header.styled';
 
@@ -11,7 +11,7 @@ const Header = () => (
 			<HeaderContent>
 				<Logo />
 				<Controls>
-					<span>{MOCKED_USER_NAME}</span>
+					<span>{USER_NAME}</span>
 					<Button type={LOGOUT_BTN.type} text={LOGOUT_BTN.text} />
 				</Controls>
 			</HeaderContent>

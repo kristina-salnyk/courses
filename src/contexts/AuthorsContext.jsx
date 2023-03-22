@@ -1,13 +1,13 @@
 import { createContext, useContext, useMemo, useState } from 'react';
 
-import { MOCKED_AUTHORS_LIST } from '../constants';
+import { AUTHORS_LIST } from '../constants';
 
 const AuthorsContext = createContext();
 
 export const useAuthors = () => useContext(AuthorsContext);
 
 export const AuthorsProvider = ({ children }) => {
-	const [authors, setAuthors] = useState(MOCKED_AUTHORS_LIST);
+	const [authors, setAuthors] = useState(AUTHORS_LIST);
 
 	const getAuthorsListById = useMemo(
 		() => (authorsId) =>
