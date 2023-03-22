@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+import PropTypes from 'prop-types';
 
 import { COURSES_LIST } from '../constants';
 
@@ -14,4 +15,9 @@ export const CoursesProvider = ({ children }) => {
 			{children}
 		</CoursesContext.Provider>
 	);
+};
+
+CoursesProvider.propTypes = {
+	children: PropTypes.oneOfType([PropTypes.element, PropTypes.array])
+		.isRequired,
 };

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const useValidationError = () => {
+const useValidationErrors = () => {
 	const [validationErrors, setValidationErrors] = useState([]);
 
 	const validateOneField = (schema, name, value) => {
@@ -44,4 +44,4 @@ const useValidationError = () => {
 	};
 };
 
-export default useValidationError;
+export default useValidationErrors;

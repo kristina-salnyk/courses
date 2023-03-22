@@ -1,4 +1,5 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import React, { createContext, useContext, useMemo, useState } from 'react';
+import PropTypes from 'prop-types';
 
 import { AUTHORS_LIST } from '../constants';
 
@@ -29,4 +30,9 @@ export const AuthorsProvider = ({ children }) => {
 			{children}
 		</AuthorsContext.Provider>
 	);
+};
+
+AuthorsProvider.propTypes = {
+	children: PropTypes.oneOfType([PropTypes.element, PropTypes.array])
+		.isRequired,
 };
