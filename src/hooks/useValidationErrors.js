@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 const useValidationErrors = () => {
 	const [validationErrors, setValidationErrors] = useState([]);
 
-	const validateOneField = (schema, name, value) => {
+	const validateOneField = useCallback((schema, name, value) => {
 		(async () => {
 			try {
 				await schema.validateAt(name, { [name]: value });
@@ -18,9 +18,9 @@ const useValidationErrors = () => {
 				});
 			}
 		})();
-	};
+	}, []);
 
-	const validateAllFields = async (schema, fields) => {
+	const validateAllFields = useCallback(async (schema, fields) => {
 		try {
 			await schema.validate(fields, {
 				abortEarly: false,
@@ -30,12 +30,16 @@ const useValidationErrors = () => {
 			setValidationErrors(Array.from(error.inner));
 		}
 		return false;
-	};
+	}, []);
 
-	const errors = validationErrors.reduce((acc, item) => {
-		if (!acc[item.path]) acc[item.path] = item?.message;
-		return acc;
-	}, {});
+	const errors = useMemo(
+		() =>
+			validationErrors.reduce((acc, item) => {
+				if (!acc[item.path]) acc[item.path] = item?.message;
+				return acc;
+			}, {}),
+		[validationErrors]
+	);
 
 	return {
 		validationErrors: errors,
