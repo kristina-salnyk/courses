@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { CourseCard } from './components/CourseCard';
@@ -24,13 +24,11 @@ const Courses = () => {
 		);
 	}, [courses, searchQuery]);
 
-	const updateSearchQuery = useCallback(setSearchQuery, [setSearchQuery]);
-
 	return (
 		<CoursesStyled>
 			<Container>
 				<ToolBar>
-					<SearchBar onSubmit={updateSearchQuery} />
+					<SearchBar onSubmit={setSearchQuery} />
 					<Button
 						type={ADD_NEW_COURSE_BTN.type}
 						text={ADD_NEW_COURSE_BTN.text}
