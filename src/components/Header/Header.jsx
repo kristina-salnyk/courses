@@ -5,7 +5,6 @@ import { Button } from '../../common/Button';
 import { Container } from '../../common/Container';
 import { NavLink } from '../../common/NavLink';
 import { useUser } from '../../contexts/UserContext';
-import { clearAuthHeader } from '../../utils/api/api';
 import { LOGIN_BTN, LOGOUT_BTN, REGISTER_BTN, ROUTES } from '../../constants';
 
 import { Controls, HeaderContent, HeaderStyled } from './Header.styled';
@@ -29,7 +28,6 @@ const Header = () => {
 										setIsLoggedIn(false);
 										setToken(null);
 										setUser({ name: null, email: null });
-										clearAuthHeader();
 									}}
 								/>
 							</>
