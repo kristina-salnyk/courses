@@ -1,8 +1,12 @@
-export const BASE_URL = 'http://localhost:4000';
+export const BASE_URL =
+	'https://react-fundamentals-course-hw-backend.onrender.com';
+
+export const TOKEN_LOCAL_STORAGE_KEY = 'token';
 
 export const API_ENDPOINTS = {
 	LOGIN: '/login',
 	REGISTRATION: '/register',
+	CURRENT: '/users/me',
 };
 
 export const REGISTRATION_STATUS = {
