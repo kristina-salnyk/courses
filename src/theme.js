@@ -10,6 +10,7 @@ const theme = Object.freeze({
 		black: '#120200',
 		white: '#ffffff',
 		error: '#c40000',
+		overlay: 'rgba(255,255,255,0.6)',
 		background: {
 			primary: '#f3f3f3',
 			secondary: '#120200',
