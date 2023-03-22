@@ -1,4 +1,4 @@
-import { api } from './api';
+import { api, setAuthHeader } from './api';
 import { API_ENDPOINTS } from '../../constants';
 
 export const register = async (user) => {
@@ -7,4 +7,9 @@ export const register = async (user) => {
 
 export const login = async (user) => {
 	return await api.post(API_ENDPOINTS.LOGIN, user);
+};
+
+export const current = async (token) => {
+	setAuthHeader(token);
+	return await api.get(API_ENDPOINTS.CURRENT);
 };
