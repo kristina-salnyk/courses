@@ -1,13 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Navigate } from 'react-router-dom';
 
 import { useUser } from '../../contexts/UserContext';
-import PropTypes from 'prop-types';
 
 const PrivateRoute = ({ component: Component, redirectTo = '/' }) => {
-	const { isLoggedIn } = useUser();
+	const { isLoggedIn, isRefreshing } = useUser();
 
-	const shouldRedirect = !isLoggedIn;
+	const shouldRedirect = !isLoggedIn && !isRefreshing;
 
 	return shouldRedirect ? <Navigate to={redirectTo} /> : Component;
 };
