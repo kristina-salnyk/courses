@@ -1,23 +1,20 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { CourseCard } from './components/CourseCard';
 import { Container } from '../../common/Container';
 import { Button } from '../../common/Button';
 import { SearchBar } from './components/SearchBar';
 import { useCurrentView } from '../../contexts/ViewContext';
-import {
-	ADD_NEW_COURSE_BTN,
-	MOCKED_COURSES_LIST,
-	VIEWS,
-} from '../../constants';
+import { useCourses } from '../../contexts/CoursesContext';
+import { ADD_NEW_COURSE_BTN, VIEWS } from '../../constants';
 
 import { CoursesList, CoursesStyled, ToolBar } from './Courses.styled';
 
 const Courses = () => {
-	const courses = MOCKED_COURSES_LIST;
-	const [searchQuery, setSearchQuery] = useState('');
+	const { updateCurrentView } = useCurrentView();
+	const { courses } = useCourses();
 
-	const { setCurrentView } = useCurrentView();
+	const [searchQuery, setSearchQuery] = useState('');
 
 	const searchedCourses = useMemo(() => {
 		return courses.filter((item) =>
@@ -27,15 +24,17 @@ const Courses = () => {
 		);
 	}, [courses, searchQuery]);
 
+	const updateSearchQuery = useCallback(setSearchQuery, [setSearchQuery]);
+
 	return (
 		<CoursesStyled>
 			<Container>
 				<ToolBar>
-					<SearchBar onSubmit={setSearchQuery} />
+					<SearchBar onSubmit={updateSearchQuery} />
 					<Button
 						type={ADD_NEW_COURSE_BTN.type}
 						text={ADD_NEW_COURSE_BTN.text}
-						onClick={() => setCurrentView(VIEWS.CREATE_NEW_COURSE)}
+						onClick={() => updateCurrentView(VIEWS.CREATE_NEW_COURSE)}
 					/>
 				</ToolBar>
 				{searchedCourses.length > 0 && (

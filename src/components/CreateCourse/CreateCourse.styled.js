@@ -62,13 +62,13 @@ export const CourseInfoGroup = styled.div`
 	}
 `;
 
-export const CourseInfoGroupStyled = styled(CourseInfoGroup)`
+export const DurationGroup = styled(CourseInfoGroup)`
 	@media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
 		order: 4;
 	}
 `;
 
-export const Authors = styled.ul`
+export const AuthorsStyled = styled.ul`
 	display: flex;
 	flex-direction: column;
 	gap: ${({ theme }) => theme.spacing[1]};

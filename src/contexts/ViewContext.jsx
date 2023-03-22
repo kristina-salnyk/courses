@@ -14,9 +14,7 @@ export const ViewProvider = ({ children }) => {
 	}, []);
 
 	return (
-		<ViewContext.Provider
-			value={{ currentView, setCurrentView: updateCurrentView }}
-		>
+		<ViewContext.Provider value={{ currentView, updateCurrentView }}>
 			{children}
 		</ViewContext.Provider>
 	);

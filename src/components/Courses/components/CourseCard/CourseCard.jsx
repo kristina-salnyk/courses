@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 
 import { Button } from '../../../../common/Button';
 import { LimitedLine } from '../../../../common/LimitedLine';
+import { useAuthors } from '../../../../contexts/AuthorsContext';
 import pipeDuration from '../../../../helpers/pipeDuration';
-import getAuthorsListById from '../../../../helpers/getAuthorsListById';
 import {
 	CARD_TITLES,
 	DURATION_UNITS,
@@ -25,7 +25,9 @@ const CourseCard = ({
 	description,
 	authors,
 }) => {
-	const authorsList = getAuthorsListById(authors);
+	const { getAuthorsListById } = useAuthors();
+
+	const courseAuthorsList = getAuthorsListById(authors);
 
 	return (
 		<CourseCardStyled>
@@ -37,7 +39,7 @@ const CourseCard = ({
 				<CourseInfo>
 					<CourseInfoTitle>{CARD_TITLES.COURSE_AUTHORS}</CourseInfoTitle>
 					<LimitedLine>
-						<span title={authorsList}>{authorsList}</span>
+						<span title={courseAuthorsList}>{courseAuthorsList}</span>
 					</LimitedLine>
 					<CourseInfoTitle>{CARD_TITLES.DURATION}</CourseInfoTitle>
 					<span>

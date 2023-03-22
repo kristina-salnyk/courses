@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { toast } from 'react-toastify';
 
@@ -7,40 +7,40 @@ import { TextArea } from '../../common/TextArea';
 import { Button } from '../../common/Button';
 import { Input } from '../../common/Input';
 import { ValidationMessage } from '../../common/ValidationMessage';
+import { CreateAuthor } from './components/CreateAuthor';
+import { Authors } from './components/Authors';
+import { useAuthors } from '../../contexts/AuthorsContext';
+import { useCourses } from '../../contexts/CoursesContext';
 import { useCurrentView } from '../../contexts/ViewContext';
+import useValidationError from '../../hooks/useValidationError';
+import formKeyPressHandler from '../../helpers/handlers/formKeyPressHandler';
 import pipeDuration from '../../helpers/pipeDuration';
 import dateGenerator from '../../helpers/dateGenerator';
 import courseSchema from '../../helpers/schemas/courseSchema';
 import {
-	ADD_AUTHOR_BTN,
-	ADD_NEW_AUTHOR_ERROR_TEXT,
 	ADD_NEW_COURSE_ERROR_TEXT,
-	AUTHOR_NAME_INPUT,
 	AUTHORS_INFO_TEXT,
 	AUTHORS_LIST_NAME,
 	CARD_TITLES,
-	CREATE_AUTHOR_BTN,
 	CREATE_COURSE_BTN,
 	DELETE_AUTHOR_BTN,
 	DESCRIPTION_TEXT_AREA,
 	DURATION_INPUT,
 	DURATION_UNITS,
 	GROUP_TITLES,
-	MOCKED_AUTHORS_LIST,
-	MOCKED_COURSES_LIST,
 	TITLE_INPUT,
 	VIEWS,
 } from '../../constants';
 
 import {
 	Author,
-	Authors,
+	AuthorsStyled,
 	CourseInfo,
 	CourseInfoGroup,
-	CourseInfoGroupStyled,
 	CreateCourseForm,
 	CreateCourseStyled,
 	Duration,
+	DurationGroup,
 	FieldWrap,
 	FieldWrapStyled,
 	GroupTitle,
@@ -48,33 +48,18 @@ import {
 	TopGroup,
 } from './CreateCourse.styled';
 
-const CreateCourse = () => {
+const CreateCourse = (factory, deps) => {
+	const { updateCurrentView } = useCurrentView();
+	const { getAuthorsById } = useAuthors();
+	const { setCourses } = useCourses();
+
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
-	const [authors, setAuthors] = useState([]);
+	const [courseAuthors, setCourseAuthors] = useState([]);
 	const [duration, setDuration] = useState(0);
-	const [authorName, setAuthorName] = useState('');
 
-	const [validationError, setValidationError] = useState([]);
-
-	const { setCurrentView } = useCurrentView();
-
-	const validateField = (name, value) => {
-		(async () => {
-			try {
-				await courseSchema.validateAt(name, { [name]: value });
-				setValidationError((prevState) =>
-					prevState.filter((item) => item.path !== name)
-				);
-			} catch (error) {
-				setValidationError((prevState) => {
-					const state = prevState.filter((item) => item.path !== name);
-					state.push(error);
-					return state;
-				});
-			}
-		})();
-	};
+	const { validationErrors, validateOneField, validateAllFields } =
+		useValidationError();
 
 	const formSubmitHandler = async (event) => {
 		event.preventDefault();
@@ -83,84 +68,52 @@ const CreateCourse = () => {
 			id: uuid(),
 			title,
 			description,
-			authors,
+			authors: courseAuthors,
 			duration,
 			creationDate: dateGenerator(),
 		};
 
-		try {
-			await courseSchema.validate(course, {
-				abortEarly: false,
-			});
+		const isValid = await validateAllFields(courseSchema, course);
 
-			MOCKED_COURSES_LIST.splice(0, 0, course);
-			setCurrentView(VIEWS.COURSES);
-		} catch (error) {
-			setValidationError(Array.from(error.inner));
-			toast.error(ADD_NEW_COURSE_ERROR_TEXT);
-		}
-	};
-
-	const addNewAuthor = () => {
-		const name = authorName.trim();
-		if (!name) return;
-
-		if (MOCKED_AUTHORS_LIST.find((item) => item.name === name)) {
-			toast.error(ADD_NEW_AUTHOR_ERROR_TEXT);
+		if (isValid) {
+			setCourses((prevState) => [course, ...prevState]);
+			updateCurrentView(VIEWS.COURSES);
 			return;
 		}
 
-		const newAuthor = { id: uuid(), name };
-		MOCKED_AUTHORS_LIST.splice(0, 0, newAuthor);
-
-		setAuthorName('');
+		toast.error(ADD_NEW_COURSE_ERROR_TEXT);
 	};
 
-	const addToAuthors = (authorId) => {
-		setAuthors((prevState) => {
-			const state = [authorId, ...prevState];
-			validateField(AUTHORS_LIST_NAME, state);
-			return state;
-		});
-	};
-
-	const deleteFromAuthors = (authorId) => {
-		setAuthors((prevState) => {
-			const state = prevState.filter((item) => item !== authorId);
-			validateField(AUTHORS_LIST_NAME, state);
-			return state;
-		});
-	};
-
-	const getValidationError = (fieldName) =>
-		validationError.find((item) => item.path === fieldName)?.message;
-
-	const authorsList = MOCKED_AUTHORS_LIST.filter(
-		(item) => !authors.includes(item.id)
+	const addToAuthors = useCallback(
+		(authorId) => {
+			setCourseAuthors((prevState) => {
+				const state = [authorId, ...prevState];
+				validateOneField(courseSchema, AUTHORS_LIST_NAME, state);
+				return state;
+			});
+		},
+		[validateOneField]
 	);
 
-	const courseAuthors = MOCKED_AUTHORS_LIST.filter((item) =>
-		authors.includes(item.id)
+	const deleteFromAuthors = useCallback(
+		(authorId) => {
+			setCourseAuthors((prevState) => {
+				const state = prevState.filter((item) => item !== authorId);
+				validateOneField(courseSchema, AUTHORS_LIST_NAME, state);
+				return state;
+			});
+		},
+		[validateOneField]
 	);
 
-	const titleValidationError = getValidationError(TITLE_INPUT.name);
-	const descriptionValidationError = getValidationError(
-		DESCRIPTION_TEXT_AREA.name
-	);
-	const durationValidationError = getValidationError(DURATION_INPUT.name);
-	const authorsValidationError = getValidationError(AUTHORS_LIST_NAME);
+	const courseAuthorsList = getAuthorsById(courseAuthors);
 
 	return (
 		<CreateCourseStyled>
 			<Container>
 				<CreateCourseForm
 					onSubmit={formSubmitHandler}
-					onKeyPress={(event) => {
-						const key = event.charCode || event.keyCode || 0;
-						if (key === 13) {
-							event.preventDefault();
-						}
-					}}
+					onKeyPress={formKeyPressHandler}
 				>
 					<TopGroup>
 						<FieldWrapStyled>
@@ -169,15 +122,21 @@ const CreateCourse = () => {
 								required={true}
 								type={TITLE_INPUT.type}
 								value={title}
-								error={Boolean(titleValidationError)}
+								error={Boolean(validationErrors[TITLE_INPUT.name])}
 								placeholder={TITLE_INPUT.placeholder}
 								onChange={(event) => {
 									setTitle(event.target.value);
-									validateField(TITLE_INPUT.name, event.target.value);
+									validateOneField(
+										courseSchema,
+										TITLE_INPUT.name,
+										event.target.value
+									);
 								}}
 							/>
-							{titleValidationError && (
-								<ValidationMessage message={titleValidationError} />
+							{validationErrors[TITLE_INPUT.name] && (
+								<ValidationMessage
+									message={validationErrors[TITLE_INPUT.name]}
+								/>
 							)}
 						</FieldWrapStyled>
 						<Button
@@ -191,59 +150,30 @@ const CreateCourse = () => {
 							required={true}
 							rows={DESCRIPTION_TEXT_AREA.rows}
 							value={description}
-							error={Boolean(descriptionValidationError)}
+							error={Boolean(validationErrors[DESCRIPTION_TEXT_AREA.name])}
 							placeholder={DESCRIPTION_TEXT_AREA.placeholder}
 							onChange={(event) => {
 								setDescription(event.target.value);
-								validateField(DESCRIPTION_TEXT_AREA.name, event.target.value);
+								validateOneField(
+									courseSchema,
+									DESCRIPTION_TEXT_AREA.name,
+									event.target.value
+								);
 							}}
 						/>
-						{descriptionValidationError && (
-							<ValidationMessage message={descriptionValidationError} />
+						{validationErrors[DESCRIPTION_TEXT_AREA.name] && (
+							<ValidationMessage
+								message={validationErrors[DESCRIPTION_TEXT_AREA.name]}
+							/>
 						)}
 					</FieldWrap>
 					<CourseInfo>
-						<CourseInfoGroup>
-							<GroupTitle>{GROUP_TITLES.ADD_AUTHOR}</GroupTitle>
-							<Input
-								label={AUTHOR_NAME_INPUT.label}
-								type={AUTHOR_NAME_INPUT.type}
-								value={authorName}
-								placeholder={AUTHOR_NAME_INPUT.placeholder}
-								onChange={(event) => {
-									setAuthorName(event.target.value);
-								}}
-							/>
-							<Button
-								type={CREATE_AUTHOR_BTN.type}
-								text={CREATE_AUTHOR_BTN.text}
-								onClick={() => {
-									addNewAuthor();
-								}}
-							/>
-						</CourseInfoGroup>
-						<CourseInfoGroup>
-							<GroupTitle>{GROUP_TITLES.AUTHORS}</GroupTitle>
-							{authorsList.length > 0 ? (
-								<Authors>
-									{authorsList.map((item) => (
-										<Author key={item.id}>
-											{item.name}
-											<Button
-												type={ADD_AUTHOR_BTN.type}
-												text={ADD_AUTHOR_BTN.text}
-												onClick={() => {
-													addToAuthors(item.id);
-												}}
-											/>
-										</Author>
-									))}
-								</Authors>
-							) : (
-								<InfoMessage>{AUTHORS_INFO_TEXT}</InfoMessage>
-							)}
-						</CourseInfoGroup>
-						<CourseInfoGroupStyled>
+						<CreateAuthor />
+						<Authors
+							selectedAuthors={courseAuthors}
+							addToAuthors={addToAuthors}
+						/>
+						<DurationGroup>
 							<GroupTitle>{GROUP_TITLES.DURATION}</GroupTitle>
 							<FieldWrap>
 								<Input
@@ -252,31 +182,34 @@ const CreateCourse = () => {
 									type={DURATION_INPUT.type}
 									value={duration || ''}
 									min={DURATION_INPUT.min}
-									error={Boolean(durationValidationError)}
+									error={Boolean(validationErrors[DURATION_INPUT.name])}
 									placeholder={DURATION_INPUT.placeholder}
 									onChange={(event) => {
 										setDuration(Number(event.target.value));
-										validateField(
+										validateOneField(
+											courseSchema,
 											DURATION_INPUT.name,
 											Number(event.target.value)
 										);
 									}}
 								/>
-								{durationValidationError && (
-									<ValidationMessage message={durationValidationError} />
+								{validationErrors[DURATION_INPUT.name] && (
+									<ValidationMessage
+										message={validationErrors[DURATION_INPUT.name]}
+									/>
 								)}
 							</FieldWrap>
 							<p>
 								{CARD_TITLES.DURATION}{' '}
 								<Duration>{pipeDuration(duration)}</Duration> {DURATION_UNITS}
 							</p>
-						</CourseInfoGroupStyled>
+						</DurationGroup>
 						<CourseInfoGroup>
 							<GroupTitle>{GROUP_TITLES.COURSE_AUTHORS}</GroupTitle>
 							<FieldWrap>
-								{courseAuthors.length > 0 ? (
-									<Authors>
-										{courseAuthors.map((item) => (
+								{courseAuthorsList.length > 0 ? (
+									<AuthorsStyled>
+										{courseAuthorsList.map((item) => (
 											<Author key={item.id}>
 												{item.name}
 												<Button
@@ -288,12 +221,14 @@ const CreateCourse = () => {
 												/>
 											</Author>
 										))}
-									</Authors>
+									</AuthorsStyled>
 								) : (
 									<InfoMessage>{AUTHORS_INFO_TEXT}</InfoMessage>
 								)}
-								{authorsValidationError && (
-									<ValidationMessage message={authorsValidationError} />
+								{validationErrors[AUTHORS_LIST_NAME] && (
+									<ValidationMessage
+										message={validationErrors[AUTHORS_LIST_NAME]}
+									/>
 								)}
 							</FieldWrap>
 						</CourseInfoGroup>
