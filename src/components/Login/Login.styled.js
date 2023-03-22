@@ -8,6 +8,7 @@ export const LoginStyled = styled.section`
 `;
 
 export const LoginForm = styled.form`
+	position: relative;
 	padding: ${({ theme }) => theme.spacing[4]} ${({ theme }) => theme.spacing[3]};
 	background-color: ${({ theme }) => theme.colors.background.card};
 	box-shadow: ${({ theme }) => theme.shadows[0]};

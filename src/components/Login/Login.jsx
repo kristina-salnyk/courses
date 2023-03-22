@@ -3,10 +3,11 @@ import { toast } from 'react-toastify';
 
 import { Container } from '../../common/Container';
 import { Input } from '../../common/Input';
+import { Loader } from '../../common/Loader';
 import { ValidationMessage } from '../../common/ValidationMessage';
 import { useUser } from '../../contexts/UserContext';
-import { setAuthHeader } from '../../utils/api/api';
 import { login } from '../../utils/api/auth';
+import useValidationErrors from '../../hooks/useValidationErrors';
 import loginSchema from '../../helpers/schemas/loginSchema';
 import {
 	EMAIL_INPUT,
@@ -16,7 +17,6 @@ import {
 	PASSWORD_INPUT,
 	REGISTER_BTN,
 	ROUTES,
-	SUBMIT_VALIDATION_ERROR_TEXT,
 } from '../../constants';
 
 import {
@@ -34,25 +34,10 @@ const Login = () => {
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
 
-	const [validationError, setValidationError] = useState([]);
-
-	const validateField = (name, value) => {
-		(async () => {
-			try {
-				await loginSchema.validateAt(name, { [name]: value });
-				setValidationError((prevState) =>
-					prevState.filter((item) => item.path !== name)
-				);
-			} catch (error) {
-				setValidationError((prevState) => {
-					const state = prevState.filter((item) => item.path !== name);
-					state.push(error);
-					return state;
-				});
-			}
-		})();
-	};
+	const { validationErrors, validateOneField, validateAllFields } =
+		useValidationErrors();
 
 	const formSubmitHandler = async (event) => {
 		event.preventDefault();
@@ -62,58 +47,57 @@ const Login = () => {
 			password,
 		};
 
-		try {
-			await loginSchema.validate(user, {
-				abortEarly: false,
-			});
-		} catch (error) {
-			setValidationError(Array.from(error.inner));
-			toast.error(SUBMIT_VALIDATION_ERROR_TEXT);
-			return;
-		}
+		const isValid = await validateAllFields(loginSchema, user);
+		if (!isValid) return;
+
+		setIsLoading(true);
 
 		try {
 			const response = await login(user);
 			const { data } = response;
 
 			if (response.status === 201 && data.successful) {
-				setAuthHeader(response.data.token);
+				const [, token] = data.result.split(' ');
+
 				setIsLoggedIn(true);
-				setToken(data.result);
+				setToken(token);
 				setUser({ ...data.user });
 			} else {
 				toast.error(LOGIN_STATUS[response.status] ?? LOGIN_STATUS.default);
 			}
 		} catch (error) {
 			toast.error(LOGIN_STATUS[error.response.status] ?? LOGIN_STATUS.default);
+		} finally {
+			setIsLoading(false);
 		}
 	};
-
-	const getValidationError = (fieldName) =>
-		validationError.find((item) => item.path === fieldName)?.message;
-
-	const emailValidationError = getValidationError(EMAIL_INPUT.name);
-	const passwordValidationError = getValidationError(PASSWORD_INPUT.name);
 
 	return (
 		<LoginStyled>
 			<Container>
 				<LoginForm onSubmit={formSubmitHandler}>
+					{isLoading && <Loader />}
 					<LoginContent>
 						<FieldWrapStyled>
 							<Input
 								label={EMAIL_INPUT.label}
 								type={EMAIL_INPUT.type}
 								value={email}
-								error={Boolean(emailValidationError)}
+								error={Boolean(validationErrors[EMAIL_INPUT.name])}
 								placeholder={EMAIL_INPUT.placeholder}
 								onChange={(event) => {
 									setEmail(event.target.value);
-									validateField(EMAIL_INPUT.name, event.target.value);
+									validateOneField(
+										loginSchema,
+										EMAIL_INPUT.name,
+										event.target.value
+									);
 								}}
 							/>
-							{emailValidationError && (
-								<ValidationMessage message={emailValidationError} />
+							{validationErrors[EMAIL_INPUT.name] && (
+								<ValidationMessage
+									message={validationErrors[EMAIL_INPUT.name]}
+								/>
 							)}
 						</FieldWrapStyled>
 						<FieldWrapStyled>
@@ -121,15 +105,21 @@ const Login = () => {
 								label={PASSWORD_INPUT.label}
 								type={PASSWORD_INPUT.type}
 								value={password}
-								error={Boolean(passwordValidationError)}
+								error={Boolean(validationErrors[PASSWORD_INPUT.name])}
 								placeholder={PASSWORD_INPUT.placeholder}
 								onChange={(event) => {
 									setPassword(event.target.value);
-									validateField(PASSWORD_INPUT.name, event.target.value);
+									validateOneField(
+										loginSchema,
+										PASSWORD_INPUT.name,
+										event.target.value
+									);
 								}}
 							/>
-							{passwordValidationError && (
-								<ValidationMessage message={passwordValidationError} />
+							{validationErrors[PASSWORD_INPUT.name] && (
+								<ValidationMessage
+									message={validationErrors[PASSWORD_INPUT.name]}
+								/>
 							)}
 						</FieldWrapStyled>
 						<ButtonStyled type={LOGIN_BTN.type} text={LOGIN_BTN.text} />
