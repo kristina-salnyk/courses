@@ -5,12 +5,13 @@ import { Button } from '../../common/Button';
 import { Container } from '../../common/Container';
 import { NavLink } from '../../common/NavLink';
 import { useUser } from '../../contexts/UserContext';
+import { clearAuthHeader } from '../../utils/api/api';
 import { LOGIN_BTN, LOGOUT_BTN, REGISTER_BTN, ROUTES } from '../../constants';
 
 import { Controls, HeaderContent, HeaderStyled } from './Header.styled';
 
 const Header = () => {
-	const { isLoggedIn, setIsLoggedIn, name } = useUser();
+	const { isLoggedIn, setIsLoggedIn, user, setUser, setToken } = useUser();
 
 	return (
 		<HeaderStyled>
@@ -20,12 +21,15 @@ const Header = () => {
 					<Controls>
 						{isLoggedIn ? (
 							<>
-								<span>{name}</span>
+								<span>{user.name}</span>
 								<Button
 									type={LOGOUT_BTN.type}
 									text={LOGOUT_BTN.text}
 									onClick={() => {
 										setIsLoggedIn(false);
+										setToken(null);
+										setUser({ name: null, email: null });
+										clearAuthHeader();
 									}}
 								/>
 							</>

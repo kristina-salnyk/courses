@@ -6,14 +6,16 @@ import { Container } from '../../common/Container';
 import { Input } from '../../common/Input';
 import { ValidationMessage } from '../../common/ValidationMessage';
 import registerSchema from '../../helpers/schemas/registerSchema';
-import register from '../../utils/api/register';
+import { register } from '../../utils/api/auth';
 import {
+	SUBMIT_VALIDATION_ERROR_TEXT,
 	EMAIL_INPUT,
 	LOGIN_BTN,
 	NAME_INPUT,
 	PASSWORD_INPUT,
 	REGISTER_BTN,
 	REGISTRATION_INFO_TEXT,
+	REGISTRATION_STATUS,
 	ROUTES,
 } from '../../constants';
 
@@ -55,7 +57,7 @@ const Registration = () => {
 		})();
 	};
 
-	const formSubmitHandler = (event) => {
+	const formSubmitHandler = async (event) => {
 		event.preventDefault();
 
 		const user = {
@@ -64,19 +66,34 @@ const Registration = () => {
 			password,
 		};
 
-		(async () => {
-			try {
-				const response = await register(user);
-				const { data } = response;
+		try {
+			await registerSchema.validate(user, {
+				abortEarly: false,
+			});
+		} catch (error) {
+			setValidationError(Array.from(error.inner));
+			toast.error(SUBMIT_VALIDATION_ERROR_TEXT);
+			return;
+		}
 
-				if (response.status === 201 && data.successful) {
-					toast.success('Registration completed!');
-					navigate(ROUTES.LOGIN);
-				}
-			} catch (error) {
-				toast.error(error.message);
+		try {
+			const response = await register(user);
+			const { data } = response;
+
+			if (response.status === 201 && data.successful) {
+				toast.success(REGISTRATION_STATUS[201]);
+				navigate(ROUTES.LOGIN);
+			} else {
+				toast.error(
+					REGISTRATION_STATUS[response.status] ?? REGISTRATION_STATUS.default
+				);
 			}
-		})();
+		} catch (error) {
+			toast.error(
+				REGISTRATION_STATUS[error.response.status] ??
+					REGISTRATION_STATUS.default
+			);
+		}
 	};
 
 	const getValidationError = (fieldName) =>

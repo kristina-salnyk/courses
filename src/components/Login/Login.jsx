@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { Container } from '../../common/Container';
 import { Input } from '../../common/Input';
 import { ValidationMessage } from '../../common/ValidationMessage';
+import { useUser } from '../../contexts/UserContext';
+import { setAuthHeader } from '../../utils/api/api';
+import { login } from '../../utils/api/auth';
 import loginSchema from '../../helpers/schemas/loginSchema';
 import {
 	EMAIL_INPUT,
 	LOGIN_BTN,
 	LOGIN_INFO_TEXT,
+	LOGIN_STATUS,
 	PASSWORD_INPUT,
 	REGISTER_BTN,
 	ROUTES,
+	SUBMIT_VALIDATION_ERROR_TEXT,
 } from '../../constants';
 
 import {
@@ -24,6 +30,8 @@ import {
 } from './Login.styled';
 
 const Login = () => {
+	const { setIsLoggedIn, setUser, setToken } = useUser();
+
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 
@@ -46,8 +54,39 @@ const Login = () => {
 		})();
 	};
 
-	const formSubmitHandler = (event) => {
+	const formSubmitHandler = async (event) => {
 		event.preventDefault();
+
+		const user = {
+			email,
+			password,
+		};
+
+		try {
+			await loginSchema.validate(user, {
+				abortEarly: false,
+			});
+		} catch (error) {
+			setValidationError(Array.from(error.inner));
+			toast.error(SUBMIT_VALIDATION_ERROR_TEXT);
+			return;
+		}
+
+		try {
+			const response = await login(user);
+			const { data } = response;
+
+			if (response.status === 201 && data.successful) {
+				setAuthHeader(response.data.token);
+				setIsLoggedIn(true);
+				setToken(data.result);
+				setUser({ ...data.user });
+			} else {
+				toast.error(LOGIN_STATUS[response.status] ?? LOGIN_STATUS.default);
+			}
+		} catch (error) {
+			toast.error(LOGIN_STATUS[error.response.status] ?? LOGIN_STATUS.default);
+		}
 	};
 
 	const getValidationError = (fieldName) =>

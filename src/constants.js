@@ -5,6 +5,19 @@ export const API_ENDPOINTS = {
 	REGISTRATION: '/register',
 };
 
+export const REGISTRATION_STATUS = {
+	201: 'Registration successfully completed',
+	400: 'Registration is not completed. Check your credentials',
+	500: 'Registration is not completed. Try again later',
+	default: 'Registration is not completed. Try again later',
+};
+
+export const LOGIN_STATUS = {
+	400: 'Not authorized. Wrong login or password',
+	500: 'Not authorized. Try again later',
+	default: 'Not authorized. Try again later',
+};
+
 export const ROUTES = {
 	COURSES: '/courses',
 	CREATE_COURSE: '/courses/add',
@@ -25,7 +38,7 @@ export const CARD_TITLES = {
 	CREATED: 'Created:',
 };
 
-export const LOGO_ALTERNATIVE_TEXT = 'Logo with books and courses title';
+export const LOGO_ALTERNATIVE_TEXT = 'Logo with tag and courses title';
 
 export const ADD_NEW_AUTHOR_ERROR_TEXT = 'Author with this name already exists';
 
@@ -37,7 +50,7 @@ export const AUTHORS_INFO_TEXT = 'Author list is empty';
 
 export const AUTHORS_LIST_NAME = 'authors';
 
-export const ADD_NEW_COURSE_ERROR_TEXT = 'Please, fill in all fields';
+export const SUBMIT_VALIDATION_ERROR_TEXT = 'Please, fill in all fields';
 
 export const DURATION_UNITS = 'hours';
 

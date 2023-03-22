@@ -18,7 +18,6 @@ import pipeDuration from '../../helpers/pipeDuration';
 import dateGenerator from '../../helpers/dateGenerator';
 import courseSchema from '../../helpers/schemas/courseSchema';
 import {
-	ADD_NEW_COURSE_ERROR_TEXT,
 	AUTHORS_INFO_TEXT,
 	AUTHORS_LIST_NAME,
 	CARD_TITLES,
@@ -28,6 +27,7 @@ import {
 	DURATION_INPUT,
 	DURATION_UNITS,
 	GROUP_TITLES,
+	SUBMIT_VALIDATION_ERROR_TEXT,
 	TITLE_INPUT,
 } from '../../constants';
 
@@ -80,7 +80,7 @@ const CreateCourse = () => {
 			return;
 		}
 
-		toast.error(ADD_NEW_COURSE_ERROR_TEXT);
+		toast.error(SUBMIT_VALIDATION_ERROR_TEXT);
 	};
 
 	const addToAuthors = useCallback(

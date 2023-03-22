@@ -7,11 +7,20 @@ export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const [name] = useState('Dave');
-	// const [token, setToken] = useState(null);
+	const [user, setUser] = useState({ name: null, email: null });
+	const [token, setToken] = useState(null);
 
 	return (
-		<UserContext.Provider value={{ isLoggedIn, setIsLoggedIn, name }}>
+		<UserContext.Provider
+			value={{
+				isLoggedIn,
+				setIsLoggedIn,
+				user,
+				setUser,
+				token,
+				setToken,
+			}}
+		>
 			{children}
 		</UserContext.Provider>
 	);
