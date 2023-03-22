@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import { ButtonStyled } from './Button.styled';
 
 const Button = ({ type, text, onClick, className }) => (
-	<ButtonStyled type={type} onClick={onClick} className={className}>
+	<ButtonStyled
+		type={type}
+		onClick={onClick && (() => onClick())}
+		className={className}
+	>
 		{text}
 	</ButtonStyled>
 );

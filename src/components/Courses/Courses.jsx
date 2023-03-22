@@ -1,35 +1,36 @@
-import { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { CourseCard } from './components/CourseCard';
 import { Container } from '../../common/Container';
 import { Button } from '../../common/Button';
 import { SearchBar } from './components/SearchBar';
-import {
-	ADD_NEW_COURSE_BTN,
-	MOCKED_COURSES_LIST,
-	ROUTES,
-} from '../../constants';
+import { useCourses } from '../../contexts/CoursesContext';
+import { ADD_NEW_COURSE_BTN, ROUTES } from '../../constants';
 
 import { CoursesList, CoursesStyled, ToolBar } from './Courses.styled';
 
 const Courses = () => {
 	const navigate = useNavigate();
+	const { courses } = useCourses();
 
-	const [courses] = useState(MOCKED_COURSES_LIST);
 	const [searchQuery, setSearchQuery] = useState('');
 
-	const searchedCourses = courses.filter((item) =>
-		[item.title.toLowerCase(), item.id.toLowerCase()].some((property) =>
-			property.includes(searchQuery.toLowerCase())
-		)
-	);
+	const searchedCourses = useMemo(() => {
+		return courses.filter((item) =>
+			[item.title.toLowerCase(), item.id.toLowerCase()].some((property) =>
+				property.includes(searchQuery.toLowerCase())
+			)
+		);
+	}, [courses, searchQuery]);
+
+	const updateSearchQuery = useCallback(setSearchQuery, [setSearchQuery]);
 
 	return (
 		<CoursesStyled>
 			<Container>
 				<ToolBar>
-					<SearchBar onSubmit={setSearchQuery} />
+					<SearchBar onSubmit={updateSearchQuery} />
 					<Button
 						type={ADD_NEW_COURSE_BTN.type}
 						text={ADD_NEW_COURSE_BTN.text}

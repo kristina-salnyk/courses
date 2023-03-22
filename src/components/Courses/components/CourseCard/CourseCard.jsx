@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 
 import { Button } from '../../../../common/Button';
 import { LimitedLine } from '../../../../common/LimitedLine';
+import { useAuthors } from '../../../../contexts/AuthorsContext';
 import pipeDuration from '../../../../helpers/pipeDuration';
 import {
 	CARD_TITLES,
 	DURATION_UNITS,
-	MOCKED_AUTHORS_LIST,
 	SHOW_COURSE_BTN,
 } from '../../../../constants';
 
@@ -25,11 +25,9 @@ const CourseCard = ({
 	description,
 	authors,
 }) => {
-	const authorsList = authors
-		.map(
-			(item) => MOCKED_AUTHORS_LIST.find((author) => author.id === item)?.name
-		)
-		.join(', ');
+	const { getAuthorsListById } = useAuthors();
+
+	const courseAuthorsList = getAuthorsListById(authors);
 
 	return (
 		<CourseCardStyled>
@@ -41,7 +39,7 @@ const CourseCard = ({
 				<CourseInfo>
 					<CourseInfoTitle>{CARD_TITLES.COURSE_AUTHORS}</CourseInfoTitle>
 					<LimitedLine>
-						<span title={authorsList}>{authorsList}</span>
+						<span title={courseAuthorsList}>{courseAuthorsList}</span>
 					</LimitedLine>
 					<CourseInfoTitle>{CARD_TITLES.DURATION}</CourseInfoTitle>
 					<span>
@@ -50,11 +48,7 @@ const CourseCard = ({
 					<CourseInfoTitle>{CARD_TITLES.CREATED}</CourseInfoTitle>
 					<span>{creationDate.replaceAll('/', '.')}</span>
 				</CourseInfo>
-				<Button
-					type={SHOW_COURSE_BTN.type}
-					text={SHOW_COURSE_BTN.text}
-					onClick={() => {}}
-				/>
+				<Button type={SHOW_COURSE_BTN.type} text={SHOW_COURSE_BTN.text} />
 			</CourseInfoWrap>
 		</CourseCardStyled>
 	);
