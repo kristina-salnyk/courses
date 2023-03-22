@@ -1,18 +1,22 @@
 import React from 'react';
-import { RotatingLines } from 'react-loader-spinner';
 import { useTheme } from 'styled-components';
+import { RotatingLines } from 'react-loader-spinner';
+
+import { LoaderWrap } from './Loader.styled';
 
 const Loader = () => {
 	const theme = useTheme();
 
 	return (
-		<RotatingLines
-			strokeColor={theme.colors.accent}
-			strokeWidth='5'
-			animationDuration='0.75'
-			width='30%'
-			visible={true}
-		/>
+		<LoaderWrap>
+			<RotatingLines
+				strokeColor={theme.colors.accent}
+				strokeWidth='5'
+				animationDuration='0.75'
+				width='100'
+				visible={true}
+			/>
+		</LoaderWrap>
 	);
 };
 
