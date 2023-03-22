@@ -5,20 +5,18 @@ import { LOGOUT_BTN, MOCKED_USER_NAME } from '../../constants';
 
 import { Controls, HeaderContent, HeaderStyled } from './Header.styled';
 
-const Header = () => {
-	return (
-		<HeaderStyled>
-			<Container>
-				<HeaderContent>
-					<Logo />
-					<Controls>
-						<span>{MOCKED_USER_NAME}</span>
-						<Button type={LOGOUT_BTN.type} text={LOGOUT_BTN.text} />
-					</Controls>
-				</HeaderContent>
-			</Container>
-		</HeaderStyled>
-	);
-};
+const Header = () => (
+	<HeaderStyled>
+		<Container>
+			<HeaderContent>
+				<Logo />
+				<Controls>
+					<span>{MOCKED_USER_NAME}</span>
+					<Button type={LOGOUT_BTN.type} text={LOGOUT_BTN.text} />
+				</Controls>
+			</HeaderContent>
+		</Container>
+	</HeaderStyled>
+);
 
 export default Header;
