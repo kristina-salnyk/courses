@@ -65,7 +65,7 @@ export const UserProvider = ({ children }) => {
 		setAuthHeader(token);
 		const serializedToken = JSON.stringify({ token });
 		window.localStorage.setItem(TOKEN_LOCAL_STORAGE_KEY, serializedToken);
-	}, [token, clearAuthHeader, setAuthHeader]);
+	}, [token]);
 
 	if (isLoading) return <Loader />;
 

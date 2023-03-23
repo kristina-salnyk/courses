@@ -24,6 +24,7 @@ export const LOGIN_STATUS = {
 
 export const ROUTES = {
 	COURSES: '/courses',
+	COURSE_INFO: '/courses/:courseId',
 	CREATE_COURSE: '/courses/add',
 	LOGIN: '/login',
 	REGISTRATION: '/registration',

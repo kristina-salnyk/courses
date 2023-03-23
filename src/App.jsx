@@ -13,6 +13,7 @@ import { PrivateRoute } from './components/PrivateRoute';
 import { ROUTES } from './constants';
 
 import 'react-toastify/dist/ReactToastify.css';
+import CourseInfo from './components/CourseInfo/CourseInfo';
 
 function App() {
 	useEffect(() => {
@@ -41,6 +42,15 @@ function App() {
 						path={ROUTES.COURSES}
 						element={
 							<PrivateRoute redirectTo={ROUTES.LOGIN} component={<Courses />} />
+						}
+					/>
+					<Route
+						path={ROUTES.COURSE_INFO}
+						element={
+							<PrivateRoute
+								redirectTo={ROUTES.LOGIN}
+								component={<CourseInfo />}
+							/>
 						}
 					/>
 					<Route
