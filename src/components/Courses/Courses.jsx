@@ -38,7 +38,9 @@ const Courses = () => {
 				{searchedCourses.length > 0 && (
 					<CoursesList>
 						{searchedCourses.map((item) => (
-							<CourseCard key={item.id} {...item} />
+							<li key={item.id}>
+								<CourseCard {...item} />
+							</li>
 						))}
 					</CoursesList>
 				)}

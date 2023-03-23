@@ -6,7 +6,9 @@ import { CourseInfoStyled } from './CourseInfo.styled';
 const CourseInfo = () => {
 	return (
 		<CourseInfoStyled>
-			<Container>CourseInfo</Container>
+			<Container>
+				<div>CourseInfo</div>
+			</Container>
 		</CourseInfoStyled>
 	);
 };
