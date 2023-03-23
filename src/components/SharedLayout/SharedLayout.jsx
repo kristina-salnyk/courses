@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 import { Header } from '../Header';
-import { Loader } from '../../common/Loader';
+import { LoaderStyled } from './SharedLayout.styled';
 
 const SharedLayout = () => {
 	return (
@@ -11,7 +11,7 @@ const SharedLayout = () => {
 			<ToastContainer />
 			<Header />
 			<main>
-				<Suspense fallback={<Loader />}>
+				<Suspense fallback={<LoaderStyled />}>
 					<Outlet />
 				</Suspense>
 			</main>
