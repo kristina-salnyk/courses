@@ -39,6 +39,7 @@ export const GROUP_TITLES = {
 };
 
 export const CARD_TITLES = {
+	ID: 'ID:',
 	COURSE_AUTHORS: 'Authors:',
 	DURATION: 'Duration:',
 	CREATED: 'Created:',

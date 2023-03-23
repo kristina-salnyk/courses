@@ -27,6 +27,7 @@ import {
 	DURATION_INPUT,
 	DURATION_UNITS,
 	GROUP_TITLES,
+	ROUTES,
 	SUBMIT_VALIDATION_ERROR_TEXT,
 	TITLE_INPUT,
 } from '../../constants';
@@ -34,8 +35,8 @@ import {
 import {
 	Author,
 	AuthorsStyled,
-	CourseInfo,
-	CourseInfoGroup,
+	CourseDetails,
+	CourseDetailsGroup,
 	CreateCourseForm,
 	CreateCourseStyled,
 	Duration,
@@ -76,7 +77,7 @@ const CreateCourse = () => {
 
 		if (isValid) {
 			setCourses((prevState) => [course, ...prevState]);
-			navigate(-1);
+			navigate(ROUTES.COURSES);
 			return;
 		}
 
@@ -166,7 +167,7 @@ const CreateCourse = () => {
 							/>
 						)}
 					</FieldWrap>
-					<CourseInfo>
+					<CourseDetails>
 						<CreateAuthor />
 						<Authors
 							selectedAuthors={courseAuthors}
@@ -203,7 +204,7 @@ const CreateCourse = () => {
 								<Duration>{pipeDuration(duration)}</Duration> {DURATION_UNITS}
 							</p>
 						</DurationGroup>
-						<CourseInfoGroup>
+						<CourseDetailsGroup>
 							<GroupTitle>{GROUP_TITLES.COURSE_AUTHORS}</GroupTitle>
 							<FieldWrap>
 								{courseAuthorsList.length > 0 ? (
@@ -230,8 +231,8 @@ const CreateCourse = () => {
 									/>
 								)}
 							</FieldWrap>
-						</CourseInfoGroup>
-					</CourseInfo>
+						</CourseDetailsGroup>
+					</CourseDetails>
 				</CreateCourseForm>
 			</Container>
 		</CreateCourseStyled>

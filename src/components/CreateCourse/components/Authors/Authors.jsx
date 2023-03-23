@@ -12,7 +12,7 @@ import {
 import {
 	Author,
 	AuthorsStyled,
-	CourseInfoGroup,
+	CourseDetailsGroup,
 	GroupTitle,
 	InfoMessage,
 } from '../../CreateCourse.styled';
@@ -25,7 +25,7 @@ const Authors = ({ selectedAuthors = [], addToAuthors }) => {
 	);
 
 	return (
-		<CourseInfoGroup>
+		<CourseDetailsGroup>
 			<GroupTitle>{GROUP_TITLES.AUTHORS}</GroupTitle>
 			{authorsList.length > 0 ? (
 				<AuthorsStyled>
@@ -45,7 +45,7 @@ const Authors = ({ selectedAuthors = [], addToAuthors }) => {
 			) : (
 				<InfoMessage>{AUTHORS_INFO_TEXT}</InfoMessage>
 			)}
-		</CourseInfoGroup>
+		</CourseDetailsGroup>
 	);
 };
 

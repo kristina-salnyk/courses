@@ -34,7 +34,7 @@ export const TopGroup = styled.div`
 	}
 `;
 
-export const CourseInfo = styled.div`
+export const CourseDetails = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: ${({ theme }) => theme.spacing[3]};
@@ -52,7 +52,7 @@ export const GroupTitle = styled.h2`
 	text-align: center;
 `;
 
-export const CourseInfoGroup = styled.div`
+export const CourseDetailsGroup = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: ${({ theme }) => theme.spacing[2]};
@@ -62,7 +62,7 @@ export const CourseInfoGroup = styled.div`
 	}
 `;
 
-export const DurationGroup = styled(CourseInfoGroup)`
+export const DurationGroup = styled(CourseDetailsGroup)`
 	@media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
 		order: 4;
 	}

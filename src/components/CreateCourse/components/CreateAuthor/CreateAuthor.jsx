@@ -12,7 +12,7 @@ import {
 	GROUP_TITLES,
 } from '../../../../constants';
 
-import { CourseInfoGroup, GroupTitle } from '../../CreateCourse.styled';
+import { CourseDetailsGroup, GroupTitle } from '../../CreateCourse.styled';
 
 const CreateAuthor = () => {
 	const { authors, setAuthors } = useAuthors();
@@ -35,7 +35,7 @@ const CreateAuthor = () => {
 	};
 
 	return (
-		<CourseInfoGroup>
+		<CourseDetailsGroup>
 			<GroupTitle>{GROUP_TITLES.ADD_AUTHOR}</GroupTitle>
 			<Input
 				label={AUTHOR_NAME_INPUT.label}
@@ -51,7 +51,7 @@ const CreateAuthor = () => {
 				text={CREATE_AUTHOR_BTN.text}
 				onClick={addNewAuthor}
 			/>
-		</CourseInfoGroup>
+		</CourseDetailsGroup>
 	);
 };
 

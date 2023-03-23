@@ -14,9 +14,9 @@ import {
 
 import {
 	CourseCardStyled,
-	CourseInfo,
-	CourseInfoTitle,
-	CourseInfoWrap,
+	CourseDetails,
+	CourseDetailsTitle,
+	CourseDetailsWrap,
 	CourseTitle,
 	NavLinkStyled,
 } from './CourseCard.styled';
@@ -40,25 +40,25 @@ const CourseCard = ({
 				<CourseTitle>{title}</CourseTitle>
 				<p>{description}</p>
 			</div>
-			<CourseInfoWrap>
-				<CourseInfo>
-					<CourseInfoTitle>{CARD_TITLES.COURSE_AUTHORS}</CourseInfoTitle>
+			<CourseDetailsWrap>
+				<CourseDetails>
+					<CourseDetailsTitle>{CARD_TITLES.COURSE_AUTHORS}</CourseDetailsTitle>
 					<LimitedLine>
 						<span title={courseAuthorsList}>{courseAuthorsList}</span>
 					</LimitedLine>
-					<CourseInfoTitle>{CARD_TITLES.DURATION}</CourseInfoTitle>
+					<CourseDetailsTitle>{CARD_TITLES.DURATION}</CourseDetailsTitle>
 					<span>
 						{pipeDuration(duration)} {DURATION_UNITS}
 					</span>
-					<CourseInfoTitle>{CARD_TITLES.CREATED}</CourseInfoTitle>
+					<CourseDetailsTitle>{CARD_TITLES.CREATED}</CourseDetailsTitle>
 					<span>{creationDate.replaceAll('/', '.')}</span>
-				</CourseInfo>
+				</CourseDetails>
 				<NavLinkStyled
 					path={ROUTES.COURSE_INFO.replaceAll(':courseId', id)}
 					text={SHOW_COURSE_BTN.text}
 					state={{ from: location }}
 				/>
-			</CourseInfoWrap>
+			</CourseDetailsWrap>
 		</CourseCardStyled>
 	);
 };
