@@ -1,19 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { lazy, useEffect } from 'react';
 import WebFont from 'webfontloader';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
 
-import { Courses } from './components/Courses';
-import { CreateCourse } from './components/CreateCourse';
-import { Registration } from './components/Registration';
-import { Login } from './components/Login';
-import { Header } from './components/Header';
+import { SharedLayout } from './components/SharedLayout';
 import { RestrictedRoute } from './components/RestrictedRoute';
 import { PrivateRoute } from './components/PrivateRoute';
 import { ROUTES } from './constants';
 
 import 'react-toastify/dist/ReactToastify.css';
-import CourseInfo from './components/CourseInfo/CourseInfo';
+
+const Courses = lazy(() => import('./components/Courses'));
+const CreateCourse = lazy(() => import('./components/CreateCourse'));
+const CourseInfo = lazy(() => import('./components/CourseInfo'));
+const Registration = lazy(() => import('./components/Registration'));
+const Login = lazy(() => import('./components/Login'));
 
 function App() {
 	useEffect(() => {
@@ -26,18 +26,9 @@ function App() {
 
 	return (
 		<BrowserRouter>
-			<main>
-				<ToastContainer />
-				<Header />
-				<Routes>
-					<Route
-						element={
-							<RestrictedRoute
-								redirectTo={ROUTES.COURSES}
-								component={<Login />}
-							/>
-						}
-					/>
+			<Routes>
+				<Route path='/' element={<SharedLayout />}>
+					<Route index element={<Navigate to={ROUTES.COURSES} replace />} />
 					<Route
 						path={ROUTES.COURSES}
 						element={
@@ -80,9 +71,9 @@ function App() {
 							/>
 						}
 					/>
-					<Route path='*' element={<Navigate to={ROUTES.COURSES} replace />} />
-				</Routes>
-			</main>
+				</Route>
+				<Route path='*' element={<Navigate to='/' replace />} />
+			</Routes>
 		</BrowserRouter>
 	);
 }
