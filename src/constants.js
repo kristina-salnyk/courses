@@ -7,6 +7,7 @@ export const API_ENDPOINTS = {
 	LOGIN: '/login',
 	REGISTRATION: '/register',
 	CURRENT: '/users/me',
+	LOGOUT: '/logout',
 };
 
 export const REGISTRATION_STATUS = {

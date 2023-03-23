@@ -13,3 +13,7 @@ export const current = async (token) => {
 	setAuthHeader(token);
 	return await api.get(API_ENDPOINTS.CURRENT);
 };
+
+export const logout = async () => {
+	return await api.delete(API_ENDPOINTS.LOGOUT);
+};
