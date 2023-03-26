@@ -24,6 +24,7 @@ export const LOGIN_STATUS = {
 };
 
 export const ROUTES = {
+	ROOT: '/',
 	COURSES: '/courses',
 	COURSE_INFO: '/courses/:courseId',
 	CREATE_COURSE: '/courses/add',
@@ -60,6 +61,10 @@ export const AUTHORS_LIST_NAME = 'authors';
 export const SUBMIT_VALIDATION_ERROR_TEXT = 'Please, fill in all fields';
 
 export const DURATION_UNITS = 'hours';
+
+export const BACK_BTN = {
+	text: 'Back',
+};
 
 export const LOGOUT_BTN = {
 	type: 'button',

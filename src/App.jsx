@@ -27,7 +27,7 @@ function App() {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path='/' element={<SharedLayout />}>
+				<Route path={ROUTES.ROOT} element={<SharedLayout />}>
 					<Route index element={<Navigate to={ROUTES.COURSES} replace />} />
 					<Route
 						path={ROUTES.COURSES}
@@ -72,7 +72,7 @@ function App() {
 						}
 					/>
 				</Route>
-				<Route path='*' element={<Navigate to='/' replace />} />
+				<Route path='*' element={<Navigate to={ROUTES.ROOT} replace />} />
 			</Routes>
 		</BrowserRouter>
 	);

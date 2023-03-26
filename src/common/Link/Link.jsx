@@ -15,6 +15,6 @@ export default Link;
 Link.propTypes = {
 	path: PropTypes.string.isRequired,
 	text: PropTypes.string.isRequired,
-	icon: PropTypes.elementType,
+	icon: PropTypes.element,
 	className: PropTypes.string,
 };

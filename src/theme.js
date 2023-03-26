@@ -50,6 +50,7 @@ const theme = Object.freeze({
 			l: '18px',
 			xl: '20px',
 			xxl: '24px',
+			xxxl: '28px',
 		},
 		weight: {
 			light: 300,

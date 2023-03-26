@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
 
 import { LimitedLine } from '../../../../common/LimitedLine';
 import { useAuthors } from '../../../../contexts/AuthorsContext';
@@ -29,7 +28,6 @@ const CourseCard = ({
 	description,
 	authors,
 }) => {
-	const location = useLocation();
 	const { getAuthorsListById } = useAuthors();
 
 	const courseAuthorsList = getAuthorsListById(authors);
@@ -56,7 +54,6 @@ const CourseCard = ({
 				<NavLinkStyled
 					path={ROUTES.COURSE_INFO.replaceAll(':courseId', id)}
 					text={SHOW_COURSE_BTN.text}
-					state={{ from: location }}
 				/>
 			</CourseDetailsWrap>
 		</CourseCardStyled>
