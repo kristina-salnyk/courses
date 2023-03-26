@@ -13,9 +13,9 @@ export const NavLinkStyled = styled(NavLink)`
 	background-image: none;
 	transition: background-image,
 		background-color ${({ theme }) => theme.animation.cubicBezier};
-	cursor: pointer;
 
-	&.active {
+	&.active,
+	&:hover {
 		background-color: ${({ theme }) => theme.colors.background.button};
 		background-image: linear-gradient(
 			-180deg,
