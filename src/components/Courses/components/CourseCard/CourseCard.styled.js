@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { NavLink } from '../../../../common/NavLink';
 
 export const CourseCardStyled = styled.div`
 	padding: ${({ theme }) => theme.spacing[3]};
@@ -53,13 +52,4 @@ export const CourseDetails = styled.div`
 
 export const CourseDetailsTitle = styled.span`
 	font-weight: ${({ theme }) => theme.typography.weight.bold};
-`;
-
-export const NavLinkStyled = styled(NavLink)`
-	background-color: ${({ theme }) => theme.colors.background.button};
-	background-image: linear-gradient(
-		-180deg,
-		${({ theme }) => theme.colors.lightAccent},
-		${({ theme }) => theme.colors.accent}
-	);
 `;
