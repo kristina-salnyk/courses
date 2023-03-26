@@ -19,8 +19,8 @@ export const ButtonStyled = styled.button`
 	cursor: pointer;
 
 	&:hover {
-		background-color: transparent;
 		color: ${({ theme }) => theme.colors.text.primary};
+		background-color: transparent;
 		background-image: none;
 	}
 `;
