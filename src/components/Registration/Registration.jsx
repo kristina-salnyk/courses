@@ -23,10 +23,10 @@ import {
 import {
 	ButtonStyled,
 	FieldWrapStyled,
-	InfoMessage,
 	LinkStyled,
-	RegistrationContent,
 	RegistrationForm,
+	RegistrationFormContent,
+	RegistrationFormMessage,
 	RegistrationStyled,
 } from './Registration.styled';
 
@@ -82,7 +82,7 @@ const Registration = () => {
 			<Container>
 				<RegistrationForm onSubmit={formSubmitHandler}>
 					{isLoading && <Loader />}
-					<RegistrationContent>
+					<RegistrationFormContent>
 						<FieldWrapStyled>
 							<Input
 								label={NAME_INPUT.label}
@@ -150,11 +150,11 @@ const Registration = () => {
 							)}
 						</FieldWrapStyled>
 						<ButtonStyled type={REGISTER_BTN.type} text={REGISTER_BTN.text} />
-						<InfoMessage>
+						<RegistrationFormMessage>
 							{REGISTRATION_INFO_TEXT}{' '}
 							<LinkStyled to={ROUTES.LOGIN}>{LOGIN_BTN.text}</LinkStyled>
-						</InfoMessage>
-					</RegistrationContent>
+						</RegistrationFormMessage>
+					</RegistrationFormContent>
 				</RegistrationForm>
 			</Container>
 		</RegistrationStyled>

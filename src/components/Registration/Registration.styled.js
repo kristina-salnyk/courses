@@ -15,7 +15,7 @@ export const RegistrationForm = styled.form`
 	border-radius: ${({ theme }) => theme.shape.borderRadius.m};
 `;
 
-export const RegistrationContent = styled.div`
+export const RegistrationFormContent = styled.div`
 	margin: 0 auto;
 	display: flex;
 	flex-direction: column;
@@ -37,7 +37,7 @@ export const ButtonStyled = styled(Button)`
 	align-self: center;
 `;
 
-export const InfoMessage = styled.p`
+export const RegistrationFormMessage = styled.p`
 	margin-top: ${({ theme }) => theme.spacing[2]};
 	padding: ${({ theme }) => theme.spacing[1]} 0;
 	font-size: ${({ theme }) => theme.typography.size.xs};

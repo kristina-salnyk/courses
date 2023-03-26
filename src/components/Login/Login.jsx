@@ -22,10 +22,10 @@ import {
 import {
 	ButtonStyled,
 	FieldWrapStyled,
-	InfoMessage,
 	LinkStyled,
-	LoginContent,
 	LoginForm,
+	LoginFormContent,
+	LoginFormMessage,
 	LoginStyled,
 } from './Login.styled';
 
@@ -77,7 +77,7 @@ const Login = () => {
 			<Container>
 				<LoginForm onSubmit={formSubmitHandler}>
 					{isLoading && <Loader />}
-					<LoginContent>
+					<LoginFormContent>
 						<FieldWrapStyled>
 							<Input
 								label={EMAIL_INPUT.label}
@@ -123,13 +123,13 @@ const Login = () => {
 							)}
 						</FieldWrapStyled>
 						<ButtonStyled type={LOGIN_BTN.type} text={LOGIN_BTN.text} />
-						<InfoMessage>
+						<LoginFormMessage>
 							{LOGIN_INFO_TEXT}{' '}
 							<LinkStyled to={ROUTES.REGISTRATION}>
 								{REGISTER_BTN.text}
 							</LinkStyled>
-						</InfoMessage>
-					</LoginContent>
+						</LoginFormMessage>
+					</LoginFormContent>
 				</LoginForm>
 			</Container>
 		</LoginStyled>

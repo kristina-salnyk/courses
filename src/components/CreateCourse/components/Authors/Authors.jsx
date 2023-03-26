@@ -11,10 +11,10 @@ import {
 
 import {
 	Author,
-	AuthorsStyled,
+	AuthorsList,
+	AuthorsMessage,
 	CourseDetailsGroup,
-	GroupTitle,
-	InfoMessage,
+	CourseDetailsGroupTitle,
 } from '../../CreateCourse.styled';
 
 const Authors = ({ selectedAuthors = [], addToAuthors }) => {
@@ -26,9 +26,9 @@ const Authors = ({ selectedAuthors = [], addToAuthors }) => {
 
 	return (
 		<CourseDetailsGroup>
-			<GroupTitle>{GROUP_TITLES.AUTHORS}</GroupTitle>
+			<CourseDetailsGroupTitle>{GROUP_TITLES.AUTHORS}</CourseDetailsGroupTitle>
 			{authorsList.length > 0 ? (
-				<AuthorsStyled>
+				<AuthorsList>
 					{authorsList.map((item) => (
 						<Author key={item.id}>
 							{item.name}
@@ -41,9 +41,9 @@ const Authors = ({ selectedAuthors = [], addToAuthors }) => {
 							/>
 						</Author>
 					))}
-				</AuthorsStyled>
+				</AuthorsList>
 			) : (
-				<InfoMessage>{AUTHORS_INFO_TEXT}</InfoMessage>
+				<AuthorsMessage>{AUTHORS_INFO_TEXT}</AuthorsMessage>
 			)}
 		</CourseDetailsGroup>
 	);

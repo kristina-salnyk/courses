@@ -12,7 +12,10 @@ import {
 	GROUP_TITLES,
 } from '../../../../constants';
 
-import { CourseDetailsGroup, GroupTitle } from '../../CreateCourse.styled';
+import {
+	CourseDetailsGroup,
+	CourseDetailsGroupTitle,
+} from '../../CreateCourse.styled';
 
 const CreateAuthor = () => {
 	const { authors, setAuthors } = useAuthors();
@@ -36,7 +39,9 @@ const CreateAuthor = () => {
 
 	return (
 		<CourseDetailsGroup>
-			<GroupTitle>{GROUP_TITLES.ADD_AUTHOR}</GroupTitle>
+			<CourseDetailsGroupTitle>
+				{GROUP_TITLES.ADD_AUTHOR}
+			</CourseDetailsGroupTitle>
 			<Input
 				label={AUTHOR_NAME_INPUT.label}
 				type={AUTHOR_NAME_INPUT.type}

@@ -8,7 +8,7 @@ import { SearchBar } from './components/SearchBar';
 import { useCourses } from '../../contexts/CoursesContext';
 import { ADD_NEW_COURSE_BTN, ROUTES } from '../../constants';
 
-import { CoursesList, CoursesStyled, ToolBar } from './Courses.styled';
+import { CoursesHeader, CoursesList, CoursesStyled } from './Courses.styled';
 
 const Courses = () => {
 	const navigate = useNavigate();
@@ -27,14 +27,14 @@ const Courses = () => {
 	return (
 		<CoursesStyled>
 			<Container>
-				<ToolBar>
+				<CoursesHeader>
 					<SearchBar onSubmit={setSearchQuery} />
 					<Button
 						type={ADD_NEW_COURSE_BTN.type}
 						text={ADD_NEW_COURSE_BTN.text}
 						onClick={() => navigate(ROUTES.CREATE_COURSE)}
 					/>
-				</ToolBar>
+				</CoursesHeader>
 				{searchedCourses.length > 0 && (
 					<CoursesList>
 						{searchedCourses.map((item) => (

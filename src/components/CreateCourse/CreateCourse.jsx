@@ -34,18 +34,18 @@ import {
 
 import {
 	Author,
-	AuthorsStyled,
+	AuthorsList,
+	AuthorsMessage,
 	CourseDetails,
 	CourseDetailsGroup,
+	CourseDetailsGroupTitle,
+	CourseDuration,
 	CreateCourseForm,
+	CreateCourseFormHeader,
 	CreateCourseStyled,
 	Duration,
-	DurationGroup,
 	FieldWrap,
 	FieldWrapStyled,
-	GroupTitle,
-	InfoMessage,
-	TopGroup,
 } from './CreateCourse.styled';
 
 const CreateCourse = () => {
@@ -115,7 +115,7 @@ const CreateCourse = () => {
 					onSubmit={formSubmitHandler}
 					onKeyPress={formKeyPressHandler}
 				>
-					<TopGroup>
+					<CreateCourseFormHeader>
 						<FieldWrapStyled>
 							<Input
 								label={TITLE_INPUT.label}
@@ -143,7 +143,7 @@ const CreateCourse = () => {
 							type={CREATE_COURSE_BTN.type}
 							text={CREATE_COURSE_BTN.text}
 						/>
-					</TopGroup>
+					</CreateCourseFormHeader>
 					<FieldWrap>
 						<TextArea
 							label={DESCRIPTION_TEXT_AREA.label}
@@ -173,8 +173,10 @@ const CreateCourse = () => {
 							selectedAuthors={courseAuthors}
 							addToAuthors={addToAuthors}
 						/>
-						<DurationGroup>
-							<GroupTitle>{GROUP_TITLES.DURATION}</GroupTitle>
+						<CourseDuration>
+							<CourseDetailsGroupTitle>
+								{GROUP_TITLES.DURATION}
+							</CourseDetailsGroupTitle>
 							<FieldWrap>
 								<Input
 									label={DURATION_INPUT.label}
@@ -203,12 +205,14 @@ const CreateCourse = () => {
 								{CARD_TITLES.DURATION}{' '}
 								<Duration>{pipeDuration(duration)}</Duration> {DURATION_UNITS}
 							</p>
-						</DurationGroup>
+						</CourseDuration>
 						<CourseDetailsGroup>
-							<GroupTitle>{GROUP_TITLES.COURSE_AUTHORS}</GroupTitle>
+							<CourseDetailsGroupTitle>
+								{GROUP_TITLES.COURSE_AUTHORS}
+							</CourseDetailsGroupTitle>
 							<FieldWrap>
 								{courseAuthorsList.length > 0 ? (
-									<AuthorsStyled>
+									<AuthorsList>
 										{courseAuthorsList.map((item) => (
 											<Author key={item.id}>
 												{item.name}
@@ -221,9 +225,9 @@ const CreateCourse = () => {
 												/>
 											</Author>
 										))}
-									</AuthorsStyled>
+									</AuthorsList>
 								) : (
-									<InfoMessage>{AUTHORS_INFO_TEXT}</InfoMessage>
+									<AuthorsMessage>{AUTHORS_INFO_TEXT}</AuthorsMessage>
 								)}
 								{validationErrors[AUTHORS_LIST_NAME] && (
 									<ValidationMessage
