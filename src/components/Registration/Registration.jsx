@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { Container } from '../../common/Container';
 import { Input } from '../../common/Input';
 import { Loader } from '../../common/Loader';
 import { ValidationMessage } from '../../common/ValidationMessage';
-import { register } from '../../utils/api/auth';
+import { register } from '../../services/api/user';
 import useValidationErrors from '../../hooks/useValidationErrors';
 import registerSchema from '../../helpers/schemas/registerSchema';
 import {

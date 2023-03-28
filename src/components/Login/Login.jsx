@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { Container } from '../../common/Container';
 import { Input } from '../../common/Input';
 import { Loader } from '../../common/Loader';
 import { ValidationMessage } from '../../common/ValidationMessage';
-import { useUser } from '../../contexts/UserContext';
-import { login } from '../../utils/api/auth';
+import { login } from '../../services/api/user';
+import { loginUser } from '../../store/user/actionCreators';
 import useValidationErrors from '../../hooks/useValidationErrors';
 import loginSchema from '../../helpers/schemas/loginSchema';
 import {
@@ -30,7 +31,7 @@ import {
 } from './Login.styled';
 
 const Login = () => {
-	const { setIsLoggedIn, setUser, setToken } = useUser();
+	const dispatch = useDispatch();
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -58,10 +59,9 @@ const Login = () => {
 
 			if (response.status === 201 && data.successful) {
 				const [, token] = data.result.split(' ');
-
-				setIsLoggedIn(true);
-				setToken(token);
-				setUser({ ...data.user });
+				dispatch(
+					loginUser({ name: data.user.name, email: data.user.email, token })
+				);
 			} else {
 				toast.error(LOGIN_STATUS[response.status] ?? LOGIN_STATUS.default);
 			}

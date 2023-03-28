@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Logo } from './components/Logo';
 import { Button } from '../../common/Button';
 import { Container } from '../../common/Container';
 import { NavLink } from '../../common/NavLink';
 import { Loader } from '../../common/Loader';
-import { useUser } from '../../contexts/UserContext';
-import { logout } from '../../utils/api/auth';
+import { logout } from '../../services/api/user';
+import { selectUser } from '../../store/user/selectors';
+import { logoutUser } from '../../store/user/actionCreators';
 import { LOGIN_BTN, LOGOUT_BTN, REGISTER_BTN, ROUTES } from '../../constants';
 
 import { Controls, HeaderContent, HeaderStyled } from './Header.styled';
 
 const Header = () => {
-	const { isLoggedIn, setIsLoggedIn, user, setUser, setToken } = useUser();
+	const dispatch = useDispatch();
+	const { isAuth, name } = useSelector(selectUser);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const logoutClickHandler = async () => {
@@ -22,10 +25,7 @@ const Header = () => {
 			await logout();
 		} catch (error) {
 		} finally {
-			setIsLoggedIn(false);
-			setToken(null);
-			setUser({ name: null, email: null });
-
+			dispatch(logoutUser());
 			setIsLoading(false);
 		}
 	};
@@ -38,9 +38,9 @@ const Header = () => {
 					<HeaderContent>
 						<Logo />
 						<Controls>
-							{isLoggedIn ? (
+							{isAuth ? (
 								<>
-									<span>{user.name}</span>
+									<span>{name}</span>
 									<Button
 										type={LOGOUT_BTN.type}
 										text={LOGOUT_BTN.text}
