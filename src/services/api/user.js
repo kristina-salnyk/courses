@@ -1,4 +1,4 @@
-import { api, setAuthHeader } from './api';
+import { api, setAuthHeader } from './index';
 import { API_ENDPOINTS } from '../../constants';
 
 export const register = async (user) => {
