@@ -1,10 +1,17 @@
-import React, { lazy, useEffect } from 'react';
-import WebFont from 'webfontloader';
+import React, { lazy, useEffect, useState } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import WebFont from 'webfontloader';
 
 import { SharedLayout } from './components/SharedLayout';
 import { RestrictedRoute } from './components/RestrictedRoute';
 import { PrivateRoute } from './components/PrivateRoute';
+import { Loader } from './common/Loader';
+import { clearAuthHeader, setAuthHeader } from './services/api';
+import { current } from './services/api/user';
+import { store } from './store';
+import { selectUser } from './store/user/selectors';
+import { loginUser, updateUser } from './store/user/actionCreators';
 import { ROUTES } from './constants';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,13 +23,64 @@ const Registration = lazy(() => import('./components/Registration'));
 const Login = lazy(() => import('./components/Login'));
 
 function App() {
+	const dispatch = useDispatch();
+	const { isRefreshing, token } = useSelector(selectUser);
+	const [isLoading, setIsLoading] = useState(false);
+
 	useEffect(() => {
+		(async () => {
+			try {
+				const state = store.getState();
+				const { token } = state.user;
+
+				if (!token) return;
+
+				setIsLoading(true);
+
+				try {
+					const response = await current(token);
+					const { data } = response;
+
+					if (response.status === 200 && data.successful) {
+						const { name, email } = data.result;
+
+						dispatch(loginUser({ name, email, token }));
+					} else {
+						dispatch(updateUser({ token: '' }));
+					}
+				} catch (error) {
+					dispatch(updateUser({ token: '' }));
+				} finally {
+					setIsLoading(false);
+				}
+			} catch (error) {
+			} finally {
+				dispatch(updateUser({ isRefreshing: false }));
+			}
+		})();
+	}, [dispatch]);
+
+	useEffect(() => {
+		if (token) {
+			setAuthHeader(token);
+		} else {
+			clearAuthHeader();
+		}
+	}, [token]);
+
+	useEffect(() => {
+		if (isRefreshing) return;
+
 		WebFont.load({
 			google: {
 				families: ['Noto Sans', 'sans-serif'],
 			},
 		});
-	}, []);
+	}, [isRefreshing]);
+
+	if (isLoading) return <Loader />;
+
+	if (isRefreshing) return null;
 
 	return (
 		<BrowserRouter>
