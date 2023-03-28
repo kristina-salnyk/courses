@@ -1,17 +1,17 @@
-import { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { CourseCard } from './components/CourseCard';
 import { Container } from '../../common/Container';
 import { Button } from '../../common/Button';
 import { SearchBar } from './components/SearchBar';
-import { useCurrentView } from '../../contexts/ViewContext';
 import { useCourses } from '../../contexts/CoursesContext';
-import { ADD_NEW_COURSE_BTN, VIEWS } from '../../constants';
+import { ADD_NEW_COURSE_BTN, ROUTES } from '../../constants';
 
-import { CoursesList, CoursesStyled, ToolBar } from './Courses.styled';
+import { CoursesHeader, CoursesList, CoursesStyled } from './Courses.styled';
 
 const Courses = () => {
-	const { updateCurrentView } = useCurrentView();
+	const navigate = useNavigate();
 	const { courses } = useCourses();
 
 	const [searchQuery, setSearchQuery] = useState('');
@@ -24,23 +24,23 @@ const Courses = () => {
 		);
 	}, [courses, searchQuery]);
 
-	const updateSearchQuery = useCallback(setSearchQuery, [setSearchQuery]);
-
 	return (
 		<CoursesStyled>
 			<Container>
-				<ToolBar>
-					<SearchBar onSubmit={updateSearchQuery} />
+				<CoursesHeader>
+					<SearchBar onSubmit={setSearchQuery} />
 					<Button
 						type={ADD_NEW_COURSE_BTN.type}
 						text={ADD_NEW_COURSE_BTN.text}
-						onClick={() => updateCurrentView(VIEWS.CREATE_NEW_COURSE)}
+						onClick={() => navigate(ROUTES.CREATE_COURSE)}
 					/>
-				</ToolBar>
+				</CoursesHeader>
 				{searchedCourses.length > 0 && (
 					<CoursesList>
 						{searchedCourses.map((item) => (
-							<CourseCard key={item.id} {...item} />
+							<li key={item.id}>
+								<CourseCard {...item} />
+							</li>
 						))}
 					</CoursesList>
 				)}

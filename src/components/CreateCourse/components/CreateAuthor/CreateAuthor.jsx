@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { v4 as uuid } from 'uuid';
 
@@ -12,7 +12,10 @@ import {
 	GROUP_TITLES,
 } from '../../../../constants';
 
-import { CourseInfoGroup, GroupTitle } from '../../CreateCourse.styled';
+import {
+	CourseDetailsGroup,
+	CourseDetailsGroupTitle,
+} from '../../CreateCourse.styled';
 
 const CreateAuthor = () => {
 	const { authors, setAuthors } = useAuthors();
@@ -35,8 +38,10 @@ const CreateAuthor = () => {
 	};
 
 	return (
-		<CourseInfoGroup>
-			<GroupTitle>{GROUP_TITLES.ADD_AUTHOR}</GroupTitle>
+		<CourseDetailsGroup>
+			<CourseDetailsGroupTitle>
+				{GROUP_TITLES.ADD_AUTHOR}
+			</CourseDetailsGroupTitle>
 			<Input
 				label={AUTHOR_NAME_INPUT.label}
 				type={AUTHOR_NAME_INPUT.type}
@@ -51,7 +56,7 @@ const CreateAuthor = () => {
 				text={CREATE_AUTHOR_BTN.text}
 				onClick={addNewAuthor}
 			/>
-		</CourseInfoGroup>
+		</CourseDetailsGroup>
 	);
 };
 

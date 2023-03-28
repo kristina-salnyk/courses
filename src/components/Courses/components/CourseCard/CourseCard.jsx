@@ -1,30 +1,35 @@
+import React from 'react';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 
-import { Button } from '../../../../common/Button';
 import { LimitedLine } from '../../../../common/LimitedLine';
+import { Button } from '../../../../common/Button';
 import { useAuthors } from '../../../../contexts/AuthorsContext';
 import pipeDuration from '../../../../helpers/pipeDuration';
 import {
 	CARD_TITLES,
 	DURATION_UNITS,
+	ROUTES,
 	SHOW_COURSE_BTN,
 } from '../../../../constants';
 
 import {
 	CourseCardStyled,
-	CourseInfo,
-	CourseInfoTitle,
-	CourseInfoWrap,
+	CourseDetails,
+	CourseDetailsTitle,
+	CourseDetailsWrap,
 	CourseTitle,
 } from './CourseCard.styled';
 
 const CourseCard = ({
+	id,
 	title,
 	duration,
 	creationDate,
 	description,
 	authors,
 }) => {
+	const navigate = useNavigate();
 	const { getAuthorsListById } = useAuthors();
 
 	const courseAuthorsList = getAuthorsListById(authors);
@@ -35,21 +40,27 @@ const CourseCard = ({
 				<CourseTitle>{title}</CourseTitle>
 				<p>{description}</p>
 			</div>
-			<CourseInfoWrap>
-				<CourseInfo>
-					<CourseInfoTitle>{CARD_TITLES.COURSE_AUTHORS}</CourseInfoTitle>
+			<CourseDetailsWrap>
+				<CourseDetails>
+					<CourseDetailsTitle>{CARD_TITLES.COURSE_AUTHORS}</CourseDetailsTitle>
 					<LimitedLine>
 						<span title={courseAuthorsList}>{courseAuthorsList}</span>
 					</LimitedLine>
-					<CourseInfoTitle>{CARD_TITLES.DURATION}</CourseInfoTitle>
+					<CourseDetailsTitle>{CARD_TITLES.DURATION}</CourseDetailsTitle>
 					<span>
 						{pipeDuration(duration)} {DURATION_UNITS}
 					</span>
-					<CourseInfoTitle>{CARD_TITLES.CREATED}</CourseInfoTitle>
+					<CourseDetailsTitle>{CARD_TITLES.CREATED}</CourseDetailsTitle>
 					<span>{creationDate.replaceAll('/', '.')}</span>
-				</CourseInfo>
-				<Button type={SHOW_COURSE_BTN.type} text={SHOW_COURSE_BTN.text} />
-			</CourseInfoWrap>
+				</CourseDetails>
+				<Button
+					type={SHOW_COURSE_BTN.type}
+					text={SHOW_COURSE_BTN.text}
+					onClick={() =>
+						navigate(ROUTES.COURSE_INFO.replaceAll(':courseId', id))
+					}
+				/>
+			</CourseDetailsWrap>
 		</CourseCardStyled>
 	);
 };
@@ -57,6 +68,7 @@ const CourseCard = ({
 export default CourseCard;
 
 CourseCard.propTypes = {
+	id: PropTypes.string.isRequired,
 	title: PropTypes.string.isRequired,
 	duration: PropTypes.number.isRequired,
 	creationDate: PropTypes.string.isRequired,

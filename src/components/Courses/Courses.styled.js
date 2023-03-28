@@ -4,7 +4,7 @@ export const CoursesStyled = styled.section`
 	padding: ${({ theme }) => theme.spacing[3]} 0;
 `;
 
-export const ToolBar = styled.div`
+export const CoursesHeader = styled.div`
 	margin-bottom: ${({ theme }) => theme.spacing[3]};
 	display: flex;
 	justify-content: space-between;

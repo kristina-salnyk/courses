@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const CourseCardStyled = styled.li`
+export const CourseCardStyled = styled.div`
 	padding: ${({ theme }) => theme.spacing[3]};
 	background-color: ${({ theme }) => theme.colors.background.card};
 	box-shadow: ${({ theme }) => theme.shadows[0]};
@@ -29,7 +29,7 @@ export const CourseTitle = styled.h2`
 	margin-bottom: ${({ theme }) => theme.spacing[2]};
 `;
 
-export const CourseInfoWrap = styled.div`
+export const CourseDetailsWrap = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -40,7 +40,7 @@ export const CourseInfoWrap = styled.div`
 	}
 `;
 
-export const CourseInfo = styled.div`
+export const CourseDetails = styled.div`
 	display: grid;
 	grid-template-columns: 80px auto;
 	gap: ${({ theme }) => theme.spacing[1]};
@@ -50,6 +50,6 @@ export const CourseInfo = styled.div`
 	}
 `;
 
-export const CourseInfoTitle = styled.span`
+export const CourseDetailsTitle = styled.span`
 	font-weight: ${({ theme }) => theme.typography.weight.bold};
 `;

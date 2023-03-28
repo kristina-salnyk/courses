@@ -1,3 +1,5 @@
+import React from 'react';
+
 import logo from '../../../../assets/img/logo.png';
 import { LOGO_ALTERNATIVE_TEXT } from '../../../../constants';
 

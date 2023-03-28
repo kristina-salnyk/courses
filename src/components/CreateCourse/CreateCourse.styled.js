@@ -14,7 +14,7 @@ export const CreateCourseForm = styled.form`
 	gap: ${({ theme }) => theme.spacing[2]};
 `;
 
-export const TopGroup = styled.div`
+export const CreateCourseFormHeader = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
@@ -34,7 +34,7 @@ export const TopGroup = styled.div`
 	}
 `;
 
-export const CourseInfo = styled.div`
+export const CourseDetails = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: ${({ theme }) => theme.spacing[3]};
@@ -46,13 +46,13 @@ export const CourseInfo = styled.div`
 	}
 `;
 
-export const GroupTitle = styled.h2`
+export const CourseDetailsGroupTitle = styled.h2`
 	font-size: ${({ theme }) => theme.typography.size.m};
 	font-weight: ${({ theme }) => theme.typography.weight.bold};
 	text-align: center;
 `;
 
-export const CourseInfoGroup = styled.div`
+export const CourseDetailsGroup = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: ${({ theme }) => theme.spacing[2]};
@@ -62,13 +62,13 @@ export const CourseInfoGroup = styled.div`
 	}
 `;
 
-export const DurationGroup = styled(CourseInfoGroup)`
+export const CourseDuration = styled(CourseDetailsGroup)`
 	@media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
 		order: 4;
 	}
 `;
 
-export const AuthorsStyled = styled.ul`
+export const AuthorsList = styled.ul`
 	display: flex;
 	flex-direction: column;
 	gap: ${({ theme }) => theme.spacing[1]};
@@ -100,7 +100,7 @@ export const FieldWrapStyled = styled(FieldWrap)`
 	}
 `;
 
-export const InfoMessage = styled.p`
+export const AuthorsMessage = styled.p`
 	padding: ${({ theme }) => theme.spacing[1]} 0;
 	font-size: ${({ theme }) => theme.typography.size.s};
 	font-weight: ${({ theme }) => theme.typography.weight.bold};

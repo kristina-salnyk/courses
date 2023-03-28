@@ -1,6 +1,7 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 import { Container } from '../../common/Container';
 import { TextArea } from '../../common/TextArea';
@@ -11,14 +12,12 @@ import { CreateAuthor } from './components/CreateAuthor';
 import { Authors } from './components/Authors';
 import { useAuthors } from '../../contexts/AuthorsContext';
 import { useCourses } from '../../contexts/CoursesContext';
-import { useCurrentView } from '../../contexts/ViewContext';
-import useValidationError from '../../hooks/useValidationError';
+import useValidationErrors from '../../hooks/useValidationErrors';
 import formKeyPressHandler from '../../helpers/handlers/formKeyPressHandler';
 import pipeDuration from '../../helpers/pipeDuration';
 import dateGenerator from '../../helpers/dateGenerator';
 import courseSchema from '../../helpers/schemas/courseSchema';
 import {
-	ADD_NEW_COURSE_ERROR_TEXT,
 	AUTHORS_INFO_TEXT,
 	AUTHORS_LIST_NAME,
 	CARD_TITLES,
@@ -28,28 +27,29 @@ import {
 	DURATION_INPUT,
 	DURATION_UNITS,
 	GROUP_TITLES,
+	ROUTES,
+	SUBMIT_VALIDATION_ERROR_TEXT,
 	TITLE_INPUT,
-	VIEWS,
 } from '../../constants';
 
 import {
 	Author,
-	AuthorsStyled,
-	CourseInfo,
-	CourseInfoGroup,
+	AuthorsList,
+	AuthorsMessage,
+	CourseDetails,
+	CourseDetailsGroup,
+	CourseDetailsGroupTitle,
+	CourseDuration,
 	CreateCourseForm,
+	CreateCourseFormHeader,
 	CreateCourseStyled,
 	Duration,
-	DurationGroup,
 	FieldWrap,
 	FieldWrapStyled,
-	GroupTitle,
-	InfoMessage,
-	TopGroup,
 } from './CreateCourse.styled';
 
-const CreateCourse = (factory, deps) => {
-	const { updateCurrentView } = useCurrentView();
+const CreateCourse = () => {
+	const navigate = useNavigate();
 	const { getAuthorsById } = useAuthors();
 	const { setCourses } = useCourses();
 
@@ -59,7 +59,7 @@ const CreateCourse = (factory, deps) => {
 	const [duration, setDuration] = useState(0);
 
 	const { validationErrors, validateOneField, validateAllFields } =
-		useValidationError();
+		useValidationErrors();
 
 	const formSubmitHandler = async (event) => {
 		event.preventDefault();
@@ -77,11 +77,11 @@ const CreateCourse = (factory, deps) => {
 
 		if (isValid) {
 			setCourses((prevState) => [course, ...prevState]);
-			updateCurrentView(VIEWS.COURSES);
+			navigate(ROUTES.COURSES);
 			return;
 		}
 
-		toast.error(ADD_NEW_COURSE_ERROR_TEXT);
+		toast.error(SUBMIT_VALIDATION_ERROR_TEXT);
 	};
 
 	const addToAuthors = useCallback(
@@ -115,7 +115,7 @@ const CreateCourse = (factory, deps) => {
 					onSubmit={formSubmitHandler}
 					onKeyPress={formKeyPressHandler}
 				>
-					<TopGroup>
+					<CreateCourseFormHeader>
 						<FieldWrapStyled>
 							<Input
 								label={TITLE_INPUT.label}
@@ -143,7 +143,7 @@ const CreateCourse = (factory, deps) => {
 							type={CREATE_COURSE_BTN.type}
 							text={CREATE_COURSE_BTN.text}
 						/>
-					</TopGroup>
+					</CreateCourseFormHeader>
 					<FieldWrap>
 						<TextArea
 							label={DESCRIPTION_TEXT_AREA.label}
@@ -167,14 +167,16 @@ const CreateCourse = (factory, deps) => {
 							/>
 						)}
 					</FieldWrap>
-					<CourseInfo>
+					<CourseDetails>
 						<CreateAuthor />
 						<Authors
 							selectedAuthors={courseAuthors}
 							addToAuthors={addToAuthors}
 						/>
-						<DurationGroup>
-							<GroupTitle>{GROUP_TITLES.DURATION}</GroupTitle>
+						<CourseDuration>
+							<CourseDetailsGroupTitle>
+								{GROUP_TITLES.DURATION}
+							</CourseDetailsGroupTitle>
 							<FieldWrap>
 								<Input
 									label={DURATION_INPUT.label}
@@ -203,12 +205,14 @@ const CreateCourse = (factory, deps) => {
 								{CARD_TITLES.DURATION}{' '}
 								<Duration>{pipeDuration(duration)}</Duration> {DURATION_UNITS}
 							</p>
-						</DurationGroup>
-						<CourseInfoGroup>
-							<GroupTitle>{GROUP_TITLES.COURSE_AUTHORS}</GroupTitle>
+						</CourseDuration>
+						<CourseDetailsGroup>
+							<CourseDetailsGroupTitle>
+								{GROUP_TITLES.COURSE_AUTHORS}
+							</CourseDetailsGroupTitle>
 							<FieldWrap>
 								{courseAuthorsList.length > 0 ? (
-									<AuthorsStyled>
+									<AuthorsList>
 										{courseAuthorsList.map((item) => (
 											<Author key={item.id}>
 												{item.name}
@@ -221,9 +225,9 @@ const CreateCourse = (factory, deps) => {
 												/>
 											</Author>
 										))}
-									</AuthorsStyled>
+									</AuthorsList>
 								) : (
-									<InfoMessage>{AUTHORS_INFO_TEXT}</InfoMessage>
+									<AuthorsMessage>{AUTHORS_INFO_TEXT}</AuthorsMessage>
 								)}
 								{validationErrors[AUTHORS_LIST_NAME] && (
 									<ValidationMessage
@@ -231,8 +235,8 @@ const CreateCourse = (factory, deps) => {
 									/>
 								)}
 							</FieldWrap>
-						</CourseInfoGroup>
-					</CourseInfo>
+						</CourseDetailsGroup>
+					</CourseDetails>
 				</CreateCourseForm>
 			</Container>
 		</CreateCourseStyled>
