@@ -11,3 +11,8 @@ export const selectCoursesBySearchQuery = createSelector(
 			)
 		)
 );
+
+export const selectCourseById = createSelector(
+	[selectCourses, (state, courseId) => courseId],
+	(courses, courseId) => courses.find((item) => item.id === courseId)
+);
