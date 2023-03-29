@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { RiDeleteBin6Fill, RiEdit2Fill } from 'react-icons/ri';
 
 import { LimitedLine } from '../../../../common/LimitedLine';
 import { Button } from '../../../../common/Button';
 import { Icon } from '../../../../common/Icon';
 import { useAuthors } from '../../../../contexts/AuthorsContext';
+import { deleteCourse } from '../../../../store/courses/actionCreators';
 import pipeDuration from '../../../../helpers/pipeDuration';
 import {
 	CARD_TITLES,
@@ -34,6 +36,7 @@ const CourseCard = ({
 	description,
 	authors,
 }) => {
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const { getAuthorsListById } = useAuthors();
 
@@ -73,7 +76,9 @@ const CourseCard = ({
 					<Button
 						type={DELETE_COURSE_BTN.type}
 						icon={<Icon component={RiDeleteBin6Fill} size={16} />}
-						onClick={() => {}}
+						onClick={() => {
+							dispatch(deleteCourse(id));
+						}}
 					/>
 				</CourseCardButtons>
 			</CourseDetailsWrap>

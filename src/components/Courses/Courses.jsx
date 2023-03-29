@@ -36,7 +36,7 @@ const Courses = () => {
 	);
 
 	useEffect(() => {
-		// not erase the manipulations with the array of courses
+		// not erase the manipulations with the array of courses made locally
 		if (store.getState().courses.length > 0) return;
 
 		(async () => {
