@@ -1,32 +1,77 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { CourseCard } from './components/CourseCard';
 import { Container } from '../../common/Container';
 import { Button } from '../../common/Button';
 import { SearchBar } from './components/SearchBar';
-import { useCourses } from '../../contexts/CoursesContext';
-import { ADD_NEW_COURSE_BTN, ROUTES } from '../../constants';
+import { getCourses } from '../../services/api/courses';
+import { store } from '../../store';
+import { selectCoursesBySearchQuery } from '../../store/courses/selectors';
+import { setCourses } from '../../store/courses/actionCreators';
+import {
+	ADD_NEW_COURSE_BTN,
+	GET_COURSES_STATUS,
+	ROUTES,
+} from '../../constants';
 
-import { CoursesHeader, CoursesList, CoursesStyled } from './Courses.styled';
+import {
+	CoursesHeader,
+	CoursesList,
+	CoursesStyled,
+	LoaderStyled,
+} from './Courses.styled';
 
 const Courses = () => {
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const { courses } = useCourses();
 
 	const [searchQuery, setSearchQuery] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
 
-	const searchedCourses = useMemo(() => {
-		return courses.filter((item) =>
-			[item.title.toLowerCase(), item.id.toLowerCase()].some((property) =>
-				property.includes(searchQuery.toLowerCase())
-			)
-		);
-	}, [courses, searchQuery]);
+	const courses = useSelector((state) =>
+		selectCoursesBySearchQuery(state, searchQuery)
+	);
+
+	useEffect(() => {
+		// not erase the manipulations with the array of courses
+		if (store.getState().courses.length > 0) return;
+
+		(async () => {
+			setIsLoading(true);
+
+			try {
+				const response = await getCourses();
+				const { data } = response;
+
+				if (response.status === 200 && data.successful) {
+					const courses = data.result;
+
+					dispatch(setCourses(courses));
+				} else {
+					toast.error(
+						GET_COURSES_STATUS[response.status] ?? GET_COURSES_STATUS.default
+					);
+					dispatch(setCourses([]));
+				}
+			} catch (error) {
+				toast.error(
+					GET_COURSES_STATUS[error.response.status] ??
+						GET_COURSES_STATUS.default
+				);
+				dispatch(setCourses([]));
+			} finally {
+				setIsLoading(false);
+			}
+		})();
+	}, [dispatch]);
 
 	return (
 		<CoursesStyled>
 			<Container>
+				{isLoading && <LoaderStyled />}
 				<CoursesHeader>
 					<SearchBar onSubmit={setSearchQuery} />
 					<Button
@@ -35,9 +80,9 @@ const Courses = () => {
 						onClick={() => navigate(ROUTES.CREATE_COURSE)}
 					/>
 				</CoursesHeader>
-				{searchedCourses.length > 0 && (
+				{courses.length > 0 && (
 					<CoursesList>
-						{searchedCourses.map((item) => (
+						{courses.map((item) => (
 							<li key={item.id}>
 								<CourseCard {...item} />
 							</li>
