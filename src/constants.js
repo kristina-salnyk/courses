@@ -9,6 +9,7 @@ export const API_ENDPOINTS = {
 	CURRENT: '/users/me',
 	LOGOUT: '/logout',
 	COURSES: '/courses/all',
+	AUTHORS: '/authors/all',
 };
 
 export const REGISTRATION_STATUS = {
@@ -28,6 +29,12 @@ export const GET_COURSES_STATUS = {
 	400: 'Uploading course list failed',
 	500: 'Uploading course list failed. Try again later',
 	default: 'Uploading course list failed. Try again later',
+};
+
+export const GET_AUTHORS_STATUS = {
+	400: 'Uploading author list failed',
+	500: 'Uploading author list failed. Try again later',
+	default: 'Uploading author list failed. Try again later',
 };
 
 export const ROUTES = {
