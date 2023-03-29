@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import { v4 as uuid } from 'uuid';
-import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import { Container } from '../../common/Container';
 import { TextArea } from '../../common/TextArea';
@@ -10,12 +10,11 @@ import { Input } from '../../common/Input';
 import { ValidationMessage } from '../../common/ValidationMessage';
 import { CreateAuthor } from './components/CreateAuthor';
 import { Authors } from './components/Authors';
-import { useAuthors } from '../../contexts/AuthorsContext';
-import { useCourses } from '../../contexts/CoursesContext';
+import { selectAuthorsByIds } from '../../store/authors/selectors';
+import { addCourse } from '../../store/courses/actionCreators';
 import useValidationErrors from '../../hooks/useValidationErrors';
 import formKeyPressHandler from '../../helpers/handlers/formKeyPressHandler';
 import pipeDuration from '../../helpers/pipeDuration';
-import dateGenerator from '../../helpers/dateGenerator';
 import courseSchema from '../../helpers/schemas/courseSchema';
 import {
 	AUTHORS_INFO_TEXT,
@@ -49,14 +48,17 @@ import {
 } from './CreateCourse.styled';
 
 const CreateCourse = () => {
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const { getAuthorsById } = useAuthors();
-	const { setCourses } = useCourses();
 
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [courseAuthors, setCourseAuthors] = useState([]);
 	const [duration, setDuration] = useState(0);
+
+	const authors = useSelector((state) =>
+		selectAuthorsByIds(state, courseAuthors)
+	);
 
 	const { validationErrors, validateOneField, validateAllFields } =
 		useValidationErrors();
@@ -65,18 +67,16 @@ const CreateCourse = () => {
 		event.preventDefault();
 
 		const course = {
-			id: uuid(),
 			title,
 			description,
 			authors: courseAuthors,
 			duration,
-			creationDate: dateGenerator(),
 		};
 
 		const isValid = await validateAllFields(courseSchema, course);
 
 		if (isValid) {
-			setCourses((prevState) => [course, ...prevState]);
+			dispatch(addCourse(course));
 			navigate(ROUTES.COURSES);
 			return;
 		}
@@ -105,8 +105,6 @@ const CreateCourse = () => {
 		},
 		[validateOneField]
 	);
-
-	const courseAuthorsList = getAuthorsById(courseAuthors);
 
 	return (
 		<CreateCourseStyled>
@@ -211,9 +209,9 @@ const CreateCourse = () => {
 								{GROUP_TITLES.COURSE_AUTHORS}
 							</CourseDetailsGroupTitle>
 							<FieldWrap>
-								{courseAuthorsList.length > 0 ? (
+								{authors.length > 0 ? (
 									<AuthorsList>
-										{courseAuthorsList.map((item) => (
+										{authors.map((item) => (
 											<Author key={item.id}>
 												{item.name}
 												<Button

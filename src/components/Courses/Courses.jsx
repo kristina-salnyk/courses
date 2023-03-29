@@ -8,11 +8,14 @@ import { Container } from '../../common/Container';
 import { Button } from '../../common/Button';
 import { SearchBar } from './components/SearchBar';
 import { getCourses } from '../../services/api/courses';
+import { getAuthors } from '../../services/api/authors';
 import { store } from '../../store';
 import { selectCoursesBySearchQuery } from '../../store/courses/selectors';
 import { setCourses } from '../../store/courses/actionCreators';
+import { setAuthors } from '../../store/authors/actionCreators';
 import {
 	ADD_NEW_COURSE_BTN,
+	GET_AUTHORS_STATUS,
 	GET_COURSES_STATUS,
 	ROUTES,
 } from '../../constants';
@@ -37,7 +40,8 @@ const Courses = () => {
 
 	useEffect(() => {
 		// not erase the manipulations with the array of courses made locally
-		if (store.getState().courses.length > 0) return;
+		const state = store.getState();
+		if (state.courses.length > 0) return;
 
 		(async () => {
 			setIsLoading(true);
@@ -62,6 +66,40 @@ const Courses = () => {
 						GET_COURSES_STATUS.default
 				);
 				dispatch(setCourses([]));
+			} finally {
+				setIsLoading(false);
+			}
+		})();
+	}, [dispatch]);
+
+	useEffect(() => {
+		// not erase the manipulations with the array of authors made locally
+		const state = store.getState();
+		if (state.authors.length > 0) return;
+
+		(async () => {
+			setIsLoading(true);
+
+			try {
+				const response = await getAuthors();
+				const { data } = response;
+
+				if (response.status === 200 && data.successful) {
+					const authors = data.result;
+
+					dispatch(setAuthors(authors));
+				} else {
+					toast.error(
+						GET_AUTHORS_STATUS[response.status] ?? GET_AUTHORS_STATUS.default
+					);
+					dispatch(setAuthors([]));
+				}
+			} catch (error) {
+				toast.error(
+					GET_COURSES_STATUS[error.response.status] ??
+						GET_COURSES_STATUS.default
+				);
+				dispatch(setAuthors([]));
 			} finally {
 				setIsLoading(false);
 			}

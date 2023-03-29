@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 import { Button } from '../../../../common/Button';
-import { useAuthors } from '../../../../contexts/AuthorsContext';
+import { selectAuthorsWithoutSelected } from '../../../../store/authors/selectors';
 import {
 	ADD_AUTHOR_BTN,
 	AUTHORS_INFO_TEXT,
@@ -18,18 +19,16 @@ import {
 } from '../../CreateCourse.styled';
 
 const Authors = ({ selectedAuthors = [], addToAuthors }) => {
-	const { authors } = useAuthors();
-
-	const authorsList = authors.filter(
-		(item) => !selectedAuthors.includes(item.id)
+	const authors = useSelector((state) =>
+		selectAuthorsWithoutSelected(state, selectedAuthors)
 	);
 
 	return (
 		<CourseDetailsGroup>
 			<CourseDetailsGroupTitle>{GROUP_TITLES.AUTHORS}</CourseDetailsGroupTitle>
-			{authorsList.length > 0 ? (
+			{authors.length > 0 ? (
 				<AuthorsList>
-					{authorsList.map((item) => (
+					{authors.map((item) => (
 						<Author key={item.id}>
 							{item.name}
 							<Button

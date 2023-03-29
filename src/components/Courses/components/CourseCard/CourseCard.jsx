@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RiDeleteBin6Fill, RiEdit2Fill } from 'react-icons/ri';
 
 import { LimitedLine } from '../../../../common/LimitedLine';
 import { Button } from '../../../../common/Button';
 import { Icon } from '../../../../common/Icon';
-import { useAuthors } from '../../../../contexts/AuthorsContext';
+import { selectAuthorsListByIds } from '../../../../store/authors/selectors';
 import { deleteCourse } from '../../../../store/courses/actionCreators';
 import pipeDuration from '../../../../helpers/pipeDuration';
 import {
@@ -38,9 +38,9 @@ const CourseCard = ({
 }) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const { getAuthorsListById } = useAuthors();
-
-	const courseAuthorsList = getAuthorsListById(authors);
+	const authorsList = useSelector((state) =>
+		selectAuthorsListByIds(state, authors)
+	);
 
 	return (
 		<CourseCardStyled>
@@ -52,7 +52,7 @@ const CourseCard = ({
 				<CourseDetails>
 					<CourseDetailsTitle>{CARD_TITLES.COURSE_AUTHORS}</CourseDetailsTitle>
 					<LimitedLine>
-						<span title={courseAuthorsList}>{courseAuthorsList}</span>
+						<span title={authorsList}>{authorsList}</span>
 					</LimitedLine>
 					<CourseDetailsTitle>{CARD_TITLES.DURATION}</CourseDetailsTitle>
 					<span>
