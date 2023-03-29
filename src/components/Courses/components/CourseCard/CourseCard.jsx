@@ -1,19 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
+import { RiDeleteBin6Fill, RiEdit2Fill } from 'react-icons/ri';
 
 import { LimitedLine } from '../../../../common/LimitedLine';
 import { Button } from '../../../../common/Button';
+import { Icon } from '../../../../common/Icon';
 import { useAuthors } from '../../../../contexts/AuthorsContext';
 import pipeDuration from '../../../../helpers/pipeDuration';
 import {
 	CARD_TITLES,
+	DELETE_COURSE_BTN,
 	DURATION_UNITS,
 	ROUTES,
 	SHOW_COURSE_BTN,
+	UPDATE_COURSE_BTN,
 } from '../../../../constants';
 
 import {
+	CourseCardButtons,
 	CourseCardStyled,
 	CourseDetails,
 	CourseDetailsTitle,
@@ -53,13 +58,24 @@ const CourseCard = ({
 					<CourseDetailsTitle>{CARD_TITLES.CREATED}</CourseDetailsTitle>
 					<span>{creationDate.replaceAll('/', '.')}</span>
 				</CourseDetails>
-				<Button
-					type={SHOW_COURSE_BTN.type}
-					text={SHOW_COURSE_BTN.text}
-					onClick={() =>
-						navigate(ROUTES.COURSE_INFO.replaceAll(':courseId', id))
-					}
-				/>
+				<CourseCardButtons>
+					<Button
+						type={SHOW_COURSE_BTN.type}
+						text={SHOW_COURSE_BTN.text}
+						onClick={() =>
+							navigate(ROUTES.COURSE_INFO.replaceAll(':courseId', id))
+						}
+					/>
+					<Button
+						type={UPDATE_COURSE_BTN.type}
+						icon={<Icon component={RiEdit2Fill} size={16} />}
+					/>
+					<Button
+						type={DELETE_COURSE_BTN.type}
+						icon={<Icon component={RiDeleteBin6Fill} size={16} />}
+						onClick={() => {}}
+					/>
+				</CourseCardButtons>
 			</CourseDetailsWrap>
 		</CourseCardStyled>
 	);
