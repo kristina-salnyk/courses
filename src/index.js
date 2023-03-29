@@ -3,9 +3,6 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider } from 'styled-components';
-
-import { AuthorsProvider } from './contexts/AuthorsContext';
-import { CoursesProvider } from './contexts/CoursesContext';
 import { persistor, store } from './store';
 import theme from './theme';
 import App from './App';
@@ -19,11 +16,7 @@ root.render(
 		<ThemeProvider theme={theme}>
 			<Provider store={store}>
 				<PersistGate loading={null} persistor={persistor}>
-					<AuthorsProvider>
-						<CoursesProvider>
-							<App />
-						</CoursesProvider>
-					</AuthorsProvider>
+					<App />
 				</PersistGate>
 			</Provider>
 		</ThemeProvider>
