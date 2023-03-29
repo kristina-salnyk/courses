@@ -24,6 +24,12 @@ export const LOGIN_STATUS = {
 	default: 'Not authorized. Try again later',
 };
 
+export const GET_COURSES_STATUS = {
+	400: 'Uploading course list failed',
+	500: 'Uploading course list failed. Try again later',
+	default: 'Uploading course list failed. Try again later',
+};
+
 export const ROUTES = {
 	ROOT: '/',
 	COURSES: '/courses',
@@ -85,6 +91,16 @@ export const REGISTER_BTN = {
 export const SHOW_COURSE_BTN = {
 	type: 'button',
 	text: 'Show course',
+};
+
+export const DELETE_COURSE_BTN = {
+	type: 'button',
+	text: 'Delete course',
+};
+
+export const UPDATE_COURSE_BTN = {
+	type: 'button',
+	text: 'Update course',
 };
 
 export const SEARCH_BTN = {
