@@ -28,6 +28,14 @@ function App() {
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
+		WebFont.load({
+			google: {
+				families: ['Noto Sans', 'sans-serif'],
+			},
+		});
+	}, []);
+
+	useEffect(() => {
 		(async () => {
 			try {
 				const state = store.getState();
@@ -67,16 +75,6 @@ function App() {
 			clearAuthHeader();
 		}
 	}, [token]);
-
-	useEffect(() => {
-		if (isRefreshing) return;
-
-		WebFont.load({
-			google: {
-				families: ['Noto Sans', 'sans-serif'],
-			},
-		});
-	}, [isRefreshing]);
 
 	if (isLoading) return <Loader />;
 
