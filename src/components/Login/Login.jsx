@@ -13,8 +13,8 @@ import loginSchema from '../../helpers/schemas/loginSchema';
 import {
 	EMAIL_INPUT,
 	LOGIN_BTN,
-	LOGIN_INFO_TEXT,
-	LOGIN_STATUS,
+	LOGIN_NAVIGATION_TEXT,
+	LOGIN_RESPONSE_MESSAGES,
 	PASSWORD_INPUT,
 	REGISTER_BTN,
 	ROUTES,
@@ -60,13 +60,23 @@ const Login = () => {
 			if (response.status === 201 && data.successful) {
 				const [, token] = data.result.split(' ');
 				dispatch(
-					loginUser({ name: data.user.name, email: data.user.email, token })
+					loginUser({
+						name: data.user.name,
+						email: data.user.email,
+						token,
+					})
 				);
 			} else {
-				toast.error(LOGIN_STATUS[response.status] ?? LOGIN_STATUS.default);
+				toast.error(
+					LOGIN_RESPONSE_MESSAGES[response.status] ??
+						LOGIN_RESPONSE_MESSAGES.default
+				);
 			}
 		} catch (error) {
-			toast.error(LOGIN_STATUS[error.response.status] ?? LOGIN_STATUS.default);
+			toast.error(
+				LOGIN_RESPONSE_MESSAGES[error.response.status] ??
+					LOGIN_RESPONSE_MESSAGES.default
+			);
 		} finally {
 			setIsLoading(false);
 		}
@@ -124,7 +134,7 @@ const Login = () => {
 						</FieldWrapStyled>
 						<ButtonStyled type={LOGIN_BTN.type} text={LOGIN_BTN.text} />
 						<LoginFormMessage>
-							{LOGIN_INFO_TEXT}{' '}
+							{LOGIN_NAVIGATION_TEXT}{' '}
 							<LinkStyled to={ROUTES.REGISTRATION}>
 								{REGISTER_BTN.text}
 							</LinkStyled>

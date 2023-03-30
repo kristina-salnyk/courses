@@ -12,13 +12,15 @@ import { CreateAuthor } from './components/CreateAuthor';
 import { Authors } from './components/Authors';
 import { selectAuthorsByIds } from '../../store/authors/selectors';
 import { addCourse } from '../../store/courses/actionCreators';
+import useCourses from '../../hooks/useCourses';
+import useAuthors from '../../hooks/useAuthors';
 import useValidationErrors from '../../hooks/useValidationErrors';
 import formKeyPressHandler from '../../helpers/handlers/formKeyPressHandler';
 import pipeDuration from '../../helpers/pipeDuration';
 import courseSchema from '../../helpers/schemas/courseSchema';
 import {
-	AUTHORS_INFO_TEXT,
 	AUTHORS_LIST_NAME,
+	AUTHORS_NO_RESULTS_TEXT,
 	CARD_TITLES,
 	CREATE_COURSE_BTN,
 	DELETE_AUTHOR_BTN,
@@ -45,6 +47,7 @@ import {
 	Duration,
 	FieldWrap,
 	FieldWrapStyled,
+	LoaderStyled,
 } from './CreateCourse.styled';
 
 const CreateCourse = () => {
@@ -55,6 +58,10 @@ const CreateCourse = () => {
 	const [description, setDescription] = useState('');
 	const [courseAuthors, setCourseAuthors] = useState([]);
 	const [duration, setDuration] = useState(0);
+
+	const { isCoursesLoading } = useCourses();
+	const { isAuthorsLoading } = useAuthors();
+	const isLoading = isCoursesLoading || isAuthorsLoading;
 
 	const authors = useSelector((state) =>
 		selectAuthorsByIds(state, courseAuthors)
@@ -105,6 +112,8 @@ const CreateCourse = () => {
 		},
 		[validateOneField]
 	);
+
+	if (isLoading) return <LoaderStyled />;
 
 	return (
 		<CreateCourseStyled>
@@ -225,7 +234,7 @@ const CreateCourse = () => {
 										))}
 									</AuthorsList>
 								) : (
-									<AuthorsMessage>{AUTHORS_INFO_TEXT}</AuthorsMessage>
+									<AuthorsMessage>{AUTHORS_NO_RESULTS_TEXT}</AuthorsMessage>
 								)}
 								{validationErrors[AUTHORS_LIST_NAME] && (
 									<ValidationMessage

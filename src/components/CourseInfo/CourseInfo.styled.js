@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import { Link } from '../../common/Link';
+import { Loader } from '../../common/Loader';
 
 export const CourseInfoStyled = styled.section`
 	padding: ${({ theme }) => theme.spacing[2]} 0;
@@ -100,4 +101,19 @@ export const LinkStyled = styled(Link)`
 	top: ${({ theme }) => theme.spacing[2]};
 	left: ${({ theme }) => theme.spacing[2]};
 	font-size: ${({ theme }) => theme.typography.size.s};
+`;
+
+export const CourseInfoMessage = styled.div`
+	padding: ${({ theme }) => theme.spacing[1]} 0;
+	font-size: ${({ theme }) => theme.typography.size.ь};
+	font-weight: ${({ theme }) => theme.typography.weight.bold};
+	color: ${({ theme }) => theme.colors.accent};
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: ${({ theme }) => theme.spacing[2]};
+`;
+
+export const LoaderStyled = styled(Loader)`
+	background-color: transparent;
 `;

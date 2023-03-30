@@ -29,6 +29,17 @@ export const CoursesList = styled.ul`
 	gap: ${({ theme }) => theme.spacing[3]};
 `;
 
+export const CoursesMessage = styled.div`
+	padding: ${({ theme }) => theme.spacing[1]} 0;
+	font-size: ${({ theme }) => theme.typography.size.ь};
+	font-weight: ${({ theme }) => theme.typography.weight.bold};
+	color: ${({ theme }) => theme.colors.accent};
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: ${({ theme }) => theme.spacing[2]};
+`;
+
 export const LoaderStyled = styled(Loader)`
 	background-color: transparent;
 `;

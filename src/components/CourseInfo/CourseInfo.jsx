@@ -8,29 +8,47 @@ import { MdAccessTimeFilled, MdArrowBackIos } from 'react-icons/md';
 
 import { Container } from '../../common/Container';
 import { Icon } from '../../common/Icon';
+import useCourses from '../../hooks/useCourses';
+import useAuthors from '../../hooks/useAuthors';
 import pipeDuration from '../../helpers/pipeDuration';
+import noResults from '../../assets/img/no-results.png';
 import { selectCourseById } from '../../store/courses/selectors';
 import { selectAuthorsByIds } from '../../store/authors/selectors';
-import { BACK_BTN, DURATION_UNITS, ROUTES } from '../../constants';
+import {
+	BACK_BTN,
+	COURSE_INFO_NO_RESULTS_TEXT,
+	DURATION_UNITS,
+	NO_RESULTS_ALTERNATIVE_TEXT,
+	ROUTES,
+} from '../../constants';
 
 import {
 	CourseDetails,
 	CourseDetailsWrap,
 	CourseInfoContent,
+	CourseInfoMessage,
 	CourseInfoStyled,
 	CourseInfoWrap,
 	CourseTitle,
 	LinkStyled,
+	LoaderStyled,
 } from './CourseInfo.styled';
 
 const CourseInfo = () => {
 	const { courseId } = useParams();
+
+	const { isCoursesLoading } = useCourses();
+	const { isAuthorsLoading } = useAuthors();
+	const isLoading = isCoursesLoading || isAuthorsLoading;
+
 	const course = useSelector((state) => selectCourseById(state, courseId));
 
 	const courseAuthors = course?.authors ?? [];
 	const authors = useSelector((state) =>
 		selectAuthorsByIds(state, courseAuthors)
 	);
+
+	if (isLoading) return <LoaderStyled />;
 
 	return (
 		<CourseInfoStyled>
@@ -69,7 +87,14 @@ const CourseInfo = () => {
 							</CourseInfoContent>
 						</>
 					) : (
-						<p>Course was not found</p>
+						<CourseInfoMessage>
+							<p>{COURSE_INFO_NO_RESULTS_TEXT}</p>
+							<img
+								src={noResults}
+								alt={NO_RESULTS_ALTERNATIVE_TEXT}
+								width={300}
+							/>
+						</CourseInfoMessage>
 					)}
 				</CourseInfoWrap>
 			</Container>

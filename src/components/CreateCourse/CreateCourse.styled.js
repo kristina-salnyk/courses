@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { Loader } from '../../common/Loader';
+
 export const CreateCourseStyled = styled.section`
 	padding: ${({ theme }) => theme.spacing[2]} 0;
 `;
@@ -106,4 +108,8 @@ export const AuthorsMessage = styled.p`
 	font-weight: ${({ theme }) => theme.typography.weight.bold};
 	color: ${({ theme }) => theme.colors.accent};
 	text-align: center;
+`;
+
+export const LoaderStyled = styled(Loader)`
+	background-color: transparent;
 `;

@@ -1,115 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 import { CourseCard } from './components/CourseCard';
 import { Container } from '../../common/Container';
 import { Button } from '../../common/Button';
 import { SearchBar } from './components/SearchBar';
-import { getCourses } from '../../services/api/courses';
-import { getAuthors } from '../../services/api/authors';
-import { store } from '../../store';
+import useCourses from '../../hooks/useCourses';
+import useAuthors from '../../hooks/useAuthors';
+import noResults from '../../assets/img/no-results.png';
 import { selectCoursesBySearchQuery } from '../../store/courses/selectors';
-import { setCourses } from '../../store/courses/actionCreators';
-import { setAuthors } from '../../store/authors/actionCreators';
 import {
 	ADD_NEW_COURSE_BTN,
-	GET_AUTHORS_STATUS,
-	GET_COURSES_STATUS,
+	COURSES_NO_RESULTS_TEXT,
+	NO_RESULTS_ALTERNATIVE_TEXT,
 	ROUTES,
 } from '../../constants';
 
 import {
 	CoursesHeader,
 	CoursesList,
+	CoursesMessage,
 	CoursesStyled,
 	LoaderStyled,
 } from './Courses.styled';
 
 const Courses = () => {
-	const dispatch = useDispatch();
 	const navigate = useNavigate();
-
 	const [searchQuery, setSearchQuery] = useState('');
-	const [isLoading, setIsLoading] = useState(false);
+
+	const { isCoursesLoading } = useCourses();
+	const { isAuthorsLoading } = useAuthors();
+	const isLoading = isCoursesLoading || isAuthorsLoading;
 
 	const courses = useSelector((state) =>
 		selectCoursesBySearchQuery(state, searchQuery)
 	);
 
-	useEffect(() => {
-		// not erase the manipulations with the array of courses made locally
-		const state = store.getState();
-		if (state.courses.length > 0) return;
-
-		(async () => {
-			setIsLoading(true);
-
-			try {
-				const response = await getCourses();
-				const { data } = response;
-
-				if (response.status === 200 && data.successful) {
-					const courses = data.result;
-
-					dispatch(setCourses(courses));
-				} else {
-					toast.error(
-						GET_COURSES_STATUS[response.status] ?? GET_COURSES_STATUS.default
-					);
-					dispatch(setCourses([]));
-				}
-			} catch (error) {
-				toast.error(
-					GET_COURSES_STATUS[error.response.status] ??
-						GET_COURSES_STATUS.default
-				);
-				dispatch(setCourses([]));
-			} finally {
-				setIsLoading(false);
-			}
-		})();
-	}, [dispatch]);
-
-	useEffect(() => {
-		// not erase the manipulations with the array of authors made locally
-		const state = store.getState();
-		if (state.authors.length > 0) return;
-
-		(async () => {
-			setIsLoading(true);
-
-			try {
-				const response = await getAuthors();
-				const { data } = response;
-
-				if (response.status === 200 && data.successful) {
-					const authors = data.result;
-
-					dispatch(setAuthors(authors));
-				} else {
-					toast.error(
-						GET_AUTHORS_STATUS[response.status] ?? GET_AUTHORS_STATUS.default
-					);
-					dispatch(setAuthors([]));
-				}
-			} catch (error) {
-				toast.error(
-					GET_COURSES_STATUS[error.response.status] ??
-						GET_COURSES_STATUS.default
-				);
-				dispatch(setAuthors([]));
-			} finally {
-				setIsLoading(false);
-			}
-		})();
-	}, [dispatch]);
+	if (isLoading) return <LoaderStyled />;
 
 	return (
 		<CoursesStyled>
 			<Container>
-				{isLoading && <LoaderStyled />}
 				<CoursesHeader>
 					<SearchBar onSubmit={setSearchQuery} />
 					<Button
@@ -118,7 +50,7 @@ const Courses = () => {
 						onClick={() => navigate(ROUTES.CREATE_COURSE)}
 					/>
 				</CoursesHeader>
-				{courses.length > 0 && (
+				{courses.length > 0 ? (
 					<CoursesList>
 						{courses.map((item) => (
 							<li key={item.id}>
@@ -126,6 +58,15 @@ const Courses = () => {
 							</li>
 						))}
 					</CoursesList>
+				) : (
+					<CoursesMessage>
+						<p>{COURSES_NO_RESULTS_TEXT}</p>
+						<img
+							src={noResults}
+							alt={NO_RESULTS_ALTERNATIVE_TEXT}
+							width={300}
+						/>
+					</CoursesMessage>
 				)}
 			</Container>
 		</CoursesStyled>

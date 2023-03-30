@@ -12,8 +12,8 @@ const userReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case actionTypes.USER_LOGIN:
 			return {
+				...state,
 				isAuth: true,
-				isRefreshing: false,
 				name: action.payload.name,
 				email: action.payload.email,
 				token: action.payload.token,

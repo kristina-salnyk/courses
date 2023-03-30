@@ -15,8 +15,8 @@ import {
 	NAME_INPUT,
 	PASSWORD_INPUT,
 	REGISTER_BTN,
-	REGISTRATION_INFO_TEXT,
-	REGISTRATION_STATUS,
+	REGISTRATION_NAVIGATION_TEXT,
+	REGISTRATION_RESPONSE_MESSAGES,
 	ROUTES,
 } from '../../constants';
 
@@ -60,17 +60,18 @@ const Registration = () => {
 			const { data } = response;
 
 			if (response.status === 201 && data.successful) {
-				toast.success(REGISTRATION_STATUS[201]);
+				toast.success(REGISTRATION_RESPONSE_MESSAGES[201]);
 				navigate(ROUTES.LOGIN);
 			} else {
 				toast.error(
-					REGISTRATION_STATUS[response.status] ?? REGISTRATION_STATUS.default
+					REGISTRATION_RESPONSE_MESSAGES[response.status] ??
+						REGISTRATION_RESPONSE_MESSAGES.default
 				);
 			}
 		} catch (error) {
 			toast.error(
-				REGISTRATION_STATUS[error.response.status] ??
-					REGISTRATION_STATUS.default
+				REGISTRATION_RESPONSE_MESSAGES[error.response.status] ??
+					REGISTRATION_RESPONSE_MESSAGES.default
 			);
 		} finally {
 			setIsLoading(false);
@@ -151,7 +152,7 @@ const Registration = () => {
 						</FieldWrapStyled>
 						<ButtonStyled type={REGISTER_BTN.type} text={REGISTER_BTN.text} />
 						<RegistrationFormMessage>
-							{REGISTRATION_INFO_TEXT}{' '}
+							{REGISTRATION_NAVIGATION_TEXT}{' '}
 							<LinkStyled to={ROUTES.LOGIN}>{LOGIN_BTN.text}</LinkStyled>
 						</RegistrationFormMessage>
 					</RegistrationFormContent>

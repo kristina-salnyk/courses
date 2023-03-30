@@ -6,7 +6,7 @@ import { Button } from '../../../../common/Button';
 import { selectAuthorsWithoutSelected } from '../../../../store/authors/selectors';
 import {
 	ADD_AUTHOR_BTN,
-	AUTHORS_INFO_TEXT,
+	AUTHORS_NO_RESULTS_TEXT,
 	GROUP_TITLES,
 } from '../../../../constants';
 
@@ -42,7 +42,7 @@ const Authors = ({ selectedAuthors = [], addToAuthors }) => {
 					))}
 				</AuthorsList>
 			) : (
-				<AuthorsMessage>{AUTHORS_INFO_TEXT}</AuthorsMessage>
+				<AuthorsMessage>{AUTHORS_NO_RESULTS_TEXT}</AuthorsMessage>
 			)}
 		</CourseDetailsGroup>
 	);
