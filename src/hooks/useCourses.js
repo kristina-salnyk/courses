@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { getCourses } from '../services/api/courses';
-import { store } from '../store';
 import { setCourses } from '../store/courses/actionCreators';
 import { COURSES_ALL_RESPONSE_MESSAGES } from '../constants';
 
@@ -12,10 +11,6 @@ const useCourses = () => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
-		// not erase the manipulations with the array of courses made locally
-		const state = store.getState();
-		if (state.courses.length > 0) return;
-
 		(async () => {
 			setIsLoading(true);
 

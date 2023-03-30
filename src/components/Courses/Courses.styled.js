@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-import { Loader } from '../../common/Loader';
-
 export const CoursesStyled = styled.section`
 	padding: ${({ theme }) => theme.spacing[3]} 0;
 `;
@@ -38,8 +36,4 @@ export const CoursesMessage = styled.div`
 	flex-direction: column;
 	align-items: center;
 	gap: ${({ theme }) => theme.spacing[2]};
-`;
-
-export const LoaderStyled = styled(Loader)`
-	background-color: transparent;
 `;

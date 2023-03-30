@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import { store } from '../store';
 import { getAuthors } from '../services/api/authors';
 import { setAuthors } from '../store/authors/actionCreators';
 import { AUTHORS_ALL_RESPONSE_MESSAGES } from '../constants';
@@ -12,10 +11,6 @@ const useAuthors = () => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
-		// not erase the manipulations with the array of authors made locally
-		const state = store.getState();
-		if (state.authors.length > 0) return;
-
 		(async () => {
 			setIsLoading(true);
 

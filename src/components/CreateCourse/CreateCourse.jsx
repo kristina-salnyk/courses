@@ -12,8 +12,6 @@ import { CreateAuthor } from './components/CreateAuthor';
 import { Authors } from './components/Authors';
 import { selectAuthorsByIds } from '../../store/authors/selectors';
 import { addCourse } from '../../store/courses/actionCreators';
-import useCourses from '../../hooks/useCourses';
-import useAuthors from '../../hooks/useAuthors';
 import useValidationErrors from '../../hooks/useValidationErrors';
 import formKeyPressHandler from '../../helpers/handlers/formKeyPressHandler';
 import pipeDuration from '../../helpers/pipeDuration';
@@ -47,7 +45,6 @@ import {
 	Duration,
 	FieldWrap,
 	FieldWrapStyled,
-	LoaderStyled,
 } from './CreateCourse.styled';
 
 const CreateCourse = () => {
@@ -58,10 +55,6 @@ const CreateCourse = () => {
 	const [description, setDescription] = useState('');
 	const [courseAuthors, setCourseAuthors] = useState([]);
 	const [duration, setDuration] = useState(0);
-
-	const { isCoursesLoading } = useCourses();
-	const { isAuthorsLoading } = useAuthors();
-	const isLoading = isCoursesLoading || isAuthorsLoading;
 
 	const authors = useSelector((state) =>
 		selectAuthorsByIds(state, courseAuthors)
@@ -112,8 +105,6 @@ const CreateCourse = () => {
 		},
 		[validateOneField]
 	);
-
-	if (isLoading) return <LoaderStyled />;
 
 	return (
 		<CreateCourseStyled>

@@ -6,8 +6,6 @@ import { CourseCard } from './components/CourseCard';
 import { Container } from '../../common/Container';
 import { Button } from '../../common/Button';
 import { SearchBar } from './components/SearchBar';
-import useCourses from '../../hooks/useCourses';
-import useAuthors from '../../hooks/useAuthors';
 import noResults from '../../assets/img/no-results.png';
 import { selectCoursesBySearchQuery } from '../../store/courses/selectors';
 import {
@@ -22,22 +20,15 @@ import {
 	CoursesList,
 	CoursesMessage,
 	CoursesStyled,
-	LoaderStyled,
 } from './Courses.styled';
 
 const Courses = () => {
 	const navigate = useNavigate();
 	const [searchQuery, setSearchQuery] = useState('');
 
-	const { isCoursesLoading } = useCourses();
-	const { isAuthorsLoading } = useAuthors();
-	const isLoading = isCoursesLoading || isAuthorsLoading;
-
 	const courses = useSelector((state) =>
 		selectCoursesBySearchQuery(state, searchQuery)
 	);
-
-	if (isLoading) return <LoaderStyled />;
 
 	return (
 		<CoursesStyled>

@@ -8,8 +8,6 @@ import { MdAccessTimeFilled, MdArrowBackIos } from 'react-icons/md';
 
 import { Container } from '../../common/Container';
 import { Icon } from '../../common/Icon';
-import useCourses from '../../hooks/useCourses';
-import useAuthors from '../../hooks/useAuthors';
 import pipeDuration from '../../helpers/pipeDuration';
 import noResults from '../../assets/img/no-results.png';
 import { selectCourseById } from '../../store/courses/selectors';
@@ -31,15 +29,10 @@ import {
 	CourseInfoWrap,
 	CourseTitle,
 	LinkStyled,
-	LoaderStyled,
 } from './CourseInfo.styled';
 
 const CourseInfo = () => {
 	const { courseId } = useParams();
-
-	const { isCoursesLoading } = useCourses();
-	const { isAuthorsLoading } = useAuthors();
-	const isLoading = isCoursesLoading || isAuthorsLoading;
 
 	const course = useSelector((state) => selectCourseById(state, courseId));
 
@@ -47,8 +40,6 @@ const CourseInfo = () => {
 	const authors = useSelector((state) =>
 		selectAuthorsByIds(state, courseAuthors)
 	);
-
-	if (isLoading) return <LoaderStyled />;
 
 	return (
 		<CourseInfoStyled>
