@@ -18,7 +18,7 @@ export const LOGIN_NAVIGATION_TEXT = 'If you not have an account you can go to';
 
 export const AUTHORS_NO_RESULTS_TEXT = 'Author list is empty';
 
-export const COURSES_NO_RESULTS_TEXT = 'Courses list is empty';
+export const COURSES_NO_RESULTS_TEXT = 'Course list is empty';
 
 export const COURSE_INFO_NO_RESULTS_TEXT = 'Course was not found';
 
