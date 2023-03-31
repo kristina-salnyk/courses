@@ -32,7 +32,11 @@ export const API_ENDPOINTS = {
 	CURRENT: '/users/me',
 	LOGOUT: '/logout',
 	COURSES: '/courses/all',
+	ADD_COURSE: '/courses/add',
+	UPDATE_COURSE: '/courses',
+	DELETE_COURSE: '/courses',
 	AUTHORS: '/authors/all',
+	ADD_AUTHOR: '/authors/add',
 };
 
 export const ROUTES = {
