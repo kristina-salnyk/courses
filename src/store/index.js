@@ -1,8 +1,9 @@
-import { combineReducers, createStore } from 'redux';
+import { applyMiddleware, combineReducers, createStore } from 'redux';
 import { persistReducer, persistStore } from 'redux-persist';
-import { devToolsEnhancer } from '@redux-devtools/extension';
+import { composeWithDevTools } from '@redux-devtools/extension';
 import storage from 'redux-persist/lib/storage';
 import filter from 'redux-persist-transform-filter';
+import thunkMiddleware from 'redux-thunk';
 
 import userReducer from './user/reducer';
 import authorsReducer from './authors/reducer';
@@ -24,11 +25,11 @@ const rootReducer = combineReducers({
 	authors: authorsReducer,
 });
 
-const enhancer = devToolsEnhancer();
+const composedEnhancer = composeWithDevTools(applyMiddleware(thunkMiddleware));
 
 export const store = createStore(
 	persistReducer(persistConfig, rootReducer),
-	enhancer
+	composedEnhancer
 );
 
 export let persistor = persistStore(store);
