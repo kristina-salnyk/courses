@@ -39,15 +39,15 @@ import {
 	CourseDetailsGroup,
 	CourseDetailsGroupTitle,
 	CourseDuration,
-	CreateCourseForm,
-	CreateCourseFormHeader,
-	CreateCourseStyled,
+	CourseFormContent,
+	CourseFormHeader,
+	CourseFormStyled,
 	Duration,
 	FieldWrap,
 	FieldWrapStyled,
-} from './CreateCourse.styled';
+} from './CourseForm.styled';
 
-const CreateCourse = () => {
+const CourseForm = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
@@ -107,13 +107,13 @@ const CreateCourse = () => {
 	);
 
 	return (
-		<CreateCourseStyled>
+		<CourseFormStyled>
 			<Container>
-				<CreateCourseForm
+				<CourseFormContent
 					onSubmit={formSubmitHandler}
 					onKeyPress={formKeyPressHandler}
 				>
-					<CreateCourseFormHeader>
+					<CourseFormHeader>
 						<FieldWrapStyled>
 							<Input
 								label={TITLE_INPUT.label}
@@ -141,7 +141,7 @@ const CreateCourse = () => {
 							type={CREATE_COURSE_BTN.type}
 							text={CREATE_COURSE_BTN.text}
 						/>
-					</CreateCourseFormHeader>
+					</CourseFormHeader>
 					<FieldWrap>
 						<TextArea
 							label={DESCRIPTION_TEXT_AREA.label}
@@ -235,10 +235,10 @@ const CreateCourse = () => {
 							</FieldWrap>
 						</CourseDetailsGroup>
 					</CourseDetails>
-				</CreateCourseForm>
+				</CourseFormContent>
 			</Container>
-		</CreateCourseStyled>
+		</CourseFormStyled>
 	);
 };
 
-export default CreateCourse;
+export default CourseForm;

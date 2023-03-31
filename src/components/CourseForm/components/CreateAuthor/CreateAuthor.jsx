@@ -16,7 +16,7 @@ import {
 import {
 	CourseDetailsGroup,
 	CourseDetailsGroupTitle,
-} from '../../CreateCourse.styled';
+} from '../../CourseForm.styled';
 
 const CreateAuthor = () => {
 	const dispatch = useDispatch();
