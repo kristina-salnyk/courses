@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { selectUser } from '../../store/user/selectors';
 import { ROUTES } from '../../constants';
 
-const RestrictedRouter = ({
+const RestrictedRoute = ({
 	component: Component,
 	redirectTo = ROUTES.ROOT,
 }) => {
@@ -15,9 +15,9 @@ const RestrictedRouter = ({
 	return isAuth ? <Navigate to={redirectTo} /> : Component;
 };
 
-export default RestrictedRouter;
+export default RestrictedRoute;
 
-RestrictedRouter.propTypes = {
+RestrictedRoute.propTypes = {
 	component: PropTypes.element.isRequired,
 	redirectTo: PropTypes.string.isRequired,
 };
