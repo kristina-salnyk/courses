@@ -12,6 +12,7 @@ import {
 	ADD_NEW_COURSE_BTN,
 	COURSES_NO_RESULTS_TEXT,
 	NO_RESULTS_ALTERNATIVE_TEXT,
+	ROLES,
 	ROUTES,
 } from '../../constants';
 
@@ -21,10 +22,14 @@ import {
 	CoursesMessage,
 	CoursesStyled,
 } from './Courses.styled';
+import { selectUser } from '../../store/user/selectors';
 
 const Courses = () => {
 	const navigate = useNavigate();
 	const [searchQuery, setSearchQuery] = useState('');
+
+	const { role } = useSelector(selectUser);
+	const isAdmin = role === ROLES.ADMIN;
 
 	const courses = useSelector((state) =>
 		selectCoursesBySearchQuery(state, searchQuery)
@@ -35,11 +40,13 @@ const Courses = () => {
 			<Container>
 				<CoursesHeader>
 					<SearchBar onSubmit={setSearchQuery} />
-					<Button
-						type={ADD_NEW_COURSE_BTN.type}
-						text={ADD_NEW_COURSE_BTN.text}
-						onClick={() => navigate(ROUTES.CREATE_COURSE)}
-					/>
+					{isAdmin && (
+						<Button
+							type={ADD_NEW_COURSE_BTN.type}
+							text={ADD_NEW_COURSE_BTN.text}
+							onClick={() => navigate(ROUTES.CREATE_COURSE)}
+						/>
+					)}
 				</CoursesHeader>
 				{courses.length > 0 ? (
 					<CoursesList>

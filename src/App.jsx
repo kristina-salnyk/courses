@@ -104,7 +104,6 @@ function App() {
 						path={ROUTES.COURSE_INFO}
 						element={
 							<PrivateRoute
-								restricted={true}
 								redirectTo={ROUTES.LOGIN}
 								component={<CourseInfo />}
 							/>

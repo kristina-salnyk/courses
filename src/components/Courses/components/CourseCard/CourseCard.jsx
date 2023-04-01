@@ -14,6 +14,7 @@ import {
 	CARD_TITLES,
 	DELETE_COURSE_BTN,
 	DURATION_UNITS,
+	ROLES,
 	ROUTES,
 	SHOW_COURSE_BTN,
 	UPDATE_COURSE_BTN,
@@ -27,6 +28,7 @@ import {
 	CourseDetailsWrap,
 	CourseTitle,
 } from './CourseCard.styled';
+import { selectUser } from '../../../../store/user/selectors';
 
 const CourseCard = ({
 	id,
@@ -38,6 +40,10 @@ const CourseCard = ({
 }) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+
+	const { role } = useSelector(selectUser);
+	const isAdmin = role === ROLES.ADMIN;
+
 	const authorsList = useSelector((state) =>
 		selectAuthorsListByIds(state, authors)
 	);
@@ -69,17 +75,21 @@ const CourseCard = ({
 							navigate(ROUTES.COURSE_INFO.replaceAll(':courseId', id))
 						}
 					/>
-					<Button
-						type={UPDATE_COURSE_BTN.type}
-						icon={<Icon component={RiEdit2Fill} size={16} />}
-					/>
-					<Button
-						type={DELETE_COURSE_BTN.type}
-						icon={<Icon component={RiDeleteBin6Fill} size={16} />}
-						onClick={() => {
-							dispatch(deleteCourse(id));
-						}}
-					/>
+					{isAdmin && (
+						<>
+							<Button
+								type={UPDATE_COURSE_BTN.type}
+								icon={<Icon component={RiEdit2Fill} size={16} />}
+							/>
+							<Button
+								type={DELETE_COURSE_BTN.type}
+								icon={<Icon component={RiDeleteBin6Fill} size={16} />}
+								onClick={() => {
+									dispatch(deleteCourse(id));
+								}}
+							/>
+						</>
+					)}
 				</CourseCardButtons>
 			</CourseDetailsWrap>
 		</CourseCardStyled>

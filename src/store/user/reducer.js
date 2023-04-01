@@ -2,6 +2,7 @@ import * as actionTypes from './actionTypes';
 
 const initialState = {
 	isAuth: false,
+	isLoading: false,
 	isRefreshing: true,
 	name: '',
 	email: '',
