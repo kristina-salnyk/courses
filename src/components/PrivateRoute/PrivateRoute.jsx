@@ -4,29 +4,19 @@ import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import { selectUser } from '../../store/user/selectors';
-import useCourses from '../../hooks/useCourses';
-import useAuthors from '../../hooks/useAuthors';
 import { ROUTES } from '../../constants';
 
-import { LoaderStyled } from './Private.styled';
-
-const Private = ({ component: Component, redirectTo = ROUTES.ROOT }) => {
+const PrivateRoute = ({ component: Component, redirectTo = ROUTES.ROOT }) => {
 	const { isAuth, isRefreshing } = useSelector(selectUser);
 
-	const { isCoursesLoading } = useCourses();
-	const { isAuthorsLoading } = useAuthors();
-	const isLoading = isCoursesLoading || isAuthorsLoading;
-
 	const shouldRedirect = !isAuth && !isRefreshing;
-
-	if (isLoading) return <LoaderStyled />;
 
 	return shouldRedirect ? <Navigate to={redirectTo} /> : Component;
 };
 
-export default Private;
+export default PrivateRoute;
 
-Private.propTypes = {
+PrivateRoute.propTypes = {
 	component: PropTypes.element.isRequired,
 	redirectTo: PropTypes.string.isRequired,
 };

@@ -4,9 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import WebFont from 'webfontloader';
 
 import { SharedLayout } from './components/SharedLayout';
-import { Private } from './components/Private';
+import { Private } from './components/PrivateRoute';
 import { RestrictedRoute } from './components/RestrictedRoute';
 import { Loader } from './common/Loader';
+import useCourses from './hooks/useCourses';
+import useAuthors from './hooks/useAuthors';
 import { clearAuthHeader, setAuthHeader } from './services/api';
 import { current } from './services/api/user';
 import { store } from './store';
@@ -26,6 +28,13 @@ function App() {
 	const dispatch = useDispatch();
 	const { isRefreshing, token } = useSelector(selectUser);
 	const [isLoading, setIsLoading] = useState(false);
+
+	const { isCoursesLoading } = useCourses();
+	const { isAuthorsLoading } = useAuthors();
+
+	useEffect(() => {
+		setIsLoading(isCoursesLoading || isAuthorsLoading);
+	}, [isCoursesLoading, isAuthorsLoading]);
 
 	useEffect(() => {
 		WebFont.load({
