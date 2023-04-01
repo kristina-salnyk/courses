@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import WebFont from 'webfontloader';
 
 import { SharedLayout } from './components/SharedLayout';
-import { Private } from './components/PrivateRoute';
+import { PrivateRoute } from './components/PrivateRoute';
 import { RestrictedRoute } from './components/RestrictedRoute';
 import { Loader } from './common/Loader';
 import useCourses from './hooks/useCourses';
@@ -97,19 +97,27 @@ function App() {
 					<Route
 						path={ROUTES.COURSES}
 						element={
-							<Private redirectTo={ROUTES.LOGIN} component={<Courses />} />
+							<PrivateRoute redirectTo={ROUTES.LOGIN} component={<Courses />} />
 						}
 					/>
 					<Route
 						path={ROUTES.COURSE_INFO}
 						element={
-							<Private redirectTo={ROUTES.LOGIN} component={<CourseInfo />} />
+							<PrivateRoute
+								restricted={true}
+								redirectTo={ROUTES.LOGIN}
+								component={<CourseInfo />}
+							/>
 						}
 					/>
 					<Route
 						path={ROUTES.CREATE_COURSE}
 						element={
-							<Private redirectTo={ROUTES.LOGIN} component={<CourseForm />} />
+							<PrivateRoute
+								restricted={true}
+								redirectTo={ROUTES.LOGIN}
+								component={<CourseForm />}
+							/>
 						}
 					/>
 					<Route
