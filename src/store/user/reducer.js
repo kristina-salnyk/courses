@@ -5,19 +5,14 @@ const initialState = {
 	isRefreshing: true,
 	name: '',
 	email: '',
+	role: '',
 	token: '',
 };
 
 const userReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case actionTypes.USER_LOGIN:
-			return {
-				...state,
-				isAuth: true,
-				name: action.payload.name,
-				email: action.payload.email,
-				token: action.payload.token,
-			};
+			return { ...state, ...action.payload, isAuth: true };
 		case actionTypes.USER_LOGOUT:
 			return { ...initialState, isRefreshing: false };
 		case actionTypes.USER_UPDATE:
