@@ -6,7 +6,7 @@ import { Container } from '../../common/Container';
 import { Input } from '../../common/Input';
 import { Loader } from '../../common/Loader';
 import { ValidationMessage } from '../../common/ValidationMessage';
-import { login } from '../../services/api/user';
+import { current, login } from '../../services/api/user';
 import { loginUser } from '../../store/user/actionCreators';
 import useValidationErrors from '../../hooks/useValidationErrors';
 import loginSchema from '../../helpers/schemas/loginSchema';
@@ -59,13 +59,20 @@ const Login = () => {
 
 			if (response.status === 201 && data.successful) {
 				const [, token] = data.result.split(' ');
-				dispatch(
-					loginUser({
-						name: data.user.name,
-						email: data.user.email,
-						token,
-					})
-				);
+
+				const currentResponse = await current(token);
+				const { data: currentData } = currentResponse;
+
+				if (currentResponse.status === 200 && currentData.successful) {
+					const { name, email, role } = currentData.result;
+
+					dispatch(loginUser({ name, email, role, token }));
+				} else {
+					toast.error(
+						LOGIN_RESPONSE_MESSAGES[currentResponse.status] ??
+							LOGIN_RESPONSE_MESSAGES.default
+					);
+				}
 			} else {
 				toast.error(
 					LOGIN_RESPONSE_MESSAGES[response.status] ??

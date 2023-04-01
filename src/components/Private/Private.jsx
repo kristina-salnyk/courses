@@ -8,9 +8,9 @@ import useCourses from '../../hooks/useCourses';
 import useAuthors from '../../hooks/useAuthors';
 import { ROUTES } from '../../constants';
 
-import { LoaderStyled } from './PrivateRouter.styled';
+import { LoaderStyled } from './Private.styled';
 
-const PrivateRouter = ({ component: Component, redirectTo = ROUTES.ROOT }) => {
+const Private = ({ component: Component, redirectTo = ROUTES.ROOT }) => {
 	const { isAuth, isRefreshing } = useSelector(selectUser);
 
 	const { isCoursesLoading } = useCourses();
@@ -24,9 +24,9 @@ const PrivateRouter = ({ component: Component, redirectTo = ROUTES.ROOT }) => {
 	return shouldRedirect ? <Navigate to={redirectTo} /> : Component;
 };
 
-export default PrivateRouter;
+export default Private;
 
-PrivateRouter.propTypes = {
+Private.propTypes = {
 	component: PropTypes.element.isRequired,
 	redirectTo: PropTypes.string.isRequired,
 };

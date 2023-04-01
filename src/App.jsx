@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import WebFont from 'webfontloader';
 
 import { SharedLayout } from './components/SharedLayout';
-import { RestrictedRouter } from './components/RestrictedRouter';
-import { PrivateRouter } from './components/PrivateRouter';
+import { Private } from './components/Private';
+import { RestrictedRoute } from './components/RestrictedRoute';
 import { Loader } from './common/Loader';
 import { clearAuthHeader, setAuthHeader } from './services/api';
 import { current } from './services/api/user';
@@ -17,7 +17,7 @@ import { ROUTES } from './constants';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Courses = lazy(() => import('./components/Courses'));
-const CourseForm = lazy(() => import('./components/CourseForm/CourseForm'));
+const CourseForm = lazy(() => import('./components/CourseForm'));
 const CourseInfo = lazy(() => import('./components/CourseInfo'));
 const Registration = lazy(() => import('./components/Registration'));
 const Login = lazy(() => import('./components/Login'));
@@ -50,9 +50,9 @@ function App() {
 					const { data } = response;
 
 					if (response.status === 200 && data.successful) {
-						const { name, email } = data.result;
+						const { name, email, role } = data.result;
 
-						dispatch(loginUser({ name, email, token }));
+						dispatch(loginUser({ name, email, role, token }));
 					} else {
 						dispatch(updateUser({ token: '' }));
 					}
@@ -88,34 +88,25 @@ function App() {
 					<Route
 						path={ROUTES.COURSES}
 						element={
-							<PrivateRouter
-								redirectTo={ROUTES.LOGIN}
-								component={<Courses />}
-							/>
+							<Private redirectTo={ROUTES.LOGIN} component={<Courses />} />
 						}
 					/>
 					<Route
 						path={ROUTES.COURSE_INFO}
 						element={
-							<PrivateRouter
-								redirectTo={ROUTES.LOGIN}
-								component={<CourseInfo />}
-							/>
+							<Private redirectTo={ROUTES.LOGIN} component={<CourseInfo />} />
 						}
 					/>
 					<Route
 						path={ROUTES.CREATE_COURSE}
 						element={
-							<PrivateRouter
-								redirectTo={ROUTES.LOGIN}
-								component={<CourseForm />}
-							/>
+							<Private redirectTo={ROUTES.LOGIN} component={<CourseForm />} />
 						}
 					/>
 					<Route
 						path={ROUTES.REGISTRATION}
 						element={
-							<RestrictedRouter
+							<RestrictedRoute
 								redirectTo={ROUTES.COURSES}
 								component={<Registration />}
 							/>
@@ -124,7 +115,7 @@ function App() {
 					<Route
 						path={ROUTES.LOGIN}
 						element={
-							<RestrictedRouter
+							<RestrictedRoute
 								redirectTo={ROUTES.COURSES}
 								component={<Login />}
 							/>
