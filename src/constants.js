@@ -1,5 +1,6 @@
 export const BASE_URL =
-	'https://react-fundamentals-course-hw-backend.onrender.com';
+	// 'https://react-fundamentals-course-hw-backend.onrender.com';
+	'http://localhost:4000';
 
 export const LOCAL_STORAGE_KEY = 'root';
 
@@ -25,6 +26,11 @@ export const COURSE_INFO_NO_RESULTS_TEXT = 'Course was not found';
 export const AUTHORS_LIST_NAME = 'authors';
 
 export const DURATION_UNITS = 'hours';
+
+export const ROLES = {
+	USER: 'user',
+	ADMIN: 'admin',
+};
 
 export const API_ENDPOINTS = {
 	LOGIN: '/login',
