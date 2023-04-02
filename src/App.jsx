@@ -10,10 +10,8 @@ import { Loader } from './common/Loader';
 import useCourses from './hooks/useCourses';
 import useAuthors from './hooks/useAuthors';
 import { clearAuthHeader, setAuthHeader } from './services/api';
-import { current } from './services/api/user';
-import { store } from './store';
+import { fetchUser } from './store/user/thunk';
 import { selectUser } from './store/user/selectors';
-import { loginUser, updateUser } from './store/user/actionCreators';
 import { ROUTES } from './constants';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -33,10 +31,6 @@ function App() {
 	const { isAuthorsLoading } = useAuthors();
 
 	useEffect(() => {
-		setIsLoading(isCoursesLoading || isAuthorsLoading);
-	}, [isCoursesLoading, isAuthorsLoading]);
-
-	useEffect(() => {
 		WebFont.load({
 			google: {
 				families: ['Noto Sans', 'sans-serif'],
@@ -45,36 +39,7 @@ function App() {
 	}, []);
 
 	useEffect(() => {
-		(async () => {
-			try {
-				const state = store.getState();
-				const { token } = state.user;
-
-				if (!token) return;
-
-				setIsLoading(true);
-
-				try {
-					const response = await current(token);
-					const { data } = response;
-
-					if (response.status === 200 && data.successful) {
-						const { name, email, role } = data.result;
-
-						dispatch(loginUser({ name, email, role, token }));
-					} else {
-						dispatch(updateUser({ token: '' }));
-					}
-				} catch (error) {
-					dispatch(updateUser({ token: '' }));
-				} finally {
-					setIsLoading(false);
-				}
-			} catch (error) {
-			} finally {
-				dispatch(updateUser({ isRefreshing: false }));
-			}
-		})();
+		dispatch(fetchUser());
 	}, [dispatch]);
 
 	useEffect(() => {
@@ -84,6 +49,10 @@ function App() {
 			clearAuthHeader();
 		}
 	}, [token]);
+
+	useEffect(() => {
+		setIsLoading(isCoursesLoading || isAuthorsLoading);
+	}, [isCoursesLoading, isAuthorsLoading]);
 
 	if (isLoading) return <Loader />;
 
