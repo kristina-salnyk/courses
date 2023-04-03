@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Logo } from './components/Logo';
@@ -6,28 +6,18 @@ import { Button } from '../../common/Button';
 import { Container } from '../../common/Container';
 import { NavLink } from '../../common/NavLink';
 import { Loader } from '../../common/Loader';
-import { logout } from '../../services/api/user';
 import { selectUser } from '../../store/user/selectors';
-import { logoutUser } from '../../store/user/actionCreators';
+import { fetchLogout } from '../../store/user/thunk';
 import { LOGIN_BTN, LOGOUT_BTN, REGISTER_BTN, ROUTES } from '../../constants';
 
 import { Controls, HeaderContent, HeaderStyled } from './Header.styled';
 
 const Header = () => {
 	const dispatch = useDispatch();
-	const { isAuth, name } = useSelector(selectUser);
-	const [isLoading, setIsLoading] = useState(false);
+	const { isAuth, isLoading, name } = useSelector(selectUser);
 
 	const logoutClickHandler = async () => {
-		setIsLoading(true);
-
-		try {
-			await logout();
-		} catch (error) {
-		} finally {
-			dispatch(logoutUser());
-			setIsLoading(false);
-		}
+		dispatch(fetchLogout);
 	};
 
 	return (

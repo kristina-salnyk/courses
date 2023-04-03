@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 
-import { current, login, register } from '../../services/api/user';
+import { current, login, logout, register } from '../../services/api/user';
 import {
 	changeIsLoading,
 	changeIsRefreshing,
@@ -94,4 +94,16 @@ export const fetchRegister = (user) => async (dispatch, getState) => {
 	}
 
 	return result;
+};
+
+export const fetchLogout = async (dispatch, getState) => {
+	dispatch(changeIsLoading(true));
+
+	try {
+		await logout();
+	} catch (error) {
+	} finally {
+		dispatch(logoutUser());
+		dispatch(changeIsLoading(false));
+	}
 };
