@@ -16,8 +16,10 @@ const userReducer = (state = initialState, action) => {
 			return { ...state, ...action.payload, isAuth: true };
 		case actionTypes.USER_LOGOUT:
 			return { ...initialState, isRefreshing: false };
-		case actionTypes.USER_UPDATE:
-			return { ...state, ...action.payload };
+		case actionTypes.USER_LOADING:
+			return { ...state, isLoading: action.payload.isLoading };
+		case actionTypes.USER_REFRESHING:
+			return { ...state, isRefreshing: action.payload.isRefreshing };
 		case actionTypes.PERSIST_REHYDRATE:
 			return { ...state, ...action.payload?.user };
 		default:

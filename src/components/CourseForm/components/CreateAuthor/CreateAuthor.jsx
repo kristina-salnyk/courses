@@ -20,8 +20,8 @@ import {
 
 const CreateAuthor = () => {
 	const dispatch = useDispatch();
-	const [authorName, setAuthorName] = useState('');
 	const authors = useSelector(selectAuthors);
+	const [authorName, setAuthorName] = useState('');
 
 	const addNewAuthor = () => {
 		const name = authorName.trim();

@@ -13,9 +13,16 @@ export const logoutUser = () => {
 	};
 };
 
-export const updateUser = (user) => {
+export const changeIsLoading = (isLoading) => {
 	return {
-		type: actionTypes.USER_UPDATE,
-		payload: { ...user },
+		type: actionTypes.USER_LOADING,
+		payload: { isLoading },
+	};
+};
+
+export const changeIsRefreshing = (isRefreshing) => {
+	return {
+		type: actionTypes.USER_REFRESHING,
+		payload: { isRefreshing },
 	};
 };

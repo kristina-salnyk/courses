@@ -7,8 +7,8 @@ import { RiDeleteBin6Fill, RiEdit2Fill } from 'react-icons/ri';
 import { LimitedLine } from '../../../../common/LimitedLine';
 import { Button } from '../../../../common/Button';
 import { Icon } from '../../../../common/Icon';
-import { selectAuthorsListByIds } from '../../../../store/authors/selectors';
 import { deleteCourse } from '../../../../store/courses/actionCreators';
+import { selectAuthorsListByIds } from '../../../../store/authors/selectors';
 import pipeDuration from '../../../../helpers/pipeDuration';
 import {
 	CARD_TITLES,

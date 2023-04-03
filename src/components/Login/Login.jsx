@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Container } from '../../common/Container';
 import { Input } from '../../common/Input';
 import { Loader } from '../../common/Loader';
 import { ValidationMessage } from '../../common/ValidationMessage';
-import { current, login } from '../../services/api/user';
-import { loginUser } from '../../store/user/actionCreators';
+import { fetchLogin } from '../../store/user/thunk';
+import { selectUser } from '../../store/user/selectors';
 import useValidationErrors from '../../hooks/useValidationErrors';
 import loginSchema from '../../helpers/schemas/loginSchema';
 import {
 	EMAIL_INPUT,
 	LOGIN_BTN,
 	LOGIN_NAVIGATION_TEXT,
-	LOGIN_RESPONSE_MESSAGES,
 	PASSWORD_INPUT,
 	REGISTER_BTN,
 	ROUTES,
@@ -35,8 +33,8 @@ const Login = () => {
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const [isLoading, setIsLoading] = useState(false);
 
+	const { isLoading } = useSelector(selectUser);
 	const { validationErrors, validateOneField, validateAllFields } =
 		useValidationErrors();
 
@@ -51,42 +49,7 @@ const Login = () => {
 		const isValid = await validateAllFields(loginSchema, user);
 		if (!isValid) return;
 
-		setIsLoading(true);
-
-		try {
-			const response = await login(user);
-			const { data } = response;
-
-			if (response.status === 201 && data.successful) {
-				const [, token] = data.result.split(' ');
-
-				const currentResponse = await current(token);
-				const { data: currentData } = currentResponse;
-
-				if (currentResponse.status === 200 && currentData.successful) {
-					const { name, email, role } = currentData.result;
-
-					dispatch(loginUser({ name, email, role, token }));
-				} else {
-					toast.error(
-						LOGIN_RESPONSE_MESSAGES[currentResponse.status] ??
-							LOGIN_RESPONSE_MESSAGES.default
-					);
-				}
-			} else {
-				toast.error(
-					LOGIN_RESPONSE_MESSAGES[response.status] ??
-						LOGIN_RESPONSE_MESSAGES.default
-				);
-			}
-		} catch (error) {
-			toast.error(
-				LOGIN_RESPONSE_MESSAGES[error.response.status] ??
-					LOGIN_RESPONSE_MESSAGES.default
-			);
-		} finally {
-			setIsLoading(false);
-		}
+		dispatch(fetchLogin(user));
 	};
 
 	return (

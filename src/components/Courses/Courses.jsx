@@ -6,8 +6,9 @@ import { CourseCard } from './components/CourseCard';
 import { Container } from '../../common/Container';
 import { Button } from '../../common/Button';
 import { SearchBar } from './components/SearchBar';
-import noResults from '../../assets/img/no-results.png';
+import { selectUser } from '../../store/user/selectors';
 import { selectCoursesBySearchQuery } from '../../store/courses/selectors';
+import noResults from '../../assets/img/no-results.png';
 import {
 	ADD_NEW_COURSE_BTN,
 	COURSES_NO_RESULTS_TEXT,
@@ -22,7 +23,6 @@ import {
 	CoursesMessage,
 	CoursesStyled,
 } from './Courses.styled';
-import { selectUser } from '../../store/user/selectors';
 
 const Courses = () => {
 	const navigate = useNavigate();

@@ -1,11 +1,19 @@
-import { current } from '../../services/api/user';
-import { loginUser, updateUser } from './actionCreators';
+import { toast } from 'react-toastify';
+
+import { current, login } from '../../services/api/user';
+import {
+	changeIsLoading,
+	changeIsRefreshing,
+	loginUser,
+	logoutUser,
+} from './actionCreators';
+import { LOGIN_RESPONSE_MESSAGES } from '../../constants';
 
 export const fetchUser = (token) => async (dispatch, getState) => {
 	const currentToken = token ?? getState().user.token;
 
 	if (currentToken) {
-		dispatch(updateUser({ isLoading: true }));
+		dispatch(changeIsLoading(true));
 
 		try {
 			const response = await current(currentToken);
@@ -16,14 +24,41 @@ export const fetchUser = (token) => async (dispatch, getState) => {
 
 				dispatch(loginUser({ name, email, role, currentToken }));
 			} else {
-				dispatch(updateUser({ token: '' }));
+				dispatch(logoutUser());
 			}
 		} catch (error) {
-			dispatch(updateUser({ token: '' }));
+			dispatch(logoutUser());
 		} finally {
-			dispatch(updateUser({ isLoading: false }));
+			dispatch(changeIsLoading(false));
 		}
 	}
 
-	dispatch(updateUser({ isRefreshing: false }));
+	dispatch(changeIsRefreshing(false));
+};
+
+export const fetchLogin = (user) => async (dispatch, getState) => {
+	dispatch(changeIsLoading(true));
+
+	try {
+		const response = await login(user);
+		const { data } = response;
+
+		if (response.status === 201 && data.successful) {
+			const [, token] = data.result.split(' ');
+
+			await dispatch(fetchUser(token));
+		} else {
+			toast.error(
+				LOGIN_RESPONSE_MESSAGES[response.status] ??
+					LOGIN_RESPONSE_MESSAGES.default
+			);
+		}
+	} catch (error) {
+		toast.error(
+			LOGIN_RESPONSE_MESSAGES[error.response.status] ??
+				LOGIN_RESPONSE_MESSAGES.default
+		);
+	} finally {
+		dispatch(changeIsLoading(false));
+	}
 };
