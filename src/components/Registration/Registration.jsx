@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { Container } from '../../common/Container';
 import { Input } from '../../common/Input';
-import { Loader } from '../../common/Loader';
 import { ValidationMessage } from '../../common/ValidationMessage';
 import { fetchRegister } from '../../store/user/thunk';
-import { selectUser } from '../../store/user/selectors';
 import useValidationErrors from '../../hooks/useValidationErrors';
 import registerSchema from '../../helpers/schemas/registerSchema';
 import {
@@ -38,7 +36,6 @@ const Registration = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 
-	const { isLoading } = useSelector(selectUser);
 	const { validationErrors, validateOneField, validateAllFields } =
 		useValidationErrors();
 
@@ -62,7 +59,6 @@ const Registration = () => {
 		<RegistrationStyled>
 			<Container>
 				<RegistrationForm onSubmit={formSubmitHandler}>
-					{isLoading && <Loader />}
 					<RegistrationFormContent>
 						<FieldWrapStyled>
 							<Input

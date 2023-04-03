@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { Container } from '../../common/Container';
 import { Input } from '../../common/Input';
-import { Loader } from '../../common/Loader';
 import { ValidationMessage } from '../../common/ValidationMessage';
 import { fetchLogin } from '../../store/user/thunk';
-import { selectUser } from '../../store/user/selectors';
 import useValidationErrors from '../../hooks/useValidationErrors';
 import loginSchema from '../../helpers/schemas/loginSchema';
 import {
@@ -34,7 +32,6 @@ const Login = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 
-	const { isLoading } = useSelector(selectUser);
 	const { validationErrors, validateOneField, validateAllFields } =
 		useValidationErrors();
 
@@ -56,7 +53,6 @@ const Login = () => {
 		<LoginStyled>
 			<Container>
 				<LoginForm onSubmit={formSubmitHandler}>
-					{isLoading && <Loader />}
 					<LoginFormContent>
 						<FieldWrapStyled>
 							<Input

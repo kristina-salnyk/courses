@@ -1,9 +1,9 @@
 import * as actionTypes from './actionTypes';
 
-export const loginUser = (user) => {
+export const loginUser = ({ name, email, role, token }) => {
 	return {
 		type: actionTypes.USER_LOGIN,
-		payload: { ...user },
+		payload: { name, email, role, token },
 	};
 };
 
