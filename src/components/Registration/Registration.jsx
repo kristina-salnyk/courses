@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Container } from '../../common/Container';
 import { Input } from '../../common/Input';
 import { Loader } from '../../common/Loader';
 import { ValidationMessage } from '../../common/ValidationMessage';
-import { register } from '../../services/api/user';
+import { fetchRegister } from '../../store/user/thunk';
+import { selectUser } from '../../store/user/selectors';
 import useValidationErrors from '../../hooks/useValidationErrors';
 import registerSchema from '../../helpers/schemas/registerSchema';
 import {
@@ -16,7 +17,6 @@ import {
 	PASSWORD_INPUT,
 	REGISTER_BTN,
 	REGISTRATION_NAVIGATION_TEXT,
-	REGISTRATION_RESPONSE_MESSAGES,
 	ROUTES,
 } from '../../constants';
 
@@ -32,12 +32,13 @@ import {
 
 const Registration = () => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const [isLoading, setIsLoading] = useState(false);
 
+	const { isLoading } = useSelector(selectUser);
 	const { validationErrors, validateOneField, validateAllFields } =
 		useValidationErrors();
 
@@ -53,29 +54,8 @@ const Registration = () => {
 		const isValid = await validateAllFields(registerSchema, user);
 		if (!isValid) return;
 
-		setIsLoading(true);
-
-		try {
-			const response = await register(user);
-			const { data } = response;
-
-			if (response.status === 201 && data.successful) {
-				toast.success(REGISTRATION_RESPONSE_MESSAGES[201]);
-				navigate(ROUTES.LOGIN);
-			} else {
-				toast.error(
-					REGISTRATION_RESPONSE_MESSAGES[response.status] ??
-						REGISTRATION_RESPONSE_MESSAGES.default
-				);
-			}
-		} catch (error) {
-			toast.error(
-				REGISTRATION_RESPONSE_MESSAGES[error.response.status] ??
-					REGISTRATION_RESPONSE_MESSAGES.default
-			);
-		} finally {
-			setIsLoading(false);
-		}
+		const result = await dispatch(fetchRegister(user));
+		if (result.successful) navigate(ROUTES.LOGIN);
 	};
 
 	return (
