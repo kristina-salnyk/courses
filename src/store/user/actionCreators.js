@@ -12,17 +12,3 @@ export const logoutUser = () => {
 		type: actionTypes.USER_LOGOUT,
 	};
 };
-
-export const changeIsLoading = (isLoading) => {
-	return {
-		type: actionTypes.USER_LOADING,
-		payload: { isLoading },
-	};
-};
-
-export const changeIsRefreshing = (isRefreshing) => {
-	return {
-		type: actionTypes.USER_REFRESHING,
-		payload: { isRefreshing },
-	};
-};

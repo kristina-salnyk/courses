@@ -2,26 +2,23 @@ import * as actionTypes from './actionTypes';
 
 const initialState = {
 	isAuth: false,
-	isLoading: false,
-	isRefreshing: true,
 	name: '',
 	email: '',
-	role: '',
 	token: '',
+	role: '',
 };
 
 const userReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case actionTypes.USER_LOGIN:
-			return { ...state, ...action.payload, isAuth: true };
+			return {
+				isAuth: true,
+				name: action.payload.name,
+				email: action.payload.email,
+				token: action.payload.token,
+			};
 		case actionTypes.USER_LOGOUT:
-			return { ...initialState, isRefreshing: false };
-		case actionTypes.USER_LOADING:
-			return { ...state, isLoading: action.payload.isLoading };
-		case actionTypes.USER_REFRESHING:
-			return { ...state, isRefreshing: action.payload.isRefreshing };
-		case actionTypes.PERSIST_REHYDRATE:
-			return { ...state, ...action.payload?.user };
+			return { ...initialState };
 		default:
 			return state;
 	}

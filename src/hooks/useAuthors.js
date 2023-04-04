@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -10,38 +10,36 @@ const useAuthors = () => {
 	const dispatch = useDispatch();
 	const [isLoading, setIsLoading] = useState(false);
 
-	useEffect(() => {
-		(async () => {
-			setIsLoading(true);
+	const fetchAuthors = useCallback(async () => {
+		setIsLoading(true);
 
-			try {
-				const response = await getAuthors();
-				const { data } = response;
+		try {
+			const response = await getAuthors();
+			const { data } = response;
 
-				if (response.status === 200 && data.successful) {
-					const authors = data.result;
+			if (response.status === 200 && data.successful) {
+				const authors = data.result;
 
-					dispatch(setAuthors(authors));
-				} else {
-					toast.error(
-						AUTHORS_ALL_RESPONSE_MESSAGES[response.status] ??
-							AUTHORS_ALL_RESPONSE_MESSAGES.default
-					);
-					dispatch(setAuthors([]));
-				}
-			} catch (error) {
+				dispatch(setAuthors(authors));
+			} else {
 				toast.error(
-					AUTHORS_ALL_RESPONSE_MESSAGES[error.response.status] ??
+					AUTHORS_ALL_RESPONSE_MESSAGES[response.status] ??
 						AUTHORS_ALL_RESPONSE_MESSAGES.default
 				);
 				dispatch(setAuthors([]));
-			} finally {
-				setIsLoading(false);
 			}
-		})();
+		} catch (error) {
+			toast.error(
+				AUTHORS_ALL_RESPONSE_MESSAGES[error.response.status] ??
+					AUTHORS_ALL_RESPONSE_MESSAGES.default
+			);
+			dispatch(setAuthors([]));
+		} finally {
+			setIsLoading(false);
+		}
 	}, [dispatch]);
 
-	return { isAuthorsLoading: isLoading };
+	return { fetchAuthors, isLoading };
 };
 
 export default useAuthors;

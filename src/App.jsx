@@ -1,17 +1,16 @@
-import React, { lazy, useEffect, useState } from 'react';
+import React, { lazy, useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import WebFont from 'webfontloader';
 
 import { SharedLayout } from './components/SharedLayout';
 import { PrivateRoute } from './components/PrivateRoute';
 import { RestrictedRoute } from './components/RestrictedRoute';
 import { Loader } from './common/Loader';
-import useCourses from './hooks/useCourses';
-import useAuthors from './hooks/useAuthors';
-import { clearAuthHeader, setAuthHeader } from './services/api';
-import { fetchUser } from './store/user/thunk';
 import { selectUser } from './store/user/selectors';
+import useAuthors from './hooks/useAuthors';
+import useCourses from './hooks/useCourses';
+import useUser from './hooks/useUser';
 import { ROUTES } from './constants';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,12 +22,13 @@ const Registration = lazy(() => import('./components/Registration'));
 const Login = lazy(() => import('./components/Login'));
 
 function App() {
-	const dispatch = useDispatch();
-	const { isRefreshing, token } = useSelector(selectUser);
-	const [isLoading, setIsLoading] = useState(false);
+	const { isAuth } = useSelector(selectUser);
 
-	const { isCoursesLoading } = useCourses();
-	const { isAuthorsLoading } = useAuthors();
+	const { fetchUser, isLoading: isUserLoading, isRefreshing } = useUser();
+	const { fetchAuthors, isLoading: isAuthorsLoading } = useAuthors();
+	const { fetchCourses, isLoading: isCoursesLoading } = useCourses();
+
+	const isLoading = isUserLoading || isAuthorsLoading || isCoursesLoading;
 
 	useEffect(() => {
 		WebFont.load({
@@ -39,24 +39,24 @@ function App() {
 	}, []);
 
 	useEffect(() => {
-		dispatch(fetchUser());
-	}, [dispatch]);
+		if (isRefreshing.current) return;
+
+		(async () => {
+			await fetchUser();
+			// dispatch(fetchUser());
+		})();
+	}, [fetchUser, isRefreshing]);
 
 	useEffect(() => {
-		if (token) {
-			setAuthHeader(token);
-		} else {
-			clearAuthHeader();
-		}
-	}, [token]);
+		if (!isAuth) return;
 
-	useEffect(() => {
-		setIsLoading(isCoursesLoading || isAuthorsLoading);
-	}, [isCoursesLoading, isAuthorsLoading]);
+		(async () => {
+			await fetchAuthors();
+			await fetchCourses();
+		})();
+	}, [fetchAuthors, fetchCourses, isAuth]);
 
 	if (isLoading) return <Loader />;
-
-	if (isRefreshing) return null;
 
 	return (
 		<BrowserRouter>

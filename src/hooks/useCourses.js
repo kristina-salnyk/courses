@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -10,38 +10,36 @@ const useCourses = () => {
 	const dispatch = useDispatch();
 	const [isLoading, setIsLoading] = useState(false);
 
-	useEffect(() => {
-		(async () => {
-			setIsLoading(true);
+	const fetchCourses = useCallback(async () => {
+		setIsLoading(true);
 
-			try {
-				const response = await getCourses();
-				const { data } = response;
+		try {
+			const response = await getCourses();
+			const { data } = response;
 
-				if (response.status === 200 && data.successful) {
-					const courses = data.result;
+			if (response.status === 200 && data.successful) {
+				const courses = data.result;
 
-					dispatch(setCourses(courses));
-				} else {
-					toast.error(
-						COURSES_ALL_RESPONSE_MESSAGES[response.status] ??
-							COURSES_ALL_RESPONSE_MESSAGES.default
-					);
-					dispatch(setCourses([]));
-				}
-			} catch (error) {
+				dispatch(setCourses(courses));
+			} else {
 				toast.error(
-					COURSES_ALL_RESPONSE_MESSAGES[error.response.status] ??
+					COURSES_ALL_RESPONSE_MESSAGES[response.status] ??
 						COURSES_ALL_RESPONSE_MESSAGES.default
 				);
 				dispatch(setCourses([]));
-			} finally {
-				setIsLoading(false);
 			}
-		})();
+		} catch (error) {
+			toast.error(
+				COURSES_ALL_RESPONSE_MESSAGES[error.response.status] ??
+					COURSES_ALL_RESPONSE_MESSAGES.default
+			);
+			dispatch(setCourses([]));
+		} finally {
+			setIsLoading(false);
+		}
 	}, [dispatch]);
 
-	return { isCoursesLoading: isLoading };
+	return { fetchCourses, isLoading };
 };
 
 export default useCourses;

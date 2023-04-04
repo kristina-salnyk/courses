@@ -11,9 +11,9 @@ const PrivateRoute = ({
 	redirectTo = ROUTES.ROOT,
 	restricted = false,
 }) => {
-	const { isAuth, isRefreshing, role } = useSelector(selectUser);
+	const { isAuth, role } = useSelector(selectUser);
 
-	const shouldRedirect = !isAuth && !isRefreshing;
+	const shouldRedirect = !isAuth;
 	const shouldRestrict = restricted && !(role === ROLES.ADMIN);
 
 	return shouldRedirect ? (
