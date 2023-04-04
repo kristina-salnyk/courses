@@ -7,6 +7,7 @@ import { Input } from '../../common/Input';
 import { Loader } from '../../common/Loader';
 import { ValidationMessage } from '../../common/ValidationMessage';
 import { login } from '../../services/api/user';
+import { setToken } from '../../helpers/tokenStore';
 import { loginUser } from '../../store/user/actionCreators';
 import useValidationErrors from '../../hooks/useValidationErrors';
 import loginSchema from '../../helpers/schemas/loginSchema';
@@ -66,6 +67,7 @@ const Login = () => {
 						token,
 					})
 				);
+				setToken(token);
 			} else {
 				toast.error(
 					LOGIN_RESPONSE_MESSAGES[response.status] ??

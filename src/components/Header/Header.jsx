@@ -7,6 +7,7 @@ import { Container } from '../../common/Container';
 import { NavLink } from '../../common/NavLink';
 import { Loader } from '../../common/Loader';
 import { logout } from '../../services/api/user';
+import { clearToken } from '../../helpers/tokenStore';
 import { selectUser } from '../../store/user/selectors';
 import { logoutUser } from '../../store/user/actionCreators';
 import { LOGIN_BTN, LOGOUT_BTN, REGISTER_BTN, ROUTES } from '../../constants';
@@ -26,6 +27,7 @@ const Header = () => {
 		} catch (error) {
 		} finally {
 			dispatch(logoutUser());
+			clearToken();
 			setIsLoading(false);
 		}
 	};

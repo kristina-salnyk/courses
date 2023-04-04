@@ -8,10 +8,10 @@ import { MdAccessTimeFilled, MdArrowBackIos } from 'react-icons/md';
 
 import { Container } from '../../common/Container';
 import { Icon } from '../../common/Icon';
-import pipeDuration from '../../helpers/pipeDuration';
-import noResults from '../../assets/img/no-results.png';
 import { selectCourseById } from '../../store/courses/selectors';
 import { selectAuthorsByIds } from '../../store/authors/selectors';
+import pipeDuration from '../../helpers/pipeDuration';
+import noResults from '../../assets/img/no-results.png';
 import {
 	BACK_BTN,
 	COURSE_INFO_NO_RESULTS_TEXT,
