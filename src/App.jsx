@@ -1,17 +1,16 @@
-import React, { lazy, useEffect, useState } from 'react';
+import React, { lazy, useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import WebFont from 'webfontloader';
 
 import { SharedLayout } from './components/SharedLayout';
 import { RestrictedRoute } from './components/RestrictedRoute';
 import { PrivateRoute } from './components/PrivateRoute';
 import { Loader } from './common/Loader';
-import { clearAuthHeader, setAuthHeader } from './services/api';
-import { current } from './services/api/user';
-import { store } from './store';
 import { selectUser } from './store/user/selectors';
-import { loginUser, updateUser } from './store/user/actionCreators';
+import useAuthors from './hooks/useAuthors';
+import useCourses from './hooks/useCourses';
+import useUser from './hooks/useUser';
 import { ROUTES } from './constants';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,9 +22,13 @@ const Registration = lazy(() => import('./components/Registration'));
 const Login = lazy(() => import('./components/Login'));
 
 function App() {
-	const dispatch = useDispatch();
-	const { isRefreshing, token } = useSelector(selectUser);
-	const [isLoading, setIsLoading] = useState(false);
+	const { isAuth } = useSelector(selectUser);
+
+	const { fetchUser, isLoading: isUserLoading, isRefreshing } = useUser();
+	const { fetchAuthors, isLoading: isAuthorsLoading } = useAuthors();
+	const { fetchCourses, isLoading: isCoursesLoading } = useCourses();
+
+	const isLoading = isUserLoading || isAuthorsLoading || isCoursesLoading;
 
 	useEffect(() => {
 		WebFont.load({
@@ -36,49 +39,23 @@ function App() {
 	}, []);
 
 	useEffect(() => {
+		if (isRefreshing.current) return;
+
 		(async () => {
-			try {
-				const state = store.getState();
-				const { token } = state.user;
-
-				if (!token) return;
-
-				setIsLoading(true);
-
-				try {
-					const response = await current(token);
-					const { data } = response;
-
-					if (response.status === 200 && data.successful) {
-						const { name, email } = data.result;
-
-						dispatch(loginUser({ name, email, token }));
-					} else {
-						dispatch(updateUser({ token: '' }));
-					}
-				} catch (error) {
-					dispatch(updateUser({ token: '' }));
-				} finally {
-					setIsLoading(false);
-				}
-			} catch (error) {
-			} finally {
-				dispatch(updateUser({ isRefreshing: false }));
-			}
+			await fetchUser();
 		})();
-	}, [dispatch]);
+	}, [fetchUser, isRefreshing]);
 
 	useEffect(() => {
-		if (token) {
-			setAuthHeader(token);
-		} else {
-			clearAuthHeader();
-		}
-	}, [token]);
+		if (!isAuth) return;
+
+		(async () => {
+			await fetchAuthors();
+			await fetchCourses();
+		})();
+	}, [fetchAuthors, fetchCourses, isAuth]);
 
 	if (isLoading) return <Loader />;
-
-	if (isRefreshing) return null;
 
 	return (
 		<BrowserRouter>
