@@ -12,10 +12,3 @@ export const logoutUser = () => {
 		type: actionTypes.USER_LOGOUT,
 	};
 };
-
-export const updateUser = (user) => {
-	return {
-		type: actionTypes.USER_UPDATE,
-		payload: { ...user },
-	};
-};
