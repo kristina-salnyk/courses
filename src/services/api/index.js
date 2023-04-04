@@ -1,9 +1,12 @@
 import axios from 'axios';
 
-import { BASE_URL } from '../../constants';
+const REACT_APP_URL =
+	process.env.REACT_APP_NODE_ENV === 'development'
+		? process.env.REACT_APP_DEV_URL
+		: process.env.REACT_APP_PROD_URL;
 
 export const api = axios.create({
-	baseURL: BASE_URL,
+	baseURL: REACT_APP_URL,
 });
 
 export const setAuthHeader = (token) => {

@@ -1,7 +1,4 @@
-export const BASE_URL =
-	'https://react-fundamentals-course-hw-backend.onrender.com';
-
-export const LOCAL_STORAGE_KEY = 'root';
+export const LOCAL_STORAGE_KEY = 'token';
 
 export const LOGO_ALTERNATIVE_TEXT = 'Logo with tag and courses title';
 
