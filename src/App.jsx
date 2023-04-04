@@ -1,10 +1,16 @@
 import React, { lazy, useEffect } from 'react';
-import WebFont from 'webfontloader';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import WebFont from 'webfontloader';
 
 import { SharedLayout } from './components/SharedLayout';
 import { RestrictedRoute } from './components/RestrictedRoute';
 import { PrivateRoute } from './components/PrivateRoute';
+import { Loader } from './common/Loader';
+import { selectUser } from './store/user/selectors';
+import useAuthors from './hooks/useAuthors';
+import useCourses from './hooks/useCourses';
+import useUser from './hooks/useUser';
 import { ROUTES } from './constants';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,6 +22,14 @@ const Registration = lazy(() => import('./components/Registration'));
 const Login = lazy(() => import('./components/Login'));
 
 function App() {
+	const { isAuth } = useSelector(selectUser);
+
+	const { fetchUser, isLoading: isUserLoading, isRefreshing } = useUser();
+	const { fetchAuthors, isLoading: isAuthorsLoading } = useAuthors();
+	const { fetchCourses, isLoading: isCoursesLoading } = useCourses();
+
+	const isLoading = isUserLoading || isAuthorsLoading || isCoursesLoading;
+
 	useEffect(() => {
 		WebFont.load({
 			google: {
@@ -23,6 +37,25 @@ function App() {
 			},
 		});
 	}, []);
+
+	useEffect(() => {
+		if (isRefreshing.current) return;
+
+		(async () => {
+			await fetchUser();
+		})();
+	}, [fetchUser, isRefreshing]);
+
+	useEffect(() => {
+		if (!isAuth) return;
+
+		(async () => {
+			await fetchAuthors();
+			await fetchCourses();
+		})();
+	}, [fetchAuthors, fetchCourses, isAuth]);
+
+	if (isLoading) return <Loader />;
 
 	return (
 		<BrowserRouter>

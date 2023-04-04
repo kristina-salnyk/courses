@@ -53,3 +53,9 @@ export const CourseDetails = styled.div`
 export const CourseDetailsTitle = styled.span`
 	font-weight: ${({ theme }) => theme.typography.weight.bold};
 `;
+
+export const CourseCardButtons = styled.div`
+	display: flex;
+	flex-wrap: nowrap;
+	gap: ${({ theme }) => theme.spacing[1]};
+`;

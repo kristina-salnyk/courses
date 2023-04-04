@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 
-import { UserProvider } from './contexts/UserContext';
-import { AuthorsProvider } from './contexts/AuthorsContext';
-import { CoursesProvider } from './contexts/CoursesContext';
-import App from './App';
+import { store } from './store';
 import theme from './theme';
+import App from './App';
 
 import 'normalize.css';
 import './index.css';
@@ -15,13 +14,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<React.StrictMode>
 		<ThemeProvider theme={theme}>
-			<UserProvider>
-				<AuthorsProvider>
-					<CoursesProvider>
-						<App />
-					</CoursesProvider>
-				</AuthorsProvider>
-			</UserProvider>
+			<Provider store={store}>
+				<App />
+			</Provider>
 		</ThemeProvider>
 	</React.StrictMode>
 );

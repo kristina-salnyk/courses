@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { Container } from '../../common/Container';
 import { Input } from '../../common/Input';
 import { Loader } from '../../common/Loader';
 import { ValidationMessage } from '../../common/ValidationMessage';
-import { useUser } from '../../contexts/UserContext';
-import { login } from '../../utils/api/auth';
+import { login } from '../../services/api/user';
+import { setToken } from '../../helpers/tokenStore';
+import { loginUser } from '../../store/user/actionCreators';
 import useValidationErrors from '../../hooks/useValidationErrors';
 import loginSchema from '../../helpers/schemas/loginSchema';
 import {
 	EMAIL_INPUT,
 	LOGIN_BTN,
-	LOGIN_INFO_TEXT,
-	LOGIN_STATUS,
+	LOGIN_NAVIGATION_TEXT,
+	LOGIN_RESPONSE_MESSAGES,
 	PASSWORD_INPUT,
 	REGISTER_BTN,
 	ROUTES,
@@ -30,7 +32,7 @@ import {
 } from './Login.styled';
 
 const Login = () => {
-	const { setIsLoggedIn, setUser, setToken } = useUser();
+	const dispatch = useDispatch();
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -58,15 +60,25 @@ const Login = () => {
 
 			if (response.status === 201 && data.successful) {
 				const [, token] = data.result.split(' ');
-
-				setIsLoggedIn(true);
+				dispatch(
+					loginUser({
+						name: data.user.name,
+						email: data.user.email,
+						token,
+					})
+				);
 				setToken(token);
-				setUser({ ...data.user });
 			} else {
-				toast.error(LOGIN_STATUS[response.status] ?? LOGIN_STATUS.default);
+				toast.error(
+					LOGIN_RESPONSE_MESSAGES[response.status] ??
+						LOGIN_RESPONSE_MESSAGES.default
+				);
 			}
 		} catch (error) {
-			toast.error(LOGIN_STATUS[error.response.status] ?? LOGIN_STATUS.default);
+			toast.error(
+				LOGIN_RESPONSE_MESSAGES[error.response.status] ??
+					LOGIN_RESPONSE_MESSAGES.default
+			);
 		} finally {
 			setIsLoading(false);
 		}
@@ -124,7 +136,7 @@ const Login = () => {
 						</FieldWrapStyled>
 						<ButtonStyled type={LOGIN_BTN.type} text={LOGIN_BTN.text} />
 						<LoginFormMessage>
-							{LOGIN_INFO_TEXT}{' '}
+							{LOGIN_NAVIGATION_TEXT}{' '}
 							<LinkStyled to={ROUTES.REGISTRATION}>
 								{REGISTER_BTN.text}
 							</LinkStyled>

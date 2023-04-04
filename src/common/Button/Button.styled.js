@@ -22,5 +22,14 @@ export const ButtonStyled = styled.button`
 		color: ${({ theme }) => theme.colors.text.primary};
 		background-color: transparent;
 		background-image: none;
+
+		& > svg {
+			fill: ${({ theme }) => theme.colors.background.button};
+		}
+	}
+
+	& > svg {
+		display: block;
+		fill: ${({ theme }) => theme.colors.text.secondary};
 	}
 `;

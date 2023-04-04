@@ -1,28 +1,34 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { CourseCard } from './components/CourseCard';
 import { Container } from '../../common/Container';
 import { Button } from '../../common/Button';
 import { SearchBar } from './components/SearchBar';
-import { useCourses } from '../../contexts/CoursesContext';
-import { ADD_NEW_COURSE_BTN, ROUTES } from '../../constants';
+import { selectCoursesBySearchQuery } from '../../store/courses/selectors';
+import noResults from '../../assets/img/no-results.png';
+import {
+	ADD_NEW_COURSE_BTN,
+	COURSES_NO_RESULTS_TEXT,
+	NO_RESULTS_ALTERNATIVE_TEXT,
+	ROUTES,
+} from '../../constants';
 
-import { CoursesHeader, CoursesList, CoursesStyled } from './Courses.styled';
+import {
+	CoursesHeader,
+	CoursesList,
+	CoursesMessage,
+	CoursesStyled,
+} from './Courses.styled';
 
 const Courses = () => {
 	const navigate = useNavigate();
-	const { courses } = useCourses();
-
 	const [searchQuery, setSearchQuery] = useState('');
 
-	const searchedCourses = useMemo(() => {
-		return courses.filter((item) =>
-			[item.title.toLowerCase(), item.id.toLowerCase()].some((property) =>
-				property.includes(searchQuery.toLowerCase())
-			)
-		);
-	}, [courses, searchQuery]);
+	const courses = useSelector((state) =>
+		selectCoursesBySearchQuery(state, searchQuery)
+	);
 
 	return (
 		<CoursesStyled>
@@ -35,14 +41,23 @@ const Courses = () => {
 						onClick={() => navigate(ROUTES.CREATE_COURSE)}
 					/>
 				</CoursesHeader>
-				{searchedCourses.length > 0 && (
+				{courses.length > 0 ? (
 					<CoursesList>
-						{searchedCourses.map((item) => (
+						{courses.map((item) => (
 							<li key={item.id}>
 								<CourseCard {...item} />
 							</li>
 						))}
 					</CoursesList>
+				) : (
+					<CoursesMessage>
+						<p>{COURSES_NO_RESULTS_TEXT}</p>
+						<img
+							src={noResults}
+							alt={NO_RESULTS_ALTERNATIVE_TEXT}
+							width={300}
+						/>
+					</CoursesMessage>
 				)}
 			</Container>
 		</CoursesStyled>

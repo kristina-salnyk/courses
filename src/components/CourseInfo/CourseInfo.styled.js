@@ -18,7 +18,6 @@ export const CourseInfoWrap = styled.div`
 `;
 
 export const CourseTitle = styled.h1`
-	padding: 0 ${({ theme }) => theme.spacing[5]};
 	font-weight: ${({ theme }) => theme.typography.weight.bold};
 	font-size: ${({ theme }) => theme.typography.size.xxxl};
 	position: relative;
@@ -46,10 +45,14 @@ export const CourseTitle = styled.h1`
 		@media (min-width: ${({ theme }) => theme.breakpoints.tablet[0]}) {
 			width: 90%;
 		}
+	}
 
-		@media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-			text-align: center;
-		}
+	@media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+		text-align: center;
+	}
+
+	@media (min-width: ${({ theme }) => theme.breakpoints.tablet[0]}) {
+		padding: 0 ${({ theme }) => theme.spacing[5]};
 	}
 `;
 
@@ -97,4 +100,15 @@ export const LinkStyled = styled(Link)`
 	top: ${({ theme }) => theme.spacing[2]};
 	left: ${({ theme }) => theme.spacing[2]};
 	font-size: ${({ theme }) => theme.typography.size.s};
+`;
+
+export const CourseInfoMessage = styled.div`
+	padding: ${({ theme }) => theme.spacing[1]} 0;
+	font-size: ${({ theme }) => theme.typography.size.ь};
+	font-weight: ${({ theme }) => theme.typography.weight.bold};
+	color: ${({ theme }) => theme.colors.accent};
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: ${({ theme }) => theme.spacing[2]};
 `;

@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-import { useUser } from '../../contexts/UserContext';
+import { selectUser } from '../../store/user/selectors';
 import { ROUTES } from '../../constants';
 
 const PrivateRoute = ({ component: Component, redirectTo = ROUTES.ROOT }) => {
-	const { isLoggedIn, isRefreshing } = useUser();
+	const { isAuth } = useSelector(selectUser);
 
-	const shouldRedirect = !isLoggedIn && !isRefreshing;
+	const shouldRedirect = !isAuth;
 
 	return shouldRedirect ? <Navigate to={redirectTo} /> : Component;
 };

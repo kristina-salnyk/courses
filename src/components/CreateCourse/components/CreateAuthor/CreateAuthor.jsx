@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { v4 as uuid } from 'uuid';
 
 import { Input } from '../../../../common/Input';
 import { Button } from '../../../../common/Button';
-import { useAuthors } from '../../../../contexts/AuthorsContext';
+import { selectAuthors } from '../../../../store/authors/selectors';
+import { addAuthor } from '../../../../store/authors/actionCreators';
 import {
 	ADD_NEW_AUTHOR_ERROR_TEXT,
 	AUTHOR_NAME_INPUT,
@@ -18,9 +19,9 @@ import {
 } from '../../CreateCourse.styled';
 
 const CreateAuthor = () => {
-	const { authors, setAuthors } = useAuthors();
-
+	const dispatch = useDispatch();
 	const [authorName, setAuthorName] = useState('');
+	const authors = useSelector(selectAuthors);
 
 	const addNewAuthor = () => {
 		const name = authorName.trim();
@@ -31,9 +32,7 @@ const CreateAuthor = () => {
 			return;
 		}
 
-		const author = { id: uuid(), name };
-		setAuthors((prevState) => [author, ...prevState]);
-
+		dispatch(addAuthor({ name }));
 		setAuthorName('');
 	};
 
