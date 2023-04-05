@@ -1,12 +1,7 @@
 import { toast } from 'react-toastify';
 
 import { current, login, logout, register } from '../../services/api/user';
-import {
-	changeIsLoading,
-	changeIsRefreshing,
-	loginUser,
-	logoutUser,
-} from './actionCreators';
+import { loginUser, logoutUser } from './actionCreators';
 import {
 	LOGIN_RESPONSE_MESSAGES,
 	REGISTRATION_RESPONSE_MESSAGES,
@@ -16,8 +11,6 @@ export const fetchUser = (token) => async (dispatch, getState) => {
 	const currentToken = token ?? getState().user.token;
 
 	if (currentToken) {
-		dispatch(changeIsLoading(true));
-
 		try {
 			const response = await current(currentToken);
 			const { data } = response;
@@ -32,16 +25,12 @@ export const fetchUser = (token) => async (dispatch, getState) => {
 		} catch (error) {
 			dispatch(logoutUser());
 		} finally {
-			dispatch(changeIsLoading(false));
+			// dispatch(changeIsLoading(false));
 		}
 	}
-
-	dispatch(changeIsRefreshing(false));
 };
 
 export const fetchLogin = (user) => async (dispatch, getState) => {
-	dispatch(changeIsLoading(true));
-
 	try {
 		const response = await login(user);
 		const { data } = response;
@@ -62,14 +51,12 @@ export const fetchLogin = (user) => async (dispatch, getState) => {
 				LOGIN_RESPONSE_MESSAGES.default
 		);
 	} finally {
-		dispatch(changeIsLoading(false));
+		// dispatch(changeIsLoading(false));
 	}
 };
 
 export const fetchRegister = (user) => async (dispatch, getState) => {
 	const result = { successful: false };
-
-	dispatch(changeIsLoading(true));
 
 	try {
 		const response = await register(user);
@@ -90,20 +77,18 @@ export const fetchRegister = (user) => async (dispatch, getState) => {
 				REGISTRATION_RESPONSE_MESSAGES.default
 		);
 	} finally {
-		dispatch(changeIsLoading(false));
+		// dispatch(changeIsLoading(false));
 	}
 
 	return result;
 };
 
 export const fetchLogout = async (dispatch, getState) => {
-	dispatch(changeIsLoading(true));
-
 	try {
 		await logout();
 	} catch (error) {
 	} finally {
 		dispatch(logoutUser());
-		dispatch(changeIsLoading(false));
+		// dispatch(changeIsLoading(false));
 	}
 };
