@@ -24,7 +24,7 @@ export const fetchCourses = async (dispatch, getState) => {
 		}
 	} catch (error) {
 		toast.error(
-			COURSES_ALL_RESPONSE_MESSAGES[error.response.status] ??
+			COURSES_ALL_RESPONSE_MESSAGES[error.response?.status] ??
 				COURSES_ALL_RESPONSE_MESSAGES.default
 		);
 		dispatch(setCourses([]));

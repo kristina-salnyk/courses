@@ -47,7 +47,7 @@ export const fetchLogin = (user) => async (dispatch, getState) => {
 		}
 	} catch (error) {
 		toast.error(
-			LOGIN_RESPONSE_MESSAGES[error.response.status] ??
+			LOGIN_RESPONSE_MESSAGES[error.response?.status] ??
 				LOGIN_RESPONSE_MESSAGES.default
 		);
 	} finally {
@@ -73,7 +73,7 @@ export const fetchRegister = (user) => async (dispatch, getState) => {
 		}
 	} catch (error) {
 		toast.error(
-			REGISTRATION_RESPONSE_MESSAGES[error.response.status] ??
+			REGISTRATION_RESPONSE_MESSAGES[error.response?.status] ??
 				REGISTRATION_RESPONSE_MESSAGES.default
 		);
 	} finally {

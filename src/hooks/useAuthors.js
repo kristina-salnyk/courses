@@ -30,7 +30,7 @@ const useAuthors = () => {
 			}
 		} catch (error) {
 			toast.error(
-				AUTHORS_ALL_RESPONSE_MESSAGES[error.response.status] ??
+				AUTHORS_ALL_RESPONSE_MESSAGES[error.response?.status] ??
 					AUTHORS_ALL_RESPONSE_MESSAGES.default
 			);
 			dispatch(setAuthors([]));

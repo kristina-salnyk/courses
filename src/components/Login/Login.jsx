@@ -78,7 +78,7 @@ const Login = () => {
 			}
 		} catch (error) {
 			toast.error(
-				LOGIN_RESPONSE_MESSAGES[error.response.status] ??
+				LOGIN_RESPONSE_MESSAGES[error.response?.status] ??
 					LOGIN_RESPONSE_MESSAGES.default
 			);
 		} finally {
