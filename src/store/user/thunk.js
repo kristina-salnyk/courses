@@ -1,37 +1,52 @@
 import { toast } from 'react-toastify';
 
 import { current, login, logout, register } from '../../services/api/user';
+import { clearToken, setToken } from '../../helpers/tokenStore';
 import { loginUser, logoutUser } from './actionCreators';
 import {
 	LOGIN_RESPONSE_MESSAGES,
 	REGISTRATION_RESPONSE_MESSAGES,
 } from '../../constants';
 
-export const fetchUser = (token) => async (dispatch, getState) => {
-	const currentToken = token ?? getState().user.token;
+export const fetchUser =
+	(token, changeIsLoading) => async (dispatch, getState) => {
+		const currentToken = token ?? getState().user.token;
 
-	if (currentToken) {
-		try {
-			const response = await current(currentToken);
-			const { data } = response;
+		if (currentToken) {
+			try {
+				const response = await current(currentToken);
+				const { data } = response;
 
-			if (response.status === 200 && data.successful) {
-				const { name, email, role } = data.result;
+				if (response.status === 200 && data.successful) {
+					const { name, email, role } = data.result;
 
-				dispatch(loginUser({ name, email, role, currentToken }));
-			} else {
+					dispatch(
+						loginUser({
+							name,
+							email,
+							role,
+							token: currentToken,
+						})
+					);
+
+					setToken(currentToken);
+				} else {
+					dispatch(logoutUser());
+					clearToken();
+				}
+			} catch (error) {
 				dispatch(logoutUser());
+				clearToken();
+			} finally {
+				changeIsLoading && changeIsLoading(false);
 			}
-		} catch (error) {
-			dispatch(logoutUser());
-		} finally {
-			// dispatch(changeIsLoading(false));
 		}
-	}
-};
+	};
 
-export const fetchLogin = (user) => async (dispatch, getState) => {
+export const fetchLogin = (user, changeIsLoading) => async (dispatch) => {
 	try {
+		changeIsLoading(true);
+
 		const response = await login(user);
 		const { data } = response;
 
@@ -51,14 +66,16 @@ export const fetchLogin = (user) => async (dispatch, getState) => {
 				LOGIN_RESPONSE_MESSAGES.default
 		);
 	} finally {
-		// dispatch(changeIsLoading(false));
+		changeIsLoading(false);
 	}
 };
 
-export const fetchRegister = (user) => async (dispatch, getState) => {
+export const fetchRegister = (user, changeIsLoading) => async () => {
 	const result = { successful: false };
 
 	try {
+		changeIsLoading(true);
+
 		const response = await register(user);
 		const { data } = response;
 
@@ -77,18 +94,22 @@ export const fetchRegister = (user) => async (dispatch, getState) => {
 				REGISTRATION_RESPONSE_MESSAGES.default
 		);
 	} finally {
-		// dispatch(changeIsLoading(false));
+		changeIsLoading(false);
 	}
 
 	return result;
 };
 
-export const fetchLogout = async (dispatch, getState) => {
+export const fetchLogout = (changeIsLoading) => async (dispatch) => {
 	try {
+		changeIsLoading(true);
+
 		await logout();
 	} catch (error) {
 	} finally {
 		dispatch(logoutUser());
-		// dispatch(changeIsLoading(false));
+		clearToken();
+
+		changeIsLoading(false);
 	}
 };
