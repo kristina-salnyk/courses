@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { Container } from '../../common/Container';
 import { Input } from '../../common/Input';
+import { Loader } from '../../common/Loader';
 import { ValidationMessage } from '../../common/ValidationMessage';
 import { fetchRegister } from '../../store/user/thunk';
 import useValidationErrors from '../../hooks/useValidationErrors';
@@ -35,6 +36,7 @@ const Registration = () => {
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
 
 	const { validationErrors, validateOneField, validateAllFields } =
 		useValidationErrors();
@@ -51,7 +53,7 @@ const Registration = () => {
 		const isValid = await validateAllFields(registerSchema, user);
 		if (!isValid) return;
 
-		const result = await dispatch(fetchRegister(user));
+		const result = await dispatch(fetchRegister(user, setIsLoading));
 		if (result.successful) navigate(ROUTES.LOGIN);
 	};
 
@@ -59,6 +61,7 @@ const Registration = () => {
 		<RegistrationStyled>
 			<Container>
 				<RegistrationForm onSubmit={formSubmitHandler}>
+					{isLoading && <Loader />}
 					<RegistrationFormContent>
 						<FieldWrapStyled>
 							<Input
