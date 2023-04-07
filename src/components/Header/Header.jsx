@@ -6,10 +6,8 @@ import { Button } from '../../common/Button';
 import { Container } from '../../common/Container';
 import { NavLink } from '../../common/NavLink';
 import { Loader } from '../../common/Loader';
-import { logout } from '../../services/api/user';
-import { clearToken } from '../../helpers/tokenStore';
 import { selectUser } from '../../store/user/selectors';
-import { logoutUser } from '../../store/user/actionCreators';
+import { fetchLogout } from '../../store/user/thunk';
 import { LOGIN_BTN, LOGOUT_BTN, REGISTER_BTN, ROUTES } from '../../constants';
 
 import { Controls, HeaderContent, HeaderStyled } from './Header.styled';
@@ -20,17 +18,7 @@ const Header = () => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const logoutClickHandler = async () => {
-		setIsLoading(true);
-
-		try {
-			await logout();
-			// dispatch(fetchLogout);
-		} catch (error) {
-		} finally {
-			dispatch(logoutUser());
-			clearToken();
-			setIsLoading(false);
-		}
+		await dispatch(fetchLogout(setIsLoading));
 	};
 
 	return (
