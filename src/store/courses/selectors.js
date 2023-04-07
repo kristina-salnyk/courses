@@ -1,8 +1,6 @@
 import { createSelector } from 'reselect';
 
-export const selectIsLoading = (state) => state.courses.isLoading;
-
-export const selectCourses = (state) => state.courses.items;
+export const selectCourses = (state) => state.courses;
 
 export const selectCoursesBySearchQuery = createSelector(
 	[selectCourses, (state, searchQuery) => searchQuery],

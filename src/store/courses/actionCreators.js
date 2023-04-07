@@ -37,10 +37,3 @@ export const setCourses = (courses) => {
 		payload: [...courses],
 	};
 };
-
-export const changeIsLoading = (isLoading) => {
-	return {
-		type: actionTypes.COURSES_LOADING,
-		payload: { isLoading },
-	};
-};

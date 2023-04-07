@@ -1,13 +1,13 @@
 import { toast } from 'react-toastify';
 
 import { getCourses } from '../../services/api/courses';
-import { changeIsLoading, setCourses } from './actionCreators';
+import { setCourses } from './actionCreators';
 import { COURSES_ALL_RESPONSE_MESSAGES } from '../../constants';
 
-export const fetchCourses = async (dispatch, getState) => {
-	dispatch(changeIsLoading(true));
-
+export const fetchCourses = (changeIsLoading) => async (dispatch) => {
 	try {
+		changeIsLoading(true);
+
 		const response = await getCourses();
 		const { data } = response;
 
@@ -29,6 +29,6 @@ export const fetchCourses = async (dispatch, getState) => {
 		);
 		dispatch(setCourses([]));
 	} finally {
-		dispatch(changeIsLoading(false));
+		changeIsLoading(false);
 	}
 };
