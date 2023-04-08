@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,7 +7,9 @@ import { RiDeleteBin6Fill, RiEdit2Fill } from 'react-icons/ri';
 import { LimitedLine } from '../../../../common/LimitedLine';
 import { Button } from '../../../../common/Button';
 import { Icon } from '../../../../common/Icon';
-import { deleteCourse } from '../../../../store/courses/actionCreators';
+import { Loader } from '../../../../common/Loader';
+import { selectUser } from '../../../../store/user/selectors';
+import { fetchDeleteCourse } from '../../../../store/courses/thunk';
 import { selectAuthorsListByIds } from '../../../../store/authors/selectors';
 import pipeDuration from '../../../../helpers/pipeDuration';
 import {
@@ -28,7 +30,6 @@ import {
 	CourseDetailsWrap,
 	CourseTitle,
 } from './CourseCard.styled';
-import { selectUser } from '../../../../store/user/selectors';
 
 const CourseCard = ({
 	id,
@@ -41,6 +42,8 @@ const CourseCard = ({
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
+	const [isLoading, setIsLoading] = useState(false);
+
 	const { role } = useSelector(selectUser);
 	const isAdmin = role === ROLES.ADMIN;
 
@@ -50,6 +53,7 @@ const CourseCard = ({
 
 	return (
 		<CourseCardStyled>
+			{isLoading && <Loader width='50' />}
 			<div>
 				<CourseTitle>{title}</CourseTitle>
 				<p>{description}</p>
@@ -71,9 +75,9 @@ const CourseCard = ({
 					<Button
 						type={SHOW_COURSE_BTN.type}
 						text={SHOW_COURSE_BTN.text}
-						onClick={() =>
-							navigate(ROUTES.COURSE_INFO.replaceAll(':courseId', id))
-						}
+						onClick={() => {
+							navigate(ROUTES.COURSE_INFO.replaceAll(':courseId', id));
+						}}
 					/>
 					{isAdmin && (
 						<>
@@ -85,7 +89,7 @@ const CourseCard = ({
 								type={DELETE_COURSE_BTN.type}
 								icon={<Icon component={RiDeleteBin6Fill} size={16} />}
 								onClick={() => {
-									dispatch(deleteCourse(id));
+									dispatch(fetchDeleteCourse(id, setIsLoading));
 								}}
 							/>
 						</>

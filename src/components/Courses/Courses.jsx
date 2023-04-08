@@ -8,6 +8,7 @@ import { Button } from '../../common/Button';
 import { SearchBar } from './components/SearchBar';
 import { selectUser } from '../../store/user/selectors';
 import { fetchCourses } from '../../store/courses/thunk';
+import { fetchAuthors } from '../../store/authors/thunk';
 import { selectCoursesBySearchQuery } from '../../store/courses/selectors';
 import noResults from '../../assets/img/no-results.png';
 import {
@@ -45,7 +46,14 @@ const Courses = () => {
 		if (dataFetched.current) return;
 		dataFetched.current = true;
 
-		dispatch(fetchCourses(setIsLoading));
+		(async () => {
+			setIsLoading(true);
+
+			await dispatch(fetchAuthors());
+			await dispatch(fetchCourses());
+
+			setIsLoading(false);
+		})();
 	}, [dispatch]);
 
 	return (
@@ -57,7 +65,9 @@ const Courses = () => {
 						<Button
 							type={ADD_NEW_COURSE_BTN.type}
 							text={ADD_NEW_COURSE_BTN.text}
-							onClick={() => navigate(ROUTES.CREATE_COURSE)}
+							onClick={() => {
+								navigate(ROUTES.CREATE_COURSE);
+							}}
 						/>
 					)}
 				</CoursesHeader>

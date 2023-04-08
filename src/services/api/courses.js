@@ -5,6 +5,10 @@ export const getCourses = async () => {
 	return await api.get(API_ENDPOINTS.COURSES);
 };
 
+export const getCourse = async (courseId) => {
+	return await api.get(`${API_ENDPOINTS.UPDATE_COURSE}/${courseId}`);
+};
+
 export const addCourse = async (course) => {
 	return await api.post(API_ENDPOINTS.ADD_COURSE, course);
 };

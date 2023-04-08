@@ -17,10 +17,6 @@ const Header = () => {
 	const { isAuth, name } = useSelector(selectUser);
 	const [isLoading, setIsLoading] = useState(false);
 
-	const logoutClickHandler = async () => {
-		await dispatch(fetchLogout(setIsLoading));
-	};
-
 	return (
 		<>
 			{isLoading && <Loader />}
@@ -35,7 +31,9 @@ const Header = () => {
 									<Button
 										type={LOGOUT_BTN.type}
 										text={LOGOUT_BTN.text}
-										onClick={logoutClickHandler}
+										onClick={() => {
+											dispatch(fetchLogout(setIsLoading));
+										}}
 									/>
 								</>
 							) : (

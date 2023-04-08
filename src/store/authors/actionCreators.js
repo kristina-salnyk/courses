@@ -1,18 +1,16 @@
-import { v4 as uuid } from 'uuid';
-
 import * as actionTypes from './actionTypes';
 
-export const addAuthor = ({ name }) => {
+export const addAuthorAction = ({ id, name }) => {
 	return {
 		type: actionTypes.AUTHORS_ADD,
 		payload: {
-			id: uuid(),
+			id,
 			name,
 		},
 	};
 };
 
-export const setAuthors = (authors) => {
+export const setAuthorsAction = (authors) => {
 	return {
 		type: actionTypes.AUTHORS_FETCH,
 		payload: [...authors],

@@ -34,6 +34,7 @@ export const API_ENDPOINTS = {
 	CURRENT: '/users/me',
 	LOGOUT: '/logout',
 	COURSES: '/courses/all',
+	COURSE: '/courses',
 	ADD_COURSE: '/courses/add',
 	UPDATE_COURSE: '/courses',
 	DELETE_COURSE: '/courses',
@@ -69,10 +70,37 @@ export const COURSES_ALL_RESPONSE_MESSAGES = {
 	default: 'Course list has not been loaded. Try again later',
 };
 
+export const COURSE_RESPONSE_MESSAGES = {
+	400: 'Course has not been loaded',
+	500: 'Course has not been loaded. Try again later',
+	default: 'Course has not been loaded. Try again later',
+};
+
 export const AUTHORS_ALL_RESPONSE_MESSAGES = {
 	400: 'Author list has not been loaded',
 	500: 'Author list has not been loaded. Try again later',
 	default: 'Author list has not been loaded. Try again later',
+};
+
+export const AUTHORS_ADD_RESPONSE_MESSAGES = {
+	201: 'Author successfully added',
+	400: 'Author has not been added',
+	500: 'Author has not been added. Try again later',
+	default: 'Author has not been added. Try again later',
+};
+
+export const COURSES_ADD_RESPONSE_MESSAGES = {
+	201: 'Course successfully added',
+	400: 'Course has not been added',
+	500: 'Course has not been added. Try again later',
+	default: 'Course has not been added. Try again later',
+};
+
+export const COURSES_DELETE_RESPONSE_MESSAGES = {
+	201: 'Course successfully deleted',
+	400: 'Course has not been deleted',
+	500: 'Course has not been deleted. Try again later',
+	default: 'Course has not been deleted. Try again later',
 };
 
 export const GROUP_TITLES = {
