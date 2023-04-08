@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+
+import { Loader } from '../../common/Loader';
 import { fetchUser } from '../../store/user/thunk';
 import { LOCAL_STORAGE_KEY } from '../../constants';
-import { Loader } from '../../common/Loader';
 
 const AuthMiddleware = ({ children }) => {
 	const dispatch = useDispatch();
