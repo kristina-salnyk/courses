@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -10,8 +10,10 @@ import { Input } from '../../common/Input';
 import { ValidationMessage } from '../../common/ValidationMessage';
 import { CreateAuthor } from './components/CreateAuthor';
 import { Authors } from './components/Authors';
-import { addCourse } from '../../store/courses/actionCreators';
+import { Loader } from '../../common/Loader';
 import { selectAuthorsByIds } from '../../store/authors/selectors';
+import { fetchAddCourse } from '../../store/courses/thunk';
+import { fetchAuthors } from '../../store/authors/thunk';
 import useValidationErrors from '../../hooks/useValidationErrors';
 import formKeyPressHandler from '../../helpers/handlers/formKeyPressHandler';
 import pipeDuration from '../../helpers/pipeDuration';
@@ -51,10 +53,12 @@ const CourseForm = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
+	const dataFetched = useRef(false);
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [courseAuthors, setCourseAuthors] = useState([]);
 	const [duration, setDuration] = useState(0);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const authors = useSelector((state) =>
 		selectAuthorsByIds(state, courseAuthors)
@@ -63,22 +67,31 @@ const CourseForm = () => {
 	const { validationErrors, validateOneField, validateAllFields } =
 		useValidationErrors();
 
+	useEffect(() => {
+		if (dataFetched.current) return;
+		dataFetched.current = true;
+
+		dispatch(fetchAuthors(setIsLoading));
+	}, [dispatch]);
+
 	const formSubmitHandler = async (event) => {
 		event.preventDefault();
 
 		const course = {
 			title,
 			description,
-			authors: courseAuthors,
 			duration,
+			authors: courseAuthors,
 		};
 
 		const isValid = await validateAllFields(courseSchema, course);
 
 		if (isValid) {
-			dispatch(addCourse(course));
-			navigate(ROUTES.COURSES);
-			return;
+			const result = await dispatch(fetchAddCourse(course, setIsLoading));
+			if (result.successful) {
+				navigate(ROUTES.COURSES);
+				return;
+			}
 		}
 
 		toast.error(SUBMIT_VALIDATION_ERROR_TEXT);
@@ -113,6 +126,7 @@ const CourseForm = () => {
 					onSubmit={formSubmitHandler}
 					onKeyPress={formKeyPressHandler}
 				>
+					{isLoading && <Loader />}
 					<CourseFormHeader>
 						<FieldWrapStyled>
 							<Input

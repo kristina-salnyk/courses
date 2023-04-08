@@ -5,6 +5,7 @@ export const CourseFormStyled = styled.section`
 `;
 
 export const CourseFormContent = styled.form`
+	position: relative;
 	padding: ${({ theme }) => theme.spacing[3]};
 	background-color: ${({ theme }) => theme.colors.background.card};
 	box-shadow: ${({ theme }) => theme.shadows[0]};
@@ -53,6 +54,7 @@ export const CourseDetailsGroupTitle = styled.h2`
 `;
 
 export const CourseDetailsGroup = styled.div`
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	gap: ${({ theme }) => theme.spacing[2]};
