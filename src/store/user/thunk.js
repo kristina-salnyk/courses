@@ -2,7 +2,7 @@ import { toast } from 'react-toastify';
 
 import { current, login, logout, register } from '../../services/api/user';
 import { clearToken, setToken } from '../../helpers/tokenStore';
-import { loginUser, logoutUser } from './actionCreators';
+import { loginAction, logoutAction } from './actionCreators';
 import {
 	LOGIN_RESPONSE_MESSAGES,
 	REGISTRATION_RESPONSE_MESSAGES,
@@ -21,7 +21,7 @@ export const fetchUser =
 					const { name, email, role } = data.result;
 
 					dispatch(
-						loginUser({
+						loginAction({
 							name,
 							email,
 							role,
@@ -31,11 +31,11 @@ export const fetchUser =
 
 					setToken(currentToken);
 				} else {
-					dispatch(logoutUser());
+					dispatch(logoutAction());
 					clearToken();
 				}
 			} catch (error) {
-				dispatch(logoutUser());
+				dispatch(logoutAction());
 				clearToken();
 			} finally {
 				changeIsLoading && changeIsLoading(false);
@@ -107,7 +107,7 @@ export const fetchLogout = (changeIsLoading) => async (dispatch) => {
 		await logout();
 	} catch (error) {
 	} finally {
-		dispatch(logoutUser());
+		dispatch(logoutAction());
 		clearToken();
 
 		changeIsLoading(false);

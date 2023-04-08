@@ -1,37 +1,41 @@
-import { v4 as uuid } from 'uuid';
-
 import * as actionTypes from './actionTypes';
-import dateGenerator from '../../helpers/dateGenerator';
 
-export const addCourse = ({ title, description, duration, authors }) => {
+export const addCourseAction = ({
+	id,
+	title,
+	description,
+	duration,
+	authors,
+	creationDate,
+}) => {
 	return {
 		type: actionTypes.COURSES_ADD,
 		payload: {
-			id: uuid(),
+			id,
 			title,
 			description,
 			authors,
 			duration,
-			creationDate: dateGenerator(),
+			creationDate,
 		},
 	};
 };
 
-export const deleteCourse = (id) => {
+export const deleteCourseAction = (id) => {
 	return {
 		type: actionTypes.COURSES_DELETE,
 		payload: { id },
 	};
 };
 
-export const updateCourse = (id, course) => {
+export const updateCourseAction = (id, course) => {
 	return {
 		type: actionTypes.COURSES_UPDATE,
 		payload: { ...course, id },
 	};
 };
 
-export const setCourses = (courses) => {
+export const setCoursesAction = (courses) => {
 	return {
 		type: actionTypes.COURSES_FETCH,
 		payload: [...courses],
