@@ -31,7 +31,7 @@ const Courses = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const dataFetched = useRef(false);
+	const initDataFetched = useRef(false);
 	const [searchQuery, setSearchQuery] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -43,8 +43,8 @@ const Courses = () => {
 	);
 
 	useEffect(() => {
-		if (dataFetched.current) return;
-		dataFetched.current = true;
+		if (initDataFetched.current) return;
+		initDataFetched.current = true;
 
 		(async () => {
 			setIsLoading(true);

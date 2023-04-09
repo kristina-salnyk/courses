@@ -11,7 +11,7 @@ import loginSchema from '../../helpers/schemas/loginSchema';
 import {
 	EMAIL_INPUT,
 	LOGIN_BTN,
-	LOGIN_NAVIGATION_TEXT,
+	LOGIN_NAVIGATE_TEXT,
 	PASSWORD_INPUT,
 	REGISTER_BTN,
 	ROUTES,
@@ -103,7 +103,7 @@ const Login = () => {
 						</FieldWrapStyled>
 						<ButtonStyled type={LOGIN_BTN.type} text={LOGIN_BTN.text} />
 						<LoginFormMessage>
-							{LOGIN_NAVIGATION_TEXT}{' '}
+							{LOGIN_NAVIGATE_TEXT}{' '}
 							<LinkStyled to={ROUTES.REGISTRATION}>
 								{REGISTER_BTN.text}
 							</LinkStyled>

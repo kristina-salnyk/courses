@@ -21,9 +21,11 @@ import {
 
 const CreateAuthor = () => {
 	const dispatch = useDispatch();
-	const authors = useSelector(selectAuthors);
+
 	const [authorName, setAuthorName] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
+
+	const authors = useSelector(selectAuthors);
 
 	const addNewAuthor = async () => {
 		const name = authorName.trim();

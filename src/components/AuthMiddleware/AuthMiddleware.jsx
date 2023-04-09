@@ -8,12 +8,12 @@ import { LOCAL_STORAGE_KEY } from '../../constants';
 
 const AuthMiddleware = ({ children }) => {
 	const dispatch = useDispatch();
-	const dataFetched = useRef(false);
+	const initDataFetched = useRef(false);
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
-		if (dataFetched.current) return;
-		dataFetched.current = true;
+		if (initDataFetched.current) return;
+		initDataFetched.current = true;
 
 		const serializedToken = window.localStorage.getItem(LOCAL_STORAGE_KEY);
 

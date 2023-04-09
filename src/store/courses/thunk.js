@@ -4,16 +4,19 @@ import {
 	addCourse,
 	deleteCourse,
 	getCourses,
+	updateCourse,
 } from '../../services/api/courses';
 import {
 	addCourseAction,
 	deleteCourseAction,
 	setCoursesAction,
+	updateCourseAction,
 } from './actionCreators';
 import {
 	COURSES_ADD_RESPONSE_MESSAGES,
 	COURSES_ALL_RESPONSE_MESSAGES,
 	COURSES_DELETE_RESPONSE_MESSAGES,
+	COURSES_UPDATE_RESPONSE_MESSAGES,
 } from '../../constants';
 
 export const fetchCourses = (changeIsLoading) => async (dispatch) => {
@@ -55,9 +58,9 @@ export const fetchAddCourse = (course, changeIsLoading) => async (dispatch) => {
 		const { data } = response;
 
 		if (response.status === 201 && data.successful) {
-			const newCourse = data.result;
+			const courseObj = data.result;
 
-			dispatch(addCourseAction(newCourse));
+			dispatch(addCourseAction(courseObj));
 			result.successful = true;
 			toast.success(COURSES_ADD_RESPONSE_MESSAGES[201]);
 		} else {
@@ -78,6 +81,40 @@ export const fetchAddCourse = (course, changeIsLoading) => async (dispatch) => {
 	return result;
 };
 
+export const fetchUpdateCourse =
+	(courseId, course, changeIsLoading) => async (dispatch) => {
+		const result = { successful: false };
+
+		try {
+			changeIsLoading(true);
+
+			const response = await updateCourse(courseId, course);
+			const { data } = response;
+
+			if (response.status === 200 && data.successful) {
+				const courseObj = data.result;
+
+				dispatch(updateCourseAction(courseObj));
+				result.successful = true;
+				toast.success(COURSES_UPDATE_RESPONSE_MESSAGES[200]);
+			} else {
+				toast.error(
+					COURSES_UPDATE_RESPONSE_MESSAGES[response.status] ??
+						COURSES_UPDATE_RESPONSE_MESSAGES.default
+				);
+			}
+		} catch (error) {
+			toast.error(
+				COURSES_UPDATE_RESPONSE_MESSAGES[error.response?.status] ??
+					COURSES_UPDATE_RESPONSE_MESSAGES.default
+			);
+		} finally {
+			changeIsLoading(false);
+		}
+
+		return result;
+	};
+
 export const fetchDeleteCourse =
 	(courseId, changeIsLoading) => async (dispatch) => {
 		try {
@@ -88,7 +125,7 @@ export const fetchDeleteCourse =
 
 			if (response.status === 200 && data.successful) {
 				dispatch(deleteCourseAction(courseId));
-				toast.success(COURSES_DELETE_RESPONSE_MESSAGES[201]);
+				toast.success(COURSES_DELETE_RESPONSE_MESSAGES[200]);
 			} else {
 				toast.error(
 					COURSES_DELETE_RESPONSE_MESSAGES[response.status] ??

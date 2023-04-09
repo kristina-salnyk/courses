@@ -28,10 +28,10 @@ export const deleteCourseAction = (id) => {
 	};
 };
 
-export const updateCourseAction = (id, course) => {
+export const updateCourseAction = (course) => {
 	return {
 		type: actionTypes.COURSES_UPDATE,
-		payload: { ...course, id },
+		payload: { ...course },
 	};
 };
 

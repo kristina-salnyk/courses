@@ -54,6 +54,16 @@ function App() {
 					}
 				/>
 				<Route
+					path={ROUTES.UPDATE_COURSE}
+					element={
+						<PrivateRoute
+							restricted={true}
+							redirectTo={ROUTES.LOGIN}
+							component={<CourseForm />}
+						/>
+					}
+				/>
+				<Route
 					path={ROUTES.REGISTRATION}
 					element={
 						<RestrictedRoute

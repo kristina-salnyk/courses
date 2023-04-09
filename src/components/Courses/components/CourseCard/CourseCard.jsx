@@ -84,6 +84,9 @@ const CourseCard = ({
 							<Button
 								type={UPDATE_COURSE_BTN.type}
 								icon={<Icon component={RiEdit2Fill} size={16} />}
+								onClick={() => {
+									navigate(ROUTES.UPDATE_COURSE.replaceAll(':courseId', id));
+								}}
 							/>
 							<Button
 								type={DELETE_COURSE_BTN.type}

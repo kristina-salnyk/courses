@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -12,7 +12,7 @@ import { CreateAuthor } from './components/CreateAuthor';
 import { Authors } from './components/Authors';
 import { Loader } from '../../common/Loader';
 import { selectAuthorsByIds } from '../../store/authors/selectors';
-import { fetchAddCourse } from '../../store/courses/thunk';
+import { fetchAddCourse, fetchUpdateCourse } from '../../store/courses/thunk';
 import { fetchAuthors } from '../../store/authors/thunk';
 import useValidationErrors from '../../hooks/useValidationErrors';
 import formKeyPressHandler from '../../helpers/handlers/formKeyPressHandler';
@@ -22,6 +22,7 @@ import {
 	AUTHORS_LIST_NAME,
 	AUTHORS_NO_RESULTS_TEXT,
 	CARD_TITLES,
+	COURSE_RESPONSE_MESSAGES,
 	CREATE_COURSE_BTN,
 	DELETE_AUTHOR_BTN,
 	DESCRIPTION_TEXT_AREA,
@@ -31,6 +32,7 @@ import {
 	ROUTES,
 	SUBMIT_VALIDATION_ERROR_TEXT,
 	TITLE_INPUT,
+	UPDATE_COURSE_BTN,
 } from '../../constants';
 
 import {
@@ -48,12 +50,16 @@ import {
 	FieldWrap,
 	FieldWrapStyled,
 } from './CourseForm.styled';
+import { getCourse } from '../../services/api/courses';
 
 const CourseForm = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const { courseId } = useParams();
+	const { pathname } = useLocation();
 
-	const dataFetched = useRef(false);
+	const initDataFetched = useRef(false);
+	const courseDataFetched = useRef(false);
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [courseAuthors, setCourseAuthors] = useState([]);
@@ -68,11 +74,44 @@ const CourseForm = () => {
 		useValidationErrors();
 
 	useEffect(() => {
-		if (dataFetched.current) return;
-		dataFetched.current = true;
+		if (initDataFetched.current) return;
+		initDataFetched.current = true;
 
 		dispatch(fetchAuthors(setIsLoading));
 	}, [dispatch]);
+
+	useEffect(() => {
+		if (!courseId || courseDataFetched.current) return;
+		courseDataFetched.current = true;
+
+		(async () => {
+			try {
+				setIsLoading(true);
+
+				const response = await getCourse(courseId);
+				const { data } = response;
+
+				if (response.status === 200 && data.successful) {
+					setTitle(data.result.title);
+					setDescription(data.result.description);
+					setCourseAuthors(data.result.authors);
+					setDuration(data.result.duration);
+				} else {
+					toast.error(
+						COURSE_RESPONSE_MESSAGES[response.status] ??
+							COURSE_RESPONSE_MESSAGES.default
+					);
+				}
+			} catch (error) {
+				toast.error(
+					COURSE_RESPONSE_MESSAGES[error.response?.status] ??
+						COURSE_RESPONSE_MESSAGES.default
+				);
+			} finally {
+				setIsLoading(false);
+			}
+		})();
+	}, [courseId]);
 
 	const formSubmitHandler = async (event) => {
 		event.preventDefault();
@@ -86,15 +125,20 @@ const CourseForm = () => {
 
 		const isValid = await validateAllFields(courseSchema, course);
 
-		if (isValid) {
-			const result = await dispatch(fetchAddCourse(course, setIsLoading));
-			if (result.successful) {
-				navigate(ROUTES.COURSES);
-				return;
-			}
+		if (!isValid) {
+			toast.error(SUBMIT_VALIDATION_ERROR_TEXT);
+			return;
 		}
 
-		toast.error(SUBMIT_VALIDATION_ERROR_TEXT);
+		let result;
+		if (pathname === ROUTES.CREATE_COURSE) {
+			result = await dispatch(fetchAddCourse(course, setIsLoading));
+		} else {
+			result = await dispatch(
+				fetchUpdateCourse(courseId, course, setIsLoading)
+			);
+		}
+		if (result.successful) navigate(ROUTES.COURSES);
 	};
 
 	const addToAuthors = useCallback(
@@ -151,10 +195,17 @@ const CourseForm = () => {
 								/>
 							)}
 						</FieldWrapStyled>
-						<Button
-							type={CREATE_COURSE_BTN.type}
-							text={CREATE_COURSE_BTN.text}
-						/>
+						{pathname === ROUTES.CREATE_COURSE ? (
+							<Button
+								type={CREATE_COURSE_BTN.type}
+								text={CREATE_COURSE_BTN.text}
+							/>
+						) : (
+							<Button
+								type={UPDATE_COURSE_BTN.type}
+								text={UPDATE_COURSE_BTN.text}
+							/>
+						)}
 					</CourseFormHeader>
 					<FieldWrap>
 						<TextArea

@@ -15,7 +15,7 @@ import {
 	NAME_INPUT,
 	PASSWORD_INPUT,
 	REGISTER_BTN,
-	REGISTRATION_NAVIGATION_TEXT,
+	REGISTRATION_NAVIGATE_TEXT,
 	ROUTES,
 } from '../../constants';
 
@@ -131,7 +131,7 @@ const Registration = () => {
 						</FieldWrapStyled>
 						<ButtonStyled type={REGISTER_BTN.type} text={REGISTER_BTN.text} />
 						<RegistrationFormMessage>
-							{REGISTRATION_NAVIGATION_TEXT}{' '}
+							{REGISTRATION_NAVIGATE_TEXT}{' '}
 							<LinkStyled to={ROUTES.LOGIN}>{LOGIN_BTN.text}</LinkStyled>
 						</RegistrationFormMessage>
 					</RegistrationFormContent>

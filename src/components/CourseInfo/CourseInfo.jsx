@@ -39,7 +39,8 @@ const CourseInfo = () => {
 	const dispatch = useDispatch();
 	const { courseId } = useParams();
 
-	const dataFetched = useRef(false);
+	const initDataFetched = useRef(false);
+	const courseDataFetched = useRef(false);
 	const [course, setCourse] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -50,14 +51,15 @@ const CourseInfo = () => {
 	);
 
 	useEffect(() => {
-		if (!course || authors.length > 0) return;
+		if (initDataFetched.current) return;
+		initDataFetched.current = true;
 
 		dispatch(fetchAuthors(setIsLoading));
-	}, [authors, course, dispatch]);
+	}, [dispatch]);
 
 	useEffect(() => {
-		if (dataFetched.current) return;
-		dataFetched.current = true;
+		if (courseDataFetched.current) return;
+		courseDataFetched.current = true;
 
 		(async () => {
 			try {

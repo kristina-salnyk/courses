@@ -8,10 +8,10 @@ export const ADD_NEW_AUTHOR_ERROR_TEXT = 'Author with this name already exists';
 
 export const SUBMIT_VALIDATION_ERROR_TEXT = 'Please, fill in all fields';
 
-export const REGISTRATION_NAVIGATION_TEXT =
+export const REGISTRATION_NAVIGATE_TEXT =
 	'If you have an account you can go to';
 
-export const LOGIN_NAVIGATION_TEXT = 'If you not have an account you can go to';
+export const LOGIN_NAVIGATE_TEXT = 'If you not have an account you can go to';
 
 export const AUTHORS_NO_RESULTS_TEXT = 'Author list is empty';
 
@@ -47,6 +47,7 @@ export const ROUTES = {
 	COURSES: '/courses',
 	COURSE_INFO: '/courses/:courseId',
 	CREATE_COURSE: '/courses/add',
+	UPDATE_COURSE: '/courses/update/:courseId',
 	LOGIN: '/login',
 	REGISTRATION: '/registration',
 };
@@ -96,8 +97,15 @@ export const COURSES_ADD_RESPONSE_MESSAGES = {
 	default: 'Course has not been added. Try again later',
 };
 
+export const COURSES_UPDATE_RESPONSE_MESSAGES = {
+	200: 'Course successfully updated',
+	400: 'Course has not been updated',
+	500: 'Course has not been updated. Try again later',
+	default: 'Course has not been updated. Try again later',
+};
+
 export const COURSES_DELETE_RESPONSE_MESSAGES = {
-	201: 'Course successfully deleted',
+	200: 'Course successfully deleted',
 	400: 'Course has not been deleted',
 	500: 'Course has not been deleted. Try again later',
 	default: 'Course has not been deleted. Try again later',
@@ -147,7 +155,7 @@ export const DELETE_COURSE_BTN = {
 };
 
 export const UPDATE_COURSE_BTN = {
-	type: 'button',
+	type: 'submit',
 	text: 'Update course',
 };
 
