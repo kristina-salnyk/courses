@@ -42,8 +42,6 @@ const Courses = () => {
 		selectCoursesBySearchQuery(state, searchQuery)
 	);
 
-	// console.log(courses);
-
 	useEffect(() => {
 		if (initDataFetched.current) return;
 		initDataFetched.current = true;
