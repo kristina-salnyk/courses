@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import {
 	addCourse,
 	deleteCourse,
+	getCourse,
 	getCourses,
 	updateCourse,
 } from '../../services/api/courses';
@@ -13,6 +14,7 @@ import {
 	updateCourseAction,
 } from './actionCreators';
 import {
+	COURSE_RESPONSE_MESSAGES,
 	COURSES_ADD_RESPONSE_MESSAGES,
 	COURSES_ALL_RESPONSE_MESSAGES,
 	COURSES_DELETE_RESPONSE_MESSAGES,
@@ -141,3 +143,34 @@ export const fetchDeleteCourse =
 			changeIsLoading(false);
 		}
 	};
+
+export const fetchCourse = (courseId, changeIsLoading) => async () => {
+	const result = { successful: false, data: null };
+
+	try {
+		changeIsLoading(true);
+
+		const response = await getCourse(courseId);
+		const { data } = response;
+
+		if (response.status === 200 && data.successful) {
+			const courseObj = data.result;
+			result.successful = true;
+			result.data = courseObj;
+		} else {
+			toast.error(
+				COURSE_RESPONSE_MESSAGES[response.status] ??
+					COURSE_RESPONSE_MESSAGES.default
+			);
+		}
+	} catch (error) {
+		toast.error(
+			COURSE_RESPONSE_MESSAGES[error.response?.status] ??
+				COURSE_RESPONSE_MESSAGES.default
+		);
+	} finally {
+		changeIsLoading(false);
+	}
+
+	return result;
+};

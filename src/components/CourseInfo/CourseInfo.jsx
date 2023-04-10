@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import { IoCreate } from 'react-icons/io5';
 import { HiUsers } from 'react-icons/hi';
 import { FaHashtag } from 'react-icons/fa';
@@ -9,15 +8,14 @@ import { MdAccessTimeFilled, MdArrowBackIos } from 'react-icons/md';
 
 import { Container } from '../../common/Container';
 import { Icon } from '../../common/Icon';
-import { getCourse } from '../../services/api/courses';
 import { selectAuthorsByIds } from '../../store/authors/selectors';
 import { fetchAuthors } from '../../store/authors/thunk';
+import { fetchCourse } from '../../store/courses/thunk';
 import pipeDuration from '../../helpers/pipeDuration';
 import noResults from '../../assets/img/no-results.png';
 import {
 	BACK_BTN,
 	COURSE_INFO_NO_RESULTS_TEXT,
-	COURSE_RESPONSE_MESSAGES,
 	DURATION_UNITS,
 	NO_RESULTS_ALTERNATIVE_TEXT,
 	ROUTES,
@@ -62,30 +60,10 @@ const CourseInfo = () => {
 		courseDataFetched.current = true;
 
 		(async () => {
-			try {
-				setIsLoading(true);
-
-				const response = await getCourse(courseId);
-				const { data } = response;
-
-				if (response.status === 200 && data.successful) {
-					setCourse({ ...data.result });
-				} else {
-					toast.error(
-						COURSE_RESPONSE_MESSAGES[response.status] ??
-							COURSE_RESPONSE_MESSAGES.default
-					);
-				}
-			} catch (error) {
-				toast.error(
-					COURSE_RESPONSE_MESSAGES[error.response?.status] ??
-						COURSE_RESPONSE_MESSAGES.default
-				);
-			} finally {
-				setIsLoading(false);
-			}
+			const result = await dispatch(fetchCourse(courseId, setIsLoading));
+			if (result.successful) setCourse({ ...result.data });
 		})();
-	}, [courseId]);
+	}, [courseId, dispatch]);
 
 	return (
 		<CourseInfoStyled>

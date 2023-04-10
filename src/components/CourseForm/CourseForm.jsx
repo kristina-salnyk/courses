@@ -12,7 +12,11 @@ import { CreateAuthor } from './components/CreateAuthor';
 import { Authors } from './components/Authors';
 import { Loader } from '../../common/Loader';
 import { selectAuthorsByIds } from '../../store/authors/selectors';
-import { fetchAddCourse, fetchUpdateCourse } from '../../store/courses/thunk';
+import {
+	fetchAddCourse,
+	fetchCourse,
+	fetchUpdateCourse,
+} from '../../store/courses/thunk';
 import { fetchAuthors } from '../../store/authors/thunk';
 import useValidationErrors from '../../hooks/useValidationErrors';
 import formKeyPressHandler from '../../helpers/handlers/formKeyPressHandler';
@@ -22,7 +26,6 @@ import {
 	AUTHORS_LIST_NAME,
 	AUTHORS_NO_RESULTS_TEXT,
 	CARD_TITLES,
-	COURSE_RESPONSE_MESSAGES,
 	CREATE_COURSE_BTN,
 	DELETE_AUTHOR_BTN,
 	DESCRIPTION_TEXT_AREA,
@@ -50,11 +53,11 @@ import {
 	FieldWrap,
 	FieldWrapStyled,
 } from './CourseForm.styled';
-import { getCourse } from '../../services/api/courses';
 
 const CourseForm = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+
 	const { courseId } = useParams();
 	const { pathname } = useLocation();
 
@@ -85,33 +88,15 @@ const CourseForm = () => {
 		courseDataFetched.current = true;
 
 		(async () => {
-			try {
-				setIsLoading(true);
-
-				const response = await getCourse(courseId);
-				const { data } = response;
-
-				if (response.status === 200 && data.successful) {
-					setTitle(data.result.title);
-					setDescription(data.result.description);
-					setCourseAuthors(data.result.authors);
-					setDuration(data.result.duration);
-				} else {
-					toast.error(
-						COURSE_RESPONSE_MESSAGES[response.status] ??
-							COURSE_RESPONSE_MESSAGES.default
-					);
-				}
-			} catch (error) {
-				toast.error(
-					COURSE_RESPONSE_MESSAGES[error.response?.status] ??
-						COURSE_RESPONSE_MESSAGES.default
-				);
-			} finally {
-				setIsLoading(false);
+			const result = await dispatch(fetchCourse(courseId, setIsLoading));
+			if (result.successful) {
+				setTitle(result.data.title);
+				setDescription(result.data.description);
+				setCourseAuthors(result.data.authors);
+				setDuration(result.data.duration);
 			}
 		})();
-	}, [courseId]);
+	}, [courseId, dispatch]);
 
 	const formSubmitHandler = async (event) => {
 		event.preventDefault();
