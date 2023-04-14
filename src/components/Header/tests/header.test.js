@@ -1,26 +1,19 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import { ThemeProvider } from 'styled-components';
-import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { screen } from '@testing-library/react';
 
-import theme from '../../../theme';
 import { Header } from '../index';
-import {
-	LOGO_ALTERNATIVE_TEXT,
-	MOCKED_STATE,
-	MOCKED_STORE,
-} from '../../../constants';
+import renderWithProviders from '../../../utils/renderWithProviders';
+import { LOGO_ALTERNATIVE_TEXT, MOCKED_STATE } from '../../../constants';
 
-test("should have logo and user's name", () => {
-	render(
-		<ThemeProvider theme={theme}>
-			<Provider store={MOCKED_STORE}>
-				<Header />
-			</Provider>
-		</ThemeProvider>
-	);
+test('should display logo', () => {
+	renderWithProviders(<Header />, { initialState: MOCKED_STATE });
 
 	expect(screen.getByAltText(LOGO_ALTERNATIVE_TEXT)).toBeInTheDocument();
+});
+
+test("should display user's name", () => {
+	renderWithProviders(<Header />, { initialState: MOCKED_STATE });
+
 	expect(screen.getByText(MOCKED_STATE.user.name)).toBeInTheDocument();
 });
