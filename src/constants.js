@@ -1,6 +1,6 @@
 export const LOCAL_STORAGE_KEY = 'token';
 
-export const LOGO_ALTERNATIVE_TEXT = 'Logo with tag and courses title';
+export const LOGO_ALTERNATIVE_TEXT = 'Logo with courses title';
 
 export const NO_RESULTS_ALTERNATIVE_TEXT = 'No results found';
 
@@ -247,7 +247,7 @@ export const MOCKED_COURSES_LIST = [
 	{
 		id: 'de5aaa59-90f5-4dbc-b8a9-aaf205c551ba',
 		title: 'JavaScript',
-		description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.`,
+		description: `Lorem Ipsum is simply dummy text of the typesetting industry.`,
 		creationDate: '8/3/2021',
 		duration: 160,
 		authors: [
@@ -258,13 +258,10 @@ export const MOCKED_COURSES_LIST = [
 	{
 		id: 'b5630fdd-7bf7-4d39-b75a-2b5906fd0916',
 		title: 'Angular',
-		description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.`,
+		description: `Lorem Ipsum is simply dummy text of the printing.`,
 		creationDate: '10/11/2020',
 		duration: 210,
-		authors: [
-			'df32994e-b23d-497c-9e4d-84e4dc02882f',
-			'095a1817-d45b-4ed7-9cf7-b2417bcbf748',
-		],
+		authors: ['df32994e-b23d-497c-9e4d-84e4dc02882f'],
 	},
 ];
 
@@ -291,13 +288,8 @@ export const MOCKED_STATE = {
 	user: {
 		isAuth: true,
 		name: 'Test Name',
+		role: 'user',
 	},
 	courses: [],
 	authors: [],
-};
-
-export const MOCKED_STORE = {
-	getState: () => MOCKED_STATE,
-	subscribe: jest.fn(),
-	dispatch: jest.fn(),
 };
