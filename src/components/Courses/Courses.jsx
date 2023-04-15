@@ -76,7 +76,7 @@ const Courses = () => {
 					(courses.length > 0 ? (
 						<CoursesList>
 							{courses.map((item) => (
-								<li key={item.id}>
+								<li key={item.id} data-testid='course-card'>
 									<CourseCard {...item} />
 								</li>
 							))}
