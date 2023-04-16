@@ -1,50 +1,48 @@
 import React from 'react';
 import '@testing-library/jest-dom';
+import { fireEvent, screen } from '@testing-library/react';
 
 import Courses from '../index';
-import { getAuthors } from '../../../services/api/authors';
-import renderWithProviders from '../../../utils/renderWithProviders';
+import App from '../../../App';
+import renderWithProvidersAndRouter from '../../../utils/renderWithProvidersAndRouter';
 import {
-	MOCKED_AUTHORS_LIST,
-	MOCKED_COURSES_LIST,
+	ADD_NEW_COURSE_BTN,
+	COURSES_NO_RESULTS_TEXT,
+	CREATE_COURSE_BTN,
 	MOCKED_STATE,
 } from '../../../constants';
 
-jest.mock('react-router-dom', () => ({
-	...jest.requireActual('react-router-dom'),
-	useNavigate: () => jest.fn(),
-}));
-
-jest.mock('../../../services/api/authors', () => ({
-	__esModule: true,
-	getAuthors: jest.fn(),
-}));
-
-jest.mock('../../../services/api/courses', () => ({
-	__esModule: true,
-	getCourses: jest.fn(),
-}));
-
 test('should display amount of CourseCard equal length of courses array', async () => {
-	getAuthors.mockImplementationOnce(() =>
-		Promise.resolve({
-			status: 200,
-			data: { successful: true, result: [...MOCKED_AUTHORS_LIST] },
-		})
-	);
-	getAuthors.mockImplementationOnce(() => ({
-		status: 200,
-		data: { successful: true, result: [...MOCKED_COURSES_LIST] },
-	}));
-
-	const { store } = renderWithProviders(<Courses />, {
+	const { store } = renderWithProvidersAndRouter(<Courses />, {
 		initialState: MOCKED_STATE,
 	});
 
-	console.log(store.getState());
+	await screen.findAllByTestId(/course-card/i);
 
-	// await screen.findByTestId('course-card');
-	//
-	// const courseCards = screen.getAllByTestId('course-card');
-	// expect(courseCards).toHaveLength(store.getState().courses.length);
+	const courseCards = screen.getAllByTestId(/course-card/i);
+	expect(courseCards).toHaveLength(store.getState().courses.length);
+});
+
+test('should display Empty container if courses array length is 0', async () => {
+	renderWithProvidersAndRouter(<Courses />, {
+		initialState: { ...MOCKED_STATE, courses: [] },
+	});
+
+	await screen.findByText(COURSES_NO_RESULTS_TEXT);
+
+	expect(screen.getByText(COURSES_NO_RESULTS_TEXT)).toBeInTheDocument();
+});
+
+test('CourseForm should be showed after a click on a button "Add new course"', async () => {
+	renderWithProvidersAndRouter(<App />, {
+		initialState: MOCKED_STATE,
+	});
+
+	await screen.findByText(ADD_NEW_COURSE_BTN.text);
+
+	fireEvent.click(screen.getByText(ADD_NEW_COURSE_BTN.text));
+
+	await screen.findByText(CREATE_COURSE_BTN.text);
+
+	expect(screen.getByText(CREATE_COURSE_BTN.text)).toBeInTheDocument();
 });

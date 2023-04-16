@@ -7,10 +7,8 @@ test('should return the initial state', () => {
 });
 
 test('should handle COURSES_ADD and returns new state', () => {
-	const mockedCourse = MOCKED_COURSES_LIST[0];
-
-	expect(reducer([], addCourseAction({ ...mockedCourse }))).toEqual([
-		{ ...mockedCourse },
+	expect(reducer([], addCourseAction({ ...MOCKED_COURSES_LIST[0] }))).toEqual([
+		{ ...MOCKED_COURSES_LIST[0] },
 	]);
 });
 
