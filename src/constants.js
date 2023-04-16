@@ -288,8 +288,8 @@ export const MOCKED_STATE = {
 	user: {
 		isAuth: true,
 		name: 'Test Name',
-		role: 'user',
+		role: 'admin',
 	},
-	courses: [],
-	authors: [],
+	courses: [...MOCKED_COURSES_LIST],
+	authors: [...MOCKED_AUTHORS_LIST],
 };
