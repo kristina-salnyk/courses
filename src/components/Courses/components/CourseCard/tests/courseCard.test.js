@@ -4,9 +4,7 @@ import { screen } from '@testing-library/react';
 
 import { CourseCard } from '../index';
 import renderWithProviders from '../../../../../utils/renderWithProviders';
-import { MOCKED_AUTHORS_LIST, MOCKED_STATE } from '../../../../../constants';
-
-const mockedState = { ...MOCKED_STATE, authors: [...MOCKED_AUTHORS_LIST] };
+import { MOCKED_STATE } from '../../../../../constants';
 
 const mockedCourse = {
 	id: 'de5aaa59-90f5-4dbc-b8a9-aaf205c551bb',
@@ -27,7 +25,7 @@ jest.mock('react-router-dom', () => ({
 
 test('should display title', () => {
 	renderWithProviders(<CourseCard {...mockedCourse} />, {
-		initialState: mockedState,
+		initialState: MOCKED_STATE,
 	});
 
 	expect(screen.getByText(/React/i)).toBeInTheDocument();
@@ -35,7 +33,7 @@ test('should display title', () => {
 
 test('should display description', () => {
 	renderWithProviders(<CourseCard {...mockedCourse} />, {
-		initialState: mockedState,
+		initialState: MOCKED_STATE,
 	});
 
 	expect(
@@ -45,7 +43,7 @@ test('should display description', () => {
 
 test('should display duration in the correct format', () => {
 	renderWithProviders(<CourseCard {...mockedCourse} />, {
-		initialState: mockedState,
+		initialState: MOCKED_STATE,
 	});
 
 	expect(screen.getByText(/02:00 hours/i)).toBeInTheDocument();
@@ -53,7 +51,7 @@ test('should display duration in the correct format', () => {
 
 test('should display authors list', () => {
 	renderWithProviders(<CourseCard {...mockedCourse} />, {
-		initialState: mockedState,
+		initialState: MOCKED_STATE,
 	});
 
 	expect(
@@ -63,7 +61,7 @@ test('should display authors list', () => {
 
 test('should display created date in the correct format', () => {
 	renderWithProviders(<CourseCard {...mockedCourse} />, {
-		initialState: mockedState,
+		initialState: MOCKED_STATE,
 	});
 
 	expect(screen.getByText(/5.11.2023/i)).toBeInTheDocument();
