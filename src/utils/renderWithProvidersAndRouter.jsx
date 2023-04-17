@@ -7,11 +7,15 @@ import { render } from '@testing-library/react';
 
 import theme from '../theme';
 import setupStore from './setupStore';
-import { ROUTES } from '../constants';
+import { MOCKED_STATE, ROUTES } from '../constants';
 
 const renderWithProvidersAndRouter = (
 	ui,
-	{ initialState, store = setupStore(initialState), route = ROUTES.ROOT } = {}
+	{
+		initialState = MOCKED_STATE,
+		store = setupStore(initialState),
+		route = ROUTES.ROOT,
+	} = {}
 ) => {
 	const Wrapper = ({ children }) => (
 		<ThemeProvider theme={theme}>

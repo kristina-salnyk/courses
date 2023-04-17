@@ -6,10 +6,11 @@ import { render } from '@testing-library/react';
 
 import theme from '../theme';
 import setupStore from './setupStore';
+import { MOCKED_STATE } from '../constants';
 
 const renderWithProviders = (
 	ui,
-	{ initialState, store = setupStore(initialState) } = {}
+	{ initialState = MOCKED_STATE, store = setupStore(initialState) } = {}
 ) => {
 	const Wrapper = ({ children }) => (
 		<ThemeProvider theme={theme}>
