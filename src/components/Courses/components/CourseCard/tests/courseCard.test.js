@@ -1,10 +1,8 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-import { screen } from '@testing-library/react';
 
 import { CourseCard } from '../index';
 import renderWithProviders from '../../../../../utils/renderWithProviders';
-import { MOCKED_STATE } from '../../../../../constants';
 
 const mockedCourse = {
 	id: 'de5aaa59-90f5-4dbc-b8a9-aaf205c551bb',
@@ -24,45 +22,33 @@ jest.mock('react-router-dom', () => ({
 }));
 
 test('should display title', () => {
-	renderWithProviders(<CourseCard {...mockedCourse} />, {
-		initialState: MOCKED_STATE,
-	});
+	const { getByText } = renderWithProviders(<CourseCard {...mockedCourse} />);
 
-	expect(screen.getByText(/React/i)).toBeInTheDocument();
+	expect(getByText(/React/i)).toBeInTheDocument();
 });
 
 test('should display description', () => {
-	renderWithProviders(<CourseCard {...mockedCourse} />, {
-		initialState: MOCKED_STATE,
-	});
+	const { getByText } = renderWithProviders(<CourseCard {...mockedCourse} />);
 
 	expect(
-		screen.getByText(/Lorem Ipsum has been the industry's standard./i)
+		getByText(/Lorem Ipsum has been the industry's standard./i)
 	).toBeInTheDocument();
 });
 
 test('should display duration in the correct format', () => {
-	renderWithProviders(<CourseCard {...mockedCourse} />, {
-		initialState: MOCKED_STATE,
-	});
+	const { getByText } = renderWithProviders(<CourseCard {...mockedCourse} />);
 
-	expect(screen.getByText(/02:00 hours/i)).toBeInTheDocument();
+	expect(getByText(/02:00 hours/i)).toBeInTheDocument();
 });
 
 test('should display authors list', () => {
-	renderWithProviders(<CourseCard {...mockedCourse} />, {
-		initialState: MOCKED_STATE,
-	});
+	const { getByText } = renderWithProviders(<CourseCard {...mockedCourse} />);
 
-	expect(
-		screen.getByText(/Anna Sidorenko, Valentina Larina/i)
-	).toBeInTheDocument();
+	expect(getByText(/Anna Sidorenko, Valentina Larina/i)).toBeInTheDocument();
 });
 
 test('should display created date in the correct format', () => {
-	renderWithProviders(<CourseCard {...mockedCourse} />, {
-		initialState: MOCKED_STATE,
-	});
+	const { getByText } = renderWithProviders(<CourseCard {...mockedCourse} />);
 
-	expect(screen.getByText(/5.11.2023/i)).toBeInTheDocument();
+	expect(getByText(/5.11.2023/i)).toBeInTheDocument();
 });
