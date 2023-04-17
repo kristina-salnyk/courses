@@ -4,14 +4,14 @@
 
 body {
   margin: 0;
-  font-family: Noto Sans, 'sans-serif';
+  font-family: Noto Sans, "sans-serif";
   background-color: #f3f3f3;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
   font-size: 16px;
 }
@@ -22,9 +22,11 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+span {
   margin: 0;
   padding: 0;
+  caret-color: transparent;
 }
 
 a {
@@ -36,3 +38,4 @@ ul {
   margin: 0;
   padding: 0;
 }
+

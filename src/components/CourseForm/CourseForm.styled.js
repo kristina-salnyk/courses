@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 
-export const CreateCourseStyled = styled.section`
+export const CourseFormStyled = styled.section`
 	padding: ${({ theme }) => theme.spacing[2]} 0;
 `;
 
-export const CreateCourseForm = styled.form`
+export const CourseFormContent = styled.form`
+	position: relative;
 	padding: ${({ theme }) => theme.spacing[3]};
 	background-color: ${({ theme }) => theme.colors.background.card};
 	box-shadow: ${({ theme }) => theme.shadows[0]};
@@ -14,7 +15,7 @@ export const CreateCourseForm = styled.form`
 	gap: ${({ theme }) => theme.spacing[2]};
 `;
 
-export const CreateCourseFormHeader = styled.div`
+export const CourseFormHeader = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
@@ -53,6 +54,7 @@ export const CourseDetailsGroupTitle = styled.h2`
 `;
 
 export const CourseDetailsGroup = styled.div`
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	gap: ${({ theme }) => theme.spacing[2]};

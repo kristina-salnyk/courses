@@ -7,7 +7,9 @@ const coursesReducer = (state = [], action) => {
 		case actionTypes.COURSES_DELETE:
 			return state.filter((item) => item.id !== action.payload.id);
 		case actionTypes.COURSES_UPDATE:
-			const courseIdx = state.indexOf((item) => item.id === action.payload.id);
+			const courseIdx = state.findIndex(
+				(item) => item.id === action.payload.id
+			);
 			return [
 				...state.slice(0, courseIdx),
 				{ ...state[courseIdx], ...action.payload },

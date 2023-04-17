@@ -5,6 +5,7 @@ const initialState = {
 	name: '',
 	email: '',
 	token: '',
+	role: '',
 };
 
 const userReducer = (state = initialState, action) => {
@@ -15,6 +16,7 @@ const userReducer = (state = initialState, action) => {
 				name: action.payload.name,
 				email: action.payload.email,
 				token: action.payload.token,
+				role: action.payload.role,
 			};
 		case actionTypes.USER_LOGOUT:
 			return { ...initialState };

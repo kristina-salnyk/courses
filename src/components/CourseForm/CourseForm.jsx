@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -10,8 +10,14 @@ import { Input } from '../../common/Input';
 import { ValidationMessage } from '../../common/ValidationMessage';
 import { CreateAuthor } from './components/CreateAuthor';
 import { Authors } from './components/Authors';
+import { Loader } from '../../common/Loader';
 import { selectAuthorsByIds } from '../../store/authors/selectors';
-import { addCourse } from '../../store/courses/actionCreators';
+import {
+	fetchAddCourse,
+	fetchCourse,
+	fetchUpdateCourse,
+} from '../../store/courses/thunk';
+import { fetchAuthors } from '../../store/authors/thunk';
 import useValidationErrors from '../../hooks/useValidationErrors';
 import formKeyPressHandler from '../../helpers/handlers/formKeyPressHandler';
 import pipeDuration from '../../helpers/pipeDuration';
@@ -29,6 +35,7 @@ import {
 	ROUTES,
 	SUBMIT_VALIDATION_ERROR_TEXT,
 	TITLE_INPUT,
+	UPDATE_COURSE_BTN,
 } from '../../constants';
 
 import {
@@ -39,22 +46,28 @@ import {
 	CourseDetailsGroup,
 	CourseDetailsGroupTitle,
 	CourseDuration,
-	CreateCourseForm,
-	CreateCourseFormHeader,
-	CreateCourseStyled,
+	CourseFormContent,
+	CourseFormHeader,
+	CourseFormStyled,
 	Duration,
 	FieldWrap,
 	FieldWrapStyled,
-} from './CreateCourse.styled';
+} from './CourseForm.styled';
 
-const CreateCourse = () => {
+const CourseForm = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
+	const { courseId } = useParams();
+	const { pathname } = useLocation();
+
+	const initDataFetched = useRef(false);
+	const courseDataFetched = useRef(false);
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [courseAuthors, setCourseAuthors] = useState([]);
 	const [duration, setDuration] = useState(0);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const authors = useSelector((state) =>
 		selectAuthorsByIds(state, courseAuthors)
@@ -63,25 +76,54 @@ const CreateCourse = () => {
 	const { validationErrors, validateOneField, validateAllFields } =
 		useValidationErrors();
 
+	useEffect(() => {
+		if (initDataFetched.current) return;
+		initDataFetched.current = true;
+
+		dispatch(fetchAuthors(setIsLoading));
+	}, [dispatch]);
+
+	useEffect(() => {
+		if (!courseId || courseDataFetched.current) return;
+		courseDataFetched.current = true;
+
+		(async () => {
+			const result = await dispatch(fetchCourse(courseId, setIsLoading));
+			if (result.successful) {
+				setTitle(result.data.title);
+				setDescription(result.data.description);
+				setCourseAuthors(result.data.authors);
+				setDuration(result.data.duration);
+			}
+		})();
+	}, [courseId, dispatch]);
+
 	const formSubmitHandler = async (event) => {
 		event.preventDefault();
 
 		const course = {
 			title,
 			description,
-			authors: courseAuthors,
 			duration,
+			authors: courseAuthors,
 		};
 
 		const isValid = await validateAllFields(courseSchema, course);
 
-		if (isValid) {
-			dispatch(addCourse(course));
-			navigate(ROUTES.COURSES);
+		if (!isValid) {
+			toast.error(SUBMIT_VALIDATION_ERROR_TEXT);
 			return;
 		}
 
-		toast.error(SUBMIT_VALIDATION_ERROR_TEXT);
+		let result;
+		if (pathname === ROUTES.CREATE_COURSE) {
+			result = await dispatch(fetchAddCourse(course, setIsLoading));
+		} else {
+			result = await dispatch(
+				fetchUpdateCourse(courseId, course, setIsLoading)
+			);
+		}
+		if (result.successful) navigate(ROUTES.COURSES);
 	};
 
 	const addToAuthors = useCallback(
@@ -107,13 +149,14 @@ const CreateCourse = () => {
 	);
 
 	return (
-		<CreateCourseStyled>
+		<CourseFormStyled>
 			<Container>
-				<CreateCourseForm
+				<CourseFormContent
 					onSubmit={formSubmitHandler}
 					onKeyPress={formKeyPressHandler}
 				>
-					<CreateCourseFormHeader>
+					{isLoading && <Loader />}
+					<CourseFormHeader>
 						<FieldWrapStyled>
 							<Input
 								label={TITLE_INPUT.label}
@@ -137,11 +180,18 @@ const CreateCourse = () => {
 								/>
 							)}
 						</FieldWrapStyled>
-						<Button
-							type={CREATE_COURSE_BTN.type}
-							text={CREATE_COURSE_BTN.text}
-						/>
-					</CreateCourseFormHeader>
+						{pathname === ROUTES.CREATE_COURSE ? (
+							<Button
+								type={CREATE_COURSE_BTN.type}
+								text={CREATE_COURSE_BTN.text}
+							/>
+						) : (
+							<Button
+								type={UPDATE_COURSE_BTN.type}
+								text={UPDATE_COURSE_BTN.text}
+							/>
+						)}
+					</CourseFormHeader>
 					<FieldWrap>
 						<TextArea
 							label={DESCRIPTION_TEXT_AREA.label}
@@ -235,10 +285,10 @@ const CreateCourse = () => {
 							</FieldWrap>
 						</CourseDetailsGroup>
 					</CourseDetails>
-				</CreateCourseForm>
+				</CourseFormContent>
 			</Container>
-		</CreateCourseStyled>
+		</CourseFormStyled>
 	);
 };
 
-export default CreateCourse;
+export default CourseForm;

@@ -4,8 +4,9 @@ import { toast } from 'react-toastify';
 
 import { Input } from '../../../../common/Input';
 import { Button } from '../../../../common/Button';
+import { Loader } from '../../../../common/Loader';
 import { selectAuthors } from '../../../../store/authors/selectors';
-import { addAuthor } from '../../../../store/authors/actionCreators';
+import { fetchAddAuthor } from '../../../../store/authors/thunk';
 import {
 	ADD_NEW_AUTHOR_ERROR_TEXT,
 	AUTHOR_NAME_INPUT,
@@ -16,14 +17,17 @@ import {
 import {
 	CourseDetailsGroup,
 	CourseDetailsGroupTitle,
-} from '../../CreateCourse.styled';
+} from '../../CourseForm.styled';
 
 const CreateAuthor = () => {
 	const dispatch = useDispatch();
+
 	const [authorName, setAuthorName] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
+
 	const authors = useSelector(selectAuthors);
 
-	const addNewAuthor = () => {
+	const addNewAuthor = async () => {
 		const name = authorName.trim();
 		if (!name) return;
 
@@ -32,12 +36,13 @@ const CreateAuthor = () => {
 			return;
 		}
 
-		dispatch(addAuthor({ name }));
-		setAuthorName('');
+		const result = await dispatch(fetchAddAuthor({ name }, setIsLoading));
+		if (result.successful) setAuthorName('');
 	};
 
 	return (
 		<CourseDetailsGroup>
+			{isLoading && <Loader width='50' />}
 			<CourseDetailsGroupTitle>
 				{GROUP_TITLES.ADD_AUTHOR}
 			</CourseDetailsGroupTitle>

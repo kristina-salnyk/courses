@@ -16,7 +16,7 @@ import {
 	AuthorsMessage,
 	CourseDetailsGroup,
 	CourseDetailsGroupTitle,
-} from '../../CreateCourse.styled';
+} from '../../CourseForm.styled';
 
 const Authors = ({ selectedAuthors = [], addToAuthors }) => {
 	const authors = useSelector((state) =>

@@ -15,8 +15,8 @@ const loginSchema = yup.object().shape({
 		.min(6, 'Name must contain from 6 to 20 characters')
 		.max(20, 'Name must contain from 6 to 20 characters')
 		.matches(
-			/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/,
-			'Password must contain at least one letter, one digit, and one special character'
+			/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]+$/,
+			'Password must contain at least one letter and one digit'
 		),
 });
 

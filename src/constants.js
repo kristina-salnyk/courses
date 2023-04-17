@@ -8,10 +8,10 @@ export const ADD_NEW_AUTHOR_ERROR_TEXT = 'Author with this name already exists';
 
 export const SUBMIT_VALIDATION_ERROR_TEXT = 'Please, fill in all fields';
 
-export const REGISTRATION_NAVIGATION_TEXT =
+export const REGISTRATION_NAVIGATE_TEXT =
 	'If you have an account you can go to';
 
-export const LOGIN_NAVIGATION_TEXT = 'If you not have an account you can go to';
+export const LOGIN_NAVIGATE_TEXT = 'If you not have an account you can go to';
 
 export const AUTHORS_NO_RESULTS_TEXT = 'Author list is empty';
 
@@ -23,13 +23,23 @@ export const AUTHORS_LIST_NAME = 'authors';
 
 export const DURATION_UNITS = 'hours';
 
+export const ROLES = {
+	USER: 'user',
+	ADMIN: 'admin',
+};
+
 export const API_ENDPOINTS = {
 	LOGIN: '/login',
 	REGISTRATION: '/register',
 	CURRENT: '/users/me',
 	LOGOUT: '/logout',
 	COURSES: '/courses/all',
+	COURSE: '/courses',
+	ADD_COURSE: '/courses/add',
+	UPDATE_COURSE: '/courses',
+	DELETE_COURSE: '/courses',
 	AUTHORS: '/authors/all',
+	ADD_AUTHOR: '/authors/add',
 };
 
 export const ROUTES = {
@@ -37,6 +47,7 @@ export const ROUTES = {
 	COURSES: '/courses',
 	COURSE_INFO: '/courses/:courseId',
 	CREATE_COURSE: '/courses/add',
+	UPDATE_COURSE: '/courses/update/:courseId',
 	LOGIN: '/login',
 	REGISTRATION: '/registration',
 };
@@ -60,10 +71,44 @@ export const COURSES_ALL_RESPONSE_MESSAGES = {
 	default: 'Course list has not been loaded. Try again later',
 };
 
+export const COURSE_RESPONSE_MESSAGES = {
+	400: 'Course has not been loaded',
+	500: 'Course has not been loaded. Try again later',
+	default: 'Course has not been loaded. Try again later',
+};
+
 export const AUTHORS_ALL_RESPONSE_MESSAGES = {
 	400: 'Author list has not been loaded',
 	500: 'Author list has not been loaded. Try again later',
 	default: 'Author list has not been loaded. Try again later',
+};
+
+export const AUTHORS_ADD_RESPONSE_MESSAGES = {
+	201: 'Author successfully added',
+	400: 'Author has not been added',
+	500: 'Author has not been added. Try again later',
+	default: 'Author has not been added. Try again later',
+};
+
+export const COURSES_ADD_RESPONSE_MESSAGES = {
+	201: 'Course successfully added',
+	400: 'Course has not been added',
+	500: 'Course has not been added. Try again later',
+	default: 'Course has not been added. Try again later',
+};
+
+export const COURSES_UPDATE_RESPONSE_MESSAGES = {
+	200: 'Course successfully updated',
+	400: 'Course has not been updated',
+	500: 'Course has not been updated. Try again later',
+	default: 'Course has not been updated. Try again later',
+};
+
+export const COURSES_DELETE_RESPONSE_MESSAGES = {
+	200: 'Course successfully deleted',
+	400: 'Course has not been deleted',
+	500: 'Course has not been deleted. Try again later',
+	default: 'Course has not been deleted. Try again later',
 };
 
 export const GROUP_TITLES = {
@@ -110,7 +155,7 @@ export const DELETE_COURSE_BTN = {
 };
 
 export const UPDATE_COURSE_BTN = {
-	type: 'button',
+	type: 'submit',
 	text: 'Update course',
 };
 

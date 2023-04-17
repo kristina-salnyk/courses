@@ -5,7 +5,7 @@ import { RotatingLines } from 'react-loader-spinner';
 
 import { LoaderWrap } from './Loader.styled';
 
-const Loader = ({ className }) => {
+const Loader = ({ width = '100', className }) => {
 	const theme = useTheme();
 
 	return (
@@ -14,7 +14,7 @@ const Loader = ({ className }) => {
 				strokeColor={theme.colors.accent}
 				strokeWidth='5'
 				animationDuration='0.75'
-				width='100'
+				width={width}
 				visible={true}
 			/>
 		</LoaderWrap>
@@ -24,5 +24,6 @@ const Loader = ({ className }) => {
 export default Loader;
 
 Loader.propTypes = {
+	width: PropTypes.string,
 	className: PropTypes.string,
 };

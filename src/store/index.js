@@ -1,5 +1,6 @@
-import { combineReducers, createStore } from 'redux';
-import { devToolsEnhancer } from '@redux-devtools/extension';
+import { applyMiddleware, combineReducers, createStore } from 'redux';
+import { composeWithDevTools } from '@redux-devtools/extension';
+import thunkMiddleware from 'redux-thunk';
 
 import userReducer from './user/reducer';
 import authorsReducer from './authors/reducer';
@@ -11,6 +12,6 @@ const rootReducer = combineReducers({
 	authors: authorsReducer,
 });
 
-const enhancer = devToolsEnhancer();
+const composedEnhancer = composeWithDevTools(applyMiddleware(thunkMiddleware));
 
-export const store = createStore(rootReducer, enhancer);
+export const store = createStore(rootReducer, composedEnhancer);

@@ -1,13 +1,13 @@
 import * as actionTypes from './actionTypes';
 
-export const loginUser = ({ name, email, token }) => {
+export const loginAction = ({ name, email, role, token }) => {
 	return {
 		type: actionTypes.USER_LOGIN,
-		payload: { name, email, token },
+		payload: { name, email, role, token },
 	};
 };
 
-export const logoutUser = () => {
+export const logoutAction = () => {
 	return {
 		type: actionTypes.USER_LOGOUT,
 	};
