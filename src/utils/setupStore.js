@@ -4,7 +4,9 @@ const setupStore = (initialState) => {
 			...initialState,
 		})),
 		subscribe: jest.fn(),
-		dispatch: jest.fn(),
+		dispatch: jest.fn(() => ({
+			successful: true,
+		})),
 	};
 };
 
