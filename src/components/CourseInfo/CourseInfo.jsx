@@ -40,7 +40,7 @@ const CourseInfo = () => {
 	const initDataFetched = useRef(false);
 	const courseDataFetched = useRef(false);
 	const [course, setCourse] = useState(null);
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 
 	const courseAuthors = course?.authors ?? [];
 
