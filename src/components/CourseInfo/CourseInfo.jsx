@@ -52,7 +52,7 @@ const CourseInfo = () => {
 		if (initDataFetched.current) return;
 		initDataFetched.current = true;
 
-		dispatch(fetchAuthors(setIsLoading));
+		dispatch(fetchAuthors());
 	}, [dispatch]);
 
 	useEffect(() => {
