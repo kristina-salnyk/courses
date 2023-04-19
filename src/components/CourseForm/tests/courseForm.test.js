@@ -20,76 +20,82 @@ jest.mock('react-router-dom', () => ({
 	useLocation: () => jest.fn(),
 }));
 
-test('should show all authors list', () => {
-	const { getByTestId } = renderWithProviders(<CourseForm />);
+describe('CourseForm', () => {
+	let store;
+	let getByTestId;
+	let getByText;
+	let findByTestId;
+	let queryByTestId;
+	let getByLabelText;
 
-	expect(getByTestId(/author-list/i)).toBeInTheDocument();
-});
+	beforeEach(() => {
+		const renderResult = renderWithProviders(<CourseForm />);
 
-test('should show course authors list', async () => {
-	const { store, getByText, findByTestId, getByTestId } = renderWithProviders(
-		<CourseForm />
-	);
-
-	const author = store.getState().authors[0];
-
-	fireEvent.click(
-		within(getByText(author.name)).getByText(ADD_AUTHOR_BTN.text)
-	);
-
-	await findByTestId(/course-author-list/i);
-
-	expect(getByTestId(/course-author-list/i)).toBeInTheDocument();
-});
-
-test('"Create author" click button should call dispatch', async () => {
-	const { store, getByLabelText, getByText } = renderWithProviders(
-		<CourseForm />
-	);
-
-	fireEvent.change(getByLabelText(AUTHOR_NAME_INPUT.label), {
-		target: { value: mockedAuthorName },
+		store = renderResult.store;
+		getByTestId = renderResult.getByTestId;
+		getByText = renderResult.getByText;
+		findByTestId = renderResult.findByTestId;
+		queryByTestId = renderResult.queryByTestId;
+		getByLabelText = renderResult.getByLabelText;
 	});
 
-	await act(async () => fireEvent.click(getByText(CREATE_AUTHOR_BTN.text)));
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
 
-	expect(store.dispatch).toHaveBeenCalled();
-});
+	test('should show all authors list', () => {
+		expect(getByTestId(/author-list/i)).toBeInTheDocument();
+	});
 
-test('"Add author" button click should add an author to course authors list', async () => {
-	const { store, getByText, getByTestId, findByTestId } = renderWithProviders(
-		<CourseForm />
-	);
+	test('should show course authors list', async () => {
+		const author = store.getState().authors[0];
 
-	const author = store.getState().authors[0];
-
-	fireEvent.click(
-		within(getByText(author.name)).getByText(ADD_AUTHOR_BTN.text)
-	);
-
-	await findByTestId(/course-author-list/i);
-
-	expect(getByTestId(/course-author-list/i)).toHaveTextContent(author.name);
-});
-
-test('"Delete author" button click should delete an author from the course list', async () => {
-	const { store, getByText, queryByTestId, findByTestId } = renderWithProviders(
-		<CourseForm />
-	);
-
-	const author = store.getState().authors[0];
-
-	fireEvent.click(
-		within(getByText(author.name)).getByText(ADD_AUTHOR_BTN.text)
-	);
-
-	await findByTestId(/course-author-list/i);
-
-	await act(async () =>
 		fireEvent.click(
-			within(getByText(author.name)).getByText(DELETE_AUTHOR_BTN.text)
-		)
-	);
+			within(getByText(author.name)).getByText(ADD_AUTHOR_BTN.text)
+		);
 
-	expect(queryByTestId(/course-author-list/i)).toBeNull();
+		await findByTestId(/course-author-list/i);
+
+		expect(getByTestId(/course-author-list/i)).toBeInTheDocument();
+	});
+
+	test('"Create author" click button should call dispatch', async () => {
+		fireEvent.change(getByLabelText(AUTHOR_NAME_INPUT.label), {
+			target: { value: mockedAuthorName },
+		});
+
+		await act(async () => fireEvent.click(getByText(CREATE_AUTHOR_BTN.text)));
+
+		expect(store.dispatch).toHaveBeenCalled();
+	});
+
+	test('"Add author" button click should add an author to course authors list', async () => {
+		const author = store.getState().authors[0];
+
+		fireEvent.click(
+			within(getByText(author.name)).getByText(ADD_AUTHOR_BTN.text)
+		);
+
+		await findByTestId(/course-author-list/i);
+
+		expect(getByTestId(/course-author-list/i)).toHaveTextContent(author.name);
+	});
+
+	test('"Delete author" button click should delete an author from the course list', async () => {
+		const author = store.getState().authors[0];
+
+		fireEvent.click(
+			within(getByText(author.name)).getByText(ADD_AUTHOR_BTN.text)
+		);
+
+		await findByTestId(/course-author-list/i);
+
+		await act(async () =>
+			fireEvent.click(
+				within(getByText(author.name)).getByText(DELETE_AUTHOR_BTN.text)
+			)
+		);
+
+		expect(queryByTestId(/course-author-list/i)).toBeNull();
+	});
 });
