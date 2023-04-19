@@ -61,7 +61,7 @@ const CourseInfo = () => {
 
 		(async () => {
 			const result = await dispatch(fetchCourse(courseId, setIsLoading));
-			if (result.successful) setCourse({ ...result.data });
+			if (result.successful) setCourse(result.data);
 		})();
 	}, [courseId, dispatch]);
 
