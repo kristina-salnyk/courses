@@ -42,6 +42,10 @@ const Courses = () => {
 		selectCoursesBySearchQuery(state, searchQuery)
 	);
 
+	const shouldRenderCourses = !isLoading && courses.length > 0;
+
+	const shouldRenderMsg = !isLoading && courses.length === 0;
+
 	useEffect(() => {
 		if (initDataFetched.current) return;
 		initDataFetched.current = true;
@@ -72,25 +76,25 @@ const Courses = () => {
 					)}
 				</CoursesHeader>
 				{isLoading && <LoaderStyled />}
-				{!isLoading &&
-					(courses.length > 0 ? (
-						<CoursesList>
-							{courses.map((item) => (
-								<li key={item.id} data-testid='course-card'>
-									<CourseCard {...item} />
-								</li>
-							))}
-						</CoursesList>
-					) : (
-						<CoursesMessage>
-							<p>{COURSES_NO_RESULTS_TEXT}</p>
-							<img
-								src={noResults}
-								alt={NO_RESULTS_ALTERNATIVE_TEXT}
-								width={300}
-							/>
-						</CoursesMessage>
-					))}
+				{shouldRenderCourses && (
+					<CoursesList>
+						{courses.map((item) => (
+							<li key={item.id} data-testid='course-card'>
+								<CourseCard {...item} />
+							</li>
+						))}
+					</CoursesList>
+				)}
+				{shouldRenderMsg && (
+					<CoursesMessage>
+						<p>{COURSES_NO_RESULTS_TEXT}</p>
+						<img
+							src={noResults}
+							alt={NO_RESULTS_ALTERNATIVE_TEXT}
+							width={300}
+						/>
+					</CoursesMessage>
+				)}
 			</Container>
 		</CoursesStyled>
 	);
