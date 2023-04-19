@@ -5,7 +5,7 @@ import { RotatingLines } from 'react-loader-spinner';
 
 import { LoaderWrap } from './Loader.styled';
 
-const Loader = ({ width = '100', className }) => {
+const Loader = ({ className, width = '100' }) => {
 	const theme = useTheme();
 
 	return (

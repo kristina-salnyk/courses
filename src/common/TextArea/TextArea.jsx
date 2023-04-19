@@ -11,10 +11,10 @@ const TextArea = ({
 	required,
 	rows,
 	value,
-	error = false,
 	placeholder,
 	onChange,
 	className,
+	error = false,
 }) => {
 	const id = uuid();
 
