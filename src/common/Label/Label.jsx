@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { LabelStyled } from './Label.styled';
 
-const Label = ({ id, label, required = false, error }) => (
+const Label = ({ id, label, error, required = false }) => (
 	<LabelStyled htmlFor={id} isRequired={required} error={error}>
 		{label}
 	</LabelStyled>

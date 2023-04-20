@@ -260,7 +260,7 @@ const CourseForm = () => {
 							</CourseDetailsGroupTitle>
 							<FieldWrap>
 								{authors.length > 0 ? (
-									<AuthorsList>
+									<AuthorsList data-testid='course-author-list'>
 										{authors.map((item) => (
 											<Author key={item.id}>
 												{item.name}

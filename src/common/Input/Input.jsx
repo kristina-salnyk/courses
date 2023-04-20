@@ -12,10 +12,10 @@ const Input = ({
 	type,
 	min,
 	value,
-	error = false,
 	placeholder,
 	onChange,
 	className,
+	error = false,
 }) => {
 	const id = uuid();
 

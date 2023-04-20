@@ -27,7 +27,7 @@ const Authors = ({ selectedAuthors = [], addToAuthors }) => {
 		<CourseDetailsGroup>
 			<CourseDetailsGroupTitle>{GROUP_TITLES.AUTHORS}</CourseDetailsGroupTitle>
 			{authors.length > 0 ? (
-				<AuthorsList>
+				<AuthorsList data-testid='author-list'>
 					{authors.map((item) => (
 						<Author key={item.id}>
 							{item.name}

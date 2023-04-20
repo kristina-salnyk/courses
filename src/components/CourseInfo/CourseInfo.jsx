@@ -48,6 +48,10 @@ const CourseInfo = () => {
 		selectAuthorsByIds(state, courseAuthors)
 	);
 
+	const shouldRenderCourse = !isLoading && course;
+
+	const shouldRenderMsg = !isLoading && !course;
+
 	useEffect(() => {
 		if (initDataFetched.current) return;
 		initDataFetched.current = true;
@@ -61,7 +65,7 @@ const CourseInfo = () => {
 
 		(async () => {
 			const result = await dispatch(fetchCourse(courseId, setIsLoading));
-			if (result.successful) setCourse({ ...result.data });
+			if (result.successful) setCourse(result.data);
 		})();
 	}, [courseId, dispatch]);
 
@@ -75,44 +79,44 @@ const CourseInfo = () => {
 						icon={<Icon component={MdArrowBackIos} />}
 					/>
 					{isLoading && <LoaderStyled />}
-					{!isLoading &&
-						(course ? (
-							<>
-								<CourseTitle>{course.title}</CourseTitle>
-								<CourseInfoContent>
-									<p>{course.description}</p>
-									<CourseDetailsWrap>
-										<CourseDetails>
-											<Icon component={FaHashtag} />
-											<span>{course.id}</span>
-											<Icon component={MdAccessTimeFilled} />
-											<span>
-												{pipeDuration(course.duration)} {DURATION_UNITS}
-											</span>
-											<Icon component={IoCreate} />
-											<span>{course.creationDate.replaceAll('/', '.')}</span>
-											<Icon component={HiUsers} />
-											<ul>
-												{authors.map((item) => (
-													<li key={item.id}>
-														<span>{item.name}</span>
-													</li>
-												))}
-											</ul>
-										</CourseDetails>
-									</CourseDetailsWrap>
-								</CourseInfoContent>
-							</>
-						) : (
-							<CourseInfoMessage>
-								<p>{COURSE_INFO_NO_RESULTS_TEXT}</p>
-								<img
-									src={noResults}
-									alt={NO_RESULTS_ALTERNATIVE_TEXT}
-									width={300}
-								/>
-							</CourseInfoMessage>
-						))}
+					{shouldRenderCourse && (
+						<>
+							<CourseTitle>{course.title}</CourseTitle>
+							<CourseInfoContent>
+								<p>{course.description}</p>
+								<CourseDetailsWrap>
+									<CourseDetails>
+										<Icon component={FaHashtag} />
+										<span>{course.id}</span>
+										<Icon component={MdAccessTimeFilled} />
+										<span>
+											{pipeDuration(course.duration)} {DURATION_UNITS}
+										</span>
+										<Icon component={IoCreate} />
+										<span>{course.creationDate.replaceAll('/', '.')}</span>
+										<Icon component={HiUsers} />
+										<ul>
+											{authors.map((item) => (
+												<li key={item.id}>
+													<span>{item.name}</span>
+												</li>
+											))}
+										</ul>
+									</CourseDetails>
+								</CourseDetailsWrap>
+							</CourseInfoContent>
+						</>
+					)}
+					{shouldRenderMsg && (
+						<CourseInfoMessage>
+							<p>{COURSE_INFO_NO_RESULTS_TEXT}</p>
+							<img
+								src={noResults}
+								alt={NO_RESULTS_ALTERNATIVE_TEXT}
+								width={300}
+							/>
+						</CourseInfoMessage>
+					)}
 				</CourseInfoWrap>
 			</Container>
 		</CourseInfoStyled>

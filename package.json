@@ -12,7 +12,7 @@
     "eslint:fix": "eslint --fix --ext .js --ext .jsx src",
     "test:nowatch": "react-scripts test --watchAll=false",
     "prepare": "husky install",
-    "prepublish": "npm run eslint:fix"
+    "prepublish": "npm run eslint:fix && npm run test:nowatch"
   },
   "devDependencies": {
     "@redux-devtools/extension": "^3.2.5",
@@ -33,6 +33,7 @@
   "dependencies": {
     "axios": "^1.3.4",
     "cross-env": "^7.0.3",
+    "jest": "^29.5.0",
     "normalize.css": "^8.0.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
@@ -69,5 +70,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "axios": "axios/dist/node/axios.cjs"
+    }
   }
 }
